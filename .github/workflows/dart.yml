@@ -22,5 +22,5 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "build/app/outputs/apk/debug/*.apk"
-        tag: "00003"
+        tag: "00004"
         token: ${{ secrets.TOKEN }}
