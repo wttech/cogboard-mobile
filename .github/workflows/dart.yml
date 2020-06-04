@@ -29,13 +29,13 @@ jobs:
     runs-on: [macos-latest]
     steps:
     - run: |
-      flutter build ios --no-codesign
-      cd build/ios/iphoneos
-      mkdir Payload
-      cd Payload
-      ln -s ../Runner.app
-      cd ..
-      zip -r app.ipa Payload
+        flutter build ios --no-codesign
+        cd build/ios/iphoneos
+        mkdir Payload
+        cd Payload
+        ln -s ../Runner.app
+        cd ..
+        zip -r app.ipa Payload
     - name: Release Apps
       uses: ncipollo/release-action@v1
       with:
