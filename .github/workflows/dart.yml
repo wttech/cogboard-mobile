@@ -21,5 +21,5 @@ jobs:
     - name: Create a Release APK
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "build/app/outputs/apk/release/" + ${{CI_COMMIT_REF_NAME}} + ".apk"
+        artifacts: "build/app/outputs/apk/release/${{CI_COMMIT_REF_NAME}}.apk"
         token: ${{ secrets.TOKEN }}
