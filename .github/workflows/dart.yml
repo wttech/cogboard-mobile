@@ -17,7 +17,7 @@ jobs:
     - uses: subosito/flutter-action@v1
     - run: flutter pub get
     - run: flutter test
-    - run: flutter build apk --debug
+    - run: flutter build apk
     - run: flutter build ios --debug --no-codesign
     - name: Create a Release artifacts
       uses: ncipollo/release-action@v1
