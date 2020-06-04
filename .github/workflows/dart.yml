@@ -21,8 +21,8 @@ jobs:
     #- name: Create a Release APK
     #  uses: ncipollo/release-action@v1
     #  with:
-    #    artifacts: "build/app/outputs/apk/release/Cogboard_mobile_${{github.job}}.apk"
-    #    tag: ${{github.job}}
+    #    artifacts: "build/app/outputs/apk/release/Cogboard_mobile_${{github.run_number}}.apk"
+    #    tag: ${{github.run_number}}
     #    token: ${{ secrets.TOKEN }}
   jobmacOS:
     name: Build IPA
@@ -40,6 +40,6 @@ jobs:
     - name: Create a Release iOS files
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "build/app/outputs/ios/release/Cogboard_mobile_${{github.job}}.ipa"
-        tag: ${{github.job}}
+        artifacts: "build/app/outputs/ios/release/Cogboard_mobile_${{github.run_number}}.ipa"
+        tag: ${{github.run_number}}
         token: ${{ secrets.TOKEN }}
