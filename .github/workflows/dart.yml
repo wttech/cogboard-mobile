@@ -6,7 +6,7 @@ on:
       - master 
 
 jobs:
-  build:
+  jobLinux:
     name: Build APK
     runs-on: ubuntu-latest
     steps:
@@ -24,6 +24,19 @@ jobs:
     #    artifacts: "build/app/outputs/apk/release/Cogboard_mobile_${{github.job}}.apk"
     #    tag: ${{github.job}}
     #    token: ${{ secrets.TOKEN }}
+  jobmacOS:
+    name: Build IPA
+    runs-on: [macos-latest]
+    env:
+      XC_VERSION: ${{ '11.4' }}
+      XC_WORKSPACE: ${{ 'MyApp.xcworkspace' }}
+      XC_SCHEME: ${{ 'MyApp' }}
+    steps:
+    - name: Select latest Xcode
+      run: "sudo xcode-select -s /Applications/Xcode_$XC_VERSION.app"
+    - uses: actions/checkout@v2
+    - name: Run Unit and UI Tests
+      run: /usr/bin/xcodebuild test -workspace "$XC_WORKSPACE" -scheme "$XC_SCHEME" -destination 'platform=iOS Simulator,name=iPhone 11'
     - run: flutter build ios --release --no-codesign
     - name: Create a Release iOS files
       uses: ncipollo/release-action@v1
