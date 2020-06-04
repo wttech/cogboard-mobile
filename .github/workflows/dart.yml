@@ -28,7 +28,10 @@ jobs:
     name: Build iOS App
     runs-on: [macos-latest]
     steps:
+    - uses: actions/checkout@v1
+    - uses: subosito/flutter-action@v1
     - run: |
+        flutter pub get
         flutter build ios --no-codesign
         cd build/ios/iphoneos
         mkdir Payload
