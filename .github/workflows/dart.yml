@@ -27,7 +27,8 @@ jobs:
   jobmacOS:
     name: Build iOS App
     runs-on: [macos-latest]
-    run: |
+    steps:
+    - run: |
       flutter build ios --no-codesign
       cd build/ios/iphoneos
       mkdir Payload
@@ -35,9 +36,9 @@ jobs:
       ln -s ../Runner.app
       cd ..
       zip -r app.ipa Payload
-  - name: Release Apps
-    uses: ncipollo/release-action@v1
-    with:
-      tag: ${{github.run_number}}
-      token: ${{ secrets.TOKEN }}
-      artifacts: "build/ios/iphoneos/Cogboard_mobile_${{github.run_number}}.ipa"
+    - name: Release Apps
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{github.run_number}}
+        token: ${{ secrets.TOKEN }}
+        artifacts: "build/ios/iphoneos/Cogboard_mobile_${{github.run_number}}.ipa"
