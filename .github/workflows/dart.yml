@@ -30,18 +30,11 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: subosito/flutter-action@v1
-    - run: |
-        flutter pub get
-        flutter build ios --no-codesign
-        cd build/ios/iphoneos
-        mkdir Payload
-        cd Payload
-        ln -s ../Runner.app
-        cd ..
-        zip -r app.ipa Payload
-    - name: Release Apps
+    - run: flutter pub get
+    - run: flutter build ios --no-codesign
+    - name: Create a Release IPA
       uses: ncipollo/release-action@v1
       with:
         tag: ${{github.run_number}}
         token: ${{ secrets.TOKEN }}
-        artifacts: "build/ios/iphoneos/Cogboard_mobile_${{github.run_number}}.ipa"
+        artifacts: "build/app/outputs/ios/Cogboard_mobile_${{github.run_number}}.ipa"
