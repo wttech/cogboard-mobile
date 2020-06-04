@@ -6,7 +6,7 @@ on:
       - master 
 
 jobs:
-  jobLinux:
+  build:
     name: Build Release artifacts
     runs-on: [macos-latest]
     steps:
