@@ -23,7 +23,12 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: app
-        path: build/
+        path: build/app/app/outputs/apk/debug/app-debug.apk
+    - name: Upload IPA
+      uses: actions/upload-artifact@v1
+      with:
+        name: ipa
+        path: build/app/ios/
 #    - name: Create a Release artifacts
 #      uses: ncipollo/release-action@v1
 #      with:
