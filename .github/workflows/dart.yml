@@ -24,9 +24,9 @@ jobs:
       with:
         name: app
         path: app/build/
-    - name: Create a Release artifacts
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: "build/"
-        tag: ${{github.run_number}}
-        token: ${{ secrets.TOKEN }}
+#    - name: Create a Release artifacts
+#      uses: ncipollo/release-action@v1
+#      with:
+#        artifacts: "build/"
+#        tag: ${{github.run_number}}
+#        token: ${{ secrets.TOKEN }}
