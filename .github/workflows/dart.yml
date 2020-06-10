@@ -23,7 +23,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: app
-        path: /build/
+        path: build/
 #    - name: Create a Release artifacts
 #      uses: ncipollo/release-action@v1
 #      with:
