@@ -22,6 +22,6 @@ jobs:
     - name: Create a Release artifacts
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "build/app/outputs/apk/debug/*.apk,build/app/outputs/apk/debug/*.ipa"
+        artifacts: "build/"
         tag: ${{github.run_number}}
         token: ${{ secrets.TOKEN }}
