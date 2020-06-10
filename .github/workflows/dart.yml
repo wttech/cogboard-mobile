@@ -19,6 +19,11 @@ jobs:
     - run: flutter test
     - run: flutter build apk --debug
     - run: flutter build ios --debug --no-codesign
+    - name: Upload APK
+      uses: actions/upload-artifact@v1
+      with:
+        name: app
+        path: app/build/
     - name: Create a Release artifacts
       uses: ncipollo/release-action@v1
       with:
