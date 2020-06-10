@@ -17,7 +17,7 @@ jobs:
     - uses: subosito/flutter-action@v1
     - run: flutter pub get
     - run: flutter test
-    - run: flutter build apk --debug
+#    - run: flutter build apk --debug
     - run: flutter build ios --no-codesign
 #    - name: Upload APK
 #      uses: actions/upload-artifact@v1
@@ -28,7 +28,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: ipa
-        path: build/app/ios/
+        path: build/
 #    - name: Create a Release artifacts
 #      uses: ncipollo/release-action@v1
 #      with:
