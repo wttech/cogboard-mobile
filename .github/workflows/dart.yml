@@ -19,11 +19,11 @@ jobs:
     - run: flutter test
     - run: flutter build apk --debug
     - run: flutter build ios --no-codesign
-    - name: Upload APK
-      uses: actions/upload-artifact@v1
-      with:
-        name: app
-        path: build/app/app/outputs/apk/debug/app-debug.apk
+#    - name: Upload APK
+#      uses: actions/upload-artifact@v1
+#      with:
+#        name: app
+#        path: build/app/app/outputs/apk/debug/app-debug.apk
     - name: Upload IPA
       uses: actions/upload-artifact@v1
       with:
