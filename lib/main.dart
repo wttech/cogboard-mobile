@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/db/db.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,10 +13,12 @@ import 'screens/login_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/widget_details.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  await ApplicationDatabase.init();
   runApp(CogboardApp());
 }
 
