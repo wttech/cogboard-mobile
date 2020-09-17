@@ -42,7 +42,7 @@ class ApplicationDatabase {
 
   static Future<List<Connection>> fetchConnections() async {
     if (_db == null) {
-      return List.empty();
+      return [];
     }
 
     final List<Map<String, dynamic>> connections =
