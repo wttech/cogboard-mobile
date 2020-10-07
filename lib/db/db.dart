@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cogboardmobileapp/models/connection.model.dart';
+import 'package:cogboardmobileapp/models/connection_model.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

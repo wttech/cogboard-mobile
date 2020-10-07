@@ -1,4 +1,4 @@
-import 'package:cogboardmobileapp/models/dashboard_tab.dart';
+import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/screens/error_widgets_screen.dart';
 import 'package:cogboardmobileapp/screens/favourite_widgets_screen.dart';
 import 'package:cogboardmobileapp/screens/home_screen.dart';
