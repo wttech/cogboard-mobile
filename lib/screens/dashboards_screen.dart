@@ -1,5 +1,8 @@
+import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
+import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/screens/settings_screen.dart';
+import 'package:cogboardmobileapp/widgets/widgets_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +13,8 @@ class DashboardsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final dashboardsProvider = Provider.of<DashboardsProvider>(context);
     final dashboardTabs = dashboardsProvider.dashboardTabs;
+    final BottomNavigationBar bottomNavigationBar = getBottomNavigationBar(context, dashboardsProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(dashboardTabs[dashboardsProvider.dashboardTabIndex].title),
@@ -23,42 +28,98 @@ class DashboardsScreen extends StatelessWidget {
           )
         ],
       ),
-      body: dashboardTabs[dashboardsProvider.dashboardTabIndex].page,
-      backgroundColor: Theme.of(context).primaryColor,
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (index) => dashboardsProvider.setDashboardTabIndex(index),
-        selectedItemColor: dashboardTabs[dashboardsProvider.dashboardTabIndex]
-            .selectedTabColor,
-        unselectedItemColor: Theme.of(context).accentColor,
-        currentIndex: dashboardsProvider.dashboardTabIndex,
-        items: [
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.star),
-            title: Text('Favourite'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.block),
-            title: Text('Quarantine'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.error),
-            title: Text('Error'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.warning),
-            title: Text('Warning'),
-          ),
-        ],
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            FutureBuilder(
+              future: Provider.of<ConfigProvider>(context, listen: false).fetchConfig(),
+              builder: (ctx, dataSnapshot) {
+                if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                  return Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else {
+                  if (dataSnapshot.error != null) {
+                    // TODO handling errors
+                    return Center(
+                      child: Text('An error occurred!'),
+                    );
+                  } else {
+                    return Consumer<ConfigProvider>(
+                      builder: (ctx, configProvider, child) => WidgetsList(
+                        boardWidgets: configProvider.boardWidgets,
+                        dashboardType: dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType,
+                      ),
+                    );
+                  }
+                }
+              },
+            ),
+          ],
+        ),
       ),
+      backgroundColor: Theme.of(context).primaryColor,
+      bottomNavigationBar: bottomNavigationBar,
+    );
+  }
+
+  BottomNavigationBar getBottomNavigationBar(BuildContext context, DashboardsProvider dashboardsProvider) {
+    final dashboardTabs = dashboardsProvider.dashboardTabs;
+
+    return BottomNavigationBar(
+      selectedItemColor: dashboardTabs[dashboardsProvider.dashboardTabIndex].selectedTabColor,
+      unselectedItemColor: Theme.of(context).accentColor,
+      currentIndex: dashboardsProvider.dashboardTabIndex,
+      items: [
+        BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).primaryColor,
+          icon: Icon(Icons.star),
+          title: Text('Favourite'),
+        ),
+        BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).primaryColor,
+          icon: Icon(Icons.block),
+          title: Text('Quarantine'),
+        ),
+        BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).primaryColor,
+          icon: Icon(Icons.home),
+          title: Text('Home'),
+        ),
+        BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).primaryColor,
+          icon: Icon(Icons.error),
+          title: Text('Error'),
+        ),
+        BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).primaryColor,
+          icon: Icon(Icons.warning),
+          title: Text('Warning'),
+        )
+      ],
+      onTap: (tabIndex) {
+        DashboardType dashboardType = DashboardType.values[tabIndex];
+        switch (dashboardType) {
+          case DashboardType.Favorites:
+            dashboardsProvider.setDashboardTabIndex(tabIndex);
+            break;
+          case DashboardType.Quarantine:
+            dashboardsProvider.setDashboardTabIndex(tabIndex);
+            break;
+          case DashboardType.Home:
+            dashboardsProvider.setDashboardTabIndex(tabIndex);
+            break;
+          case DashboardType.Error:
+            if (!dashboardsProvider.isWarningFilterPresent) {}
+            dashboardsProvider.toggleWarningFilter();
+            break;
+          case DashboardType.Warning:
+            dashboardsProvider.toggleErrorFilter();
+            break;
+        }
+      },
     );
   }
 }

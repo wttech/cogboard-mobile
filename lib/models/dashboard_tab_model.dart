@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum DashboardTabId {
+enum DashboardType {
   Favorites,
   Quarantine,
   Home,
@@ -9,15 +9,13 @@ enum DashboardTabId {
 }
 
 class DashboardTab {
-  final Widget page;
-  final String title;
-  final DashboardTabId dashboardTabId;
+  String title;
+  final DashboardType dashboardType;
   final Color selectedTabColor;
 
   DashboardTab({
-    @required this.page,
-    @required this.title,
-    @required this.dashboardTabId,
+    this.title,
+    @required this.dashboardType,
     @required this.selectedTabColor,
   });
 }
