@@ -1,4 +1,3 @@
-import 'package:cogboardmobileapp/db/db.dart';
 import 'package:cogboardmobileapp/providers/filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,8 +16,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-
-  await ApplicationDatabase.init();
   runApp(CogboardApp());
 }
 

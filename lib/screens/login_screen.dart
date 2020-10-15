@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/screens/dashboards_screen.dart';
+import 'package:cogboardmobileapp/widgets/url_select_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,39 +23,55 @@ class LoginScreen extends StatelessWidget {
             flex: 4,
             child: Container(
               color: Theme.of(context).primaryColor,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(30),
-                    child: Material(
-                      color: Colors.blue,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushReplacementNamed(DashboardsScreen.routeName);
-                        },
-                        child: Container(
-                          height: 60,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Submit",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.all(30),
+                  child: UrlSelect(),
+                ),
               ),
+              // child: Column(
+              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //   children: [
+              //     Padding(
+              //       padding: EdgeInsets.all(20),
+              //       child: Text("XD"),
+              //     )
+              //   ],
+              // )
+              // child: Column(
+              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //   children: [
+              //     Padding(
+              //       padding: const EdgeInsets.all(30),
+              //       child: Material(
+              //         color: Colors.blue,
+              //         child: InkWell(
+              //           onTap: () {
+              //             Navigator.of(context)
+              //                 .pushReplacementNamed(DashboardsScreen.routeName);
+              //           },
+              //           child: Container(
+              //             height: 60,
+              //             width: double.infinity,
+              //             decoration: BoxDecoration(
+              //               border: Border.all(color: Colors.white),
+              //             ),
+              //             child: Center(
+              //               child: Text(
+              //                 "Submit",
+              //                 style: TextStyle(
+              //                   color: Colors.white,
+              //                   fontSize: 24,
+              //                   fontWeight: FontWeight.w300,
+              //                 ),
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ),
           ),
         ],
