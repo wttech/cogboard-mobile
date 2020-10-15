@@ -5,6 +5,11 @@ class DashboardsProvider with ChangeNotifier {
 
   final List<DashboardTab> _dashboardTabs = [
     DashboardTab(
+      title: 'dashboard',
+      dashboardType: DashboardType.Home,
+      selectedTabColor: Colors.white,
+    ),
+    DashboardTab(
       title: 'favourite',
       dashboardType: DashboardType.Favorites,
       selectedTabColor: Colors.white,
@@ -13,22 +18,7 @@ class DashboardsProvider with ChangeNotifier {
       title: 'quarantine',
       dashboardType: DashboardType.Quarantine,
       selectedTabColor: Colors.white,
-    ),
-    DashboardTab(
-      title: 'dashboard',
-      dashboardType: DashboardType.Home,
-      selectedTabColor: Colors.white,
-    ),
-    DashboardTab(
-      title: 'error',
-      dashboardType: DashboardType.Error,
-      selectedTabColor: Colors.red,
-    ),
-    DashboardTab(
-      title: 'warning',
-      dashboardType: DashboardType.Warning,
-      selectedTabColor: Colors.yellow,
-    ),
+    )
   ];
 
   int _dashboardTabIndex;
@@ -50,6 +40,10 @@ class DashboardsProvider with ChangeNotifier {
 
   bool get isErrorFilterPresent {
     return _errorFilterPresent;
+  }
+
+  bool get isAnyFilterPresent {
+    return isWarningFilterPresent || isErrorFilterPresent;
   }
 
   void setDashboardTabIndex(int dashboardTabIndex) {

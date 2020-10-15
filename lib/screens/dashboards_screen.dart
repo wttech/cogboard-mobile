@@ -2,6 +2,7 @@ import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/screens/settings_screen.dart';
+import 'package:cogboardmobileapp/widgets/filters_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +43,7 @@ class DashboardsScreen extends StatelessWidget {
                   );
                 } else {
                   if (dataSnapshot.error != null) {
+                    print(dataSnapshot.error);
                     // TODO handling errors
                     return Center(
                       child: Text('An error occurred!'),
@@ -62,6 +64,7 @@ class DashboardsScreen extends StatelessWidget {
       ),
       backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: bottomNavigationBar,
+      floatingActionButton: Filters(),
     );
   }
 
@@ -72,7 +75,14 @@ class DashboardsScreen extends StatelessWidget {
       selectedItemColor: dashboardTabs[dashboardsProvider.dashboardTabIndex].selectedTabColor,
       unselectedItemColor: Theme.of(context).accentColor,
       currentIndex: dashboardsProvider.dashboardTabIndex,
+      type: BottomNavigationBarType.fixed,
+      showUnselectedLabels: false,
       items: [
+        BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).primaryColor,
+          icon: Icon(Icons.home),
+          title: Text('Home'),
+        ),
         BottomNavigationBarItem(
           backgroundColor: Theme.of(context).primaryColor,
           icon: Icon(Icons.star),
@@ -83,43 +93,8 @@ class DashboardsScreen extends StatelessWidget {
           icon: Icon(Icons.block),
           title: Text('Quarantine'),
         ),
-        BottomNavigationBarItem(
-          backgroundColor: Theme.of(context).primaryColor,
-          icon: Icon(Icons.home),
-          title: Text('Home'),
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Theme.of(context).primaryColor,
-          icon: Icon(Icons.error),
-          title: Text('Error'),
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Theme.of(context).primaryColor,
-          icon: Icon(Icons.warning),
-          title: Text('Warning'),
-        )
       ],
-      onTap: (tabIndex) {
-        DashboardType dashboardType = DashboardType.values[tabIndex];
-        switch (dashboardType) {
-          case DashboardType.Favorites:
-            dashboardsProvider.setDashboardTabIndex(tabIndex);
-            break;
-          case DashboardType.Quarantine:
-            dashboardsProvider.setDashboardTabIndex(tabIndex);
-            break;
-          case DashboardType.Home:
-            dashboardsProvider.setDashboardTabIndex(tabIndex);
-            break;
-          case DashboardType.Error:
-            if (!dashboardsProvider.isWarningFilterPresent) {}
-            dashboardsProvider.toggleWarningFilter();
-            break;
-          case DashboardType.Warning:
-            dashboardsProvider.toggleErrorFilter();
-            break;
-        }
-      },
+      onTap: (tabIndex) =>dashboardsProvider.setDashboardTabIndex(tabIndex),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/db/db.dart';
+import 'package:cogboardmobileapp/providers/filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -37,15 +38,17 @@ class CogboardApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: ConfigProvider(),
-        )
+        ),
+        ChangeNotifierProvider.value(
+          value: FilterProvider(),
+        ),
       ],
       child: MaterialApp(
           title: 'Cogboard',
           theme: ThemeData(
             primarySwatch: primarySwatchColor,
             accentColor: accentColor,
-            primaryColorBrightness: Brightness.dark,
-            accentColorBrightness: Brightness.dark,
+            canvasColor: primarySwatchColor,
           ),
           initialRoute: LoginScreen.routeName,
           routes: {
