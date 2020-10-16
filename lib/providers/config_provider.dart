@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:cogboardmobileapp/models/board_model.dart';
-import 'package:cogboardmobileapp/models/boards_model.dart';
 import 'package:cogboardmobileapp/models/config_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:flutter/material.dart';
@@ -31,5 +30,14 @@ class ConfigProvider with ChangeNotifier {
         .where((widget) => board.widgets.contains(widget.id))
         .toList();
     notifyListeners();
+  }
+
+  void updateWidget(Map<String, dynamic> widgetData) {
+    this._config.widgets.widgetsById.forEach((key, value) {
+      if(key == widgetData['id']) {
+        value.updateWidget(widgetData);
+//        setBoardWidgets(_availableBoards[_currentBoardIndex]);
+      }
+    });
   }
 }

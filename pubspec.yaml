@@ -21,6 +21,7 @@ dependencies:
     sdk: flutter
   provider: ^4.3.2
   http: ^0.12.2
+  web_socket_channel: ^1.1.0
   intl: ^0.16.1
   sqflite:
   path:

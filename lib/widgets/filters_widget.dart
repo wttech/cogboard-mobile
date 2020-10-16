@@ -1,4 +1,3 @@
-import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/providers/filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

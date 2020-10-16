@@ -1,4 +1,5 @@
-import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
+import 'dart:convert';
+
 import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/screens/settings_screen.dart';
@@ -6,6 +7,7 @@ import 'package:cogboardmobileapp/widgets/filters_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:web_socket_channel/io.dart';
 
 class DashboardsScreen extends StatelessWidget {
   static const routeName = '/dashboards';
@@ -15,6 +17,7 @@ class DashboardsScreen extends StatelessWidget {
     final dashboardsProvider = Provider.of<DashboardsProvider>(context);
     final dashboardTabs = dashboardsProvider.dashboardTabs;
     final BottomNavigationBar bottomNavigationBar = getBottomNavigationBar(context, dashboardsProvider);
+    final channel = IOWebSocketChannel.connect('ws://150.254.30.119/ws');
 
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +36,7 @@ class DashboardsScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             FutureBuilder(
-              future: Provider.of<ConfigProvider>(context, listen: false).fetchConfig(),
+              future:  Provider.of<ConfigProvider>(context, listen: false).fetchConfig(),
               builder: (ctx, dataSnapshot) {
                 if (dataSnapshot.connectionState == ConnectionState.waiting) {
                   return Expanded(
@@ -43,17 +46,35 @@ class DashboardsScreen extends StatelessWidget {
                   );
                 } else {
                   if (dataSnapshot.error != null) {
-                    print(dataSnapshot.error);
                     // TODO handling errors
                     return Center(
                       child: Text('An error occurred!'),
                     );
                   } else {
-                    return Consumer<ConfigProvider>(
-                      builder: (ctx, configProvider, child) => WidgetsList(
-                        boardWidgets: configProvider.boardWidgets,
-                        dashboardType: dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType,
-                      ),
+                    return StreamBuilder(
+                      stream: channel.stream,
+                      builder: (context, snapshot) {
+                        if(snapshot.hasError) {
+                          // TODO handling errors
+                          return Center(
+                            child: Text('An error occurred!'),
+                          );
+                        }
+                        if(snapshot.hasData) {
+                          Map<String, dynamic> decodedData = Map<String, dynamic>.from(jsonDecode(snapshot.data));
+                          if(decodedData['eventType'] == 'widget-update') {
+                            Provider.of<ConfigProvider>(context, listen: false).updateWidget(decodedData);
+                          }
+                        }
+                        return Consumer<ConfigProvider>(
+                          builder: (ctx, configProvider, child) {
+                            return WidgetsList(
+                              boardWidgets: configProvider.boardWidgets,
+                              dashboardType: dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType,
+                            );
+                          }
+                        );
+                      },
                     );
                   }
                 }
