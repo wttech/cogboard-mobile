@@ -63,7 +63,9 @@ class DashboardsScreen extends StatelessWidget {
                         if(snapshot.hasData) {
                           Map<String, dynamic> decodedData = Map<String, dynamic>.from(jsonDecode(snapshot.data));
                           if(decodedData['eventType'] == 'widget-update') {
-                            Provider.of<ConfigProvider>(context, listen: false).updateWidget(decodedData);
+                            Future.delayed(const Duration(milliseconds: 0), () {
+                              Provider.of<ConfigProvider>(context, listen: false).updateWidget(decodedData);
+                            });
                           }
                         }
                         return Consumer<ConfigProvider>(

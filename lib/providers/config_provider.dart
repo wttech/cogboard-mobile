@@ -36,7 +36,7 @@ class ConfigProvider with ChangeNotifier {
     this._config.widgets.widgetsById.forEach((key, value) {
       if(key == widgetData['id']) {
         value.updateWidget(widgetData);
-//        setBoardWidgets(_availableBoards[_currentBoardIndex]);
+        setBoardWidgets(_availableBoards[_currentBoardIndex]);
       }
     });
   }
