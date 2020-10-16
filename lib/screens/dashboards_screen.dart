@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/screens/settings_screen.dart';
+import 'package:cogboardmobileapp/widgets/dashboards_screen_bottom_navigation_bar.dart';
 import 'package:cogboardmobileapp/widgets/filters_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets_list.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,6 @@ class DashboardsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final dashboardsProvider = Provider.of<DashboardsProvider>(context);
     final dashboardTabs = dashboardsProvider.dashboardTabs;
-    final BottomNavigationBar bottomNavigationBar = getBottomNavigationBar(context, dashboardsProvider);
     final channel = IOWebSocketChannel.connect('ws://150.254.30.119/ws');
 
     return Scaffold(
@@ -68,13 +68,8 @@ class DashboardsScreen extends StatelessWidget {
                             });
                           }
                         }
-                        return Consumer<ConfigProvider>(
-                          builder: (ctx, configProvider, child) {
-                            return WidgetsList(
-                              boardWidgets: configProvider.boardWidgets,
-                              dashboardType: dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType,
-                            );
-                          }
+                        return WidgetsList(
+                            dashboardType: dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType
                         );
                       },
                     );
@@ -86,38 +81,8 @@ class DashboardsScreen extends StatelessWidget {
         ),
       ),
       backgroundColor: Theme.of(context).primaryColor,
-      bottomNavigationBar: bottomNavigationBar,
+      bottomNavigationBar: DashboardsScreenBottomNavigationBar(),
       floatingActionButton: Filters(),
-    );
-  }
-
-  BottomNavigationBar getBottomNavigationBar(BuildContext context, DashboardsProvider dashboardsProvider) {
-    final dashboardTabs = dashboardsProvider.dashboardTabs;
-
-    return BottomNavigationBar(
-      selectedItemColor: dashboardTabs[dashboardsProvider.dashboardTabIndex].selectedTabColor,
-      unselectedItemColor: Theme.of(context).accentColor,
-      currentIndex: dashboardsProvider.dashboardTabIndex,
-      type: BottomNavigationBarType.fixed,
-      showUnselectedLabels: false,
-      items: [
-        BottomNavigationBarItem(
-          backgroundColor: Theme.of(context).primaryColor,
-          icon: Icon(Icons.home),
-          title: Text('Home'),
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Theme.of(context).primaryColor,
-          icon: Icon(Icons.star),
-          title: Text('Favourite'),
-        ),
-        BottomNavigationBarItem(
-          backgroundColor: Theme.of(context).primaryColor,
-          icon: Icon(Icons.block),
-          title: Text('Quarantine'),
-        ),
-      ],
-      onTap: (tabIndex) =>dashboardsProvider.setDashboardTabIndex(tabIndex),
     );
   }
 }

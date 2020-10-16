@@ -10,10 +10,20 @@ class ConfigProvider with ChangeNotifier {
   Config _config;
   int _currentBoardIndex = 0;
   List<DashboardWidget> _boardWidgets;
+  List<DashboardWidget> _favouriteWidgets = [];
+  List<DashboardWidget> _quarantineWidgets = [];
   List<Board> _availableBoards;
 
   List<DashboardWidget> get boardWidgets {
     return [..._boardWidgets];
+  }
+
+  List<DashboardWidget> get favouriteWidgets {
+    return [..._favouriteWidgets];
+  }
+
+  List<DashboardWidget> get quarantineWidgets {
+    return [..._quarantineWidgets];
   }
 
   Future<void> fetchConfig() async {

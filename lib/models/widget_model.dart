@@ -1,5 +1,14 @@
 import 'package:cogboardmobileapp/models/widget_config_model.dart';
-import 'dart:convert';
+
+class WidgetStatus {
+  static const String OK = "OK";
+  static const String UNSTABLE = "UNSTABLE";
+  static const String FAIL = "FAIL";
+  static const String UNKNOWN = "UNKNOWN";
+  static const String IN_PROGRESS = "IN_PROGRESS";
+  static const String ERROR_CONFIGURATION = "ERROR_CONFIGURATION";
+  static const String ERROR = "ERROR";
+}
 
 class DashboardWidget {
   String id;
