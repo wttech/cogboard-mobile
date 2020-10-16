@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 enum DashboardType {
   Favorites,
   Quarantine,
-  Home
+  Home,
+  Error,
+  Warning
 }
 
 class DashboardTab {
