@@ -28,7 +28,7 @@ class JenkinsJobWidgetDetails extends StatelessWidget {
   }
 
   String get getBranch {
-    return widget.content["branch"];
+    return widget.content["branch"] != null ? widget.content["branch"] : null;
   }
 
   @override
@@ -37,7 +37,7 @@ class JenkinsJobWidgetDetails extends StatelessWidget {
       children: [
         if (getTimestamp != null) WidgetDetailsItem(detail: getTimestamp),
         if (getDuration != null) WidgetDetailsItem(detail: getDuration),
-        WidgetDetailsItem(detail: getBranch),
+        if (getBranch != null) WidgetDetailsItem(detail: getBranch),
       ],
     );
   }
