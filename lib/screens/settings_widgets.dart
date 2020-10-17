@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -105,30 +106,20 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
             return Row(
               children: <Widget>[
                 Expanded(
-                  child: Theme(
-                    child: ListTileTheme(
-                      contentPadding: EdgeInsets.all(0),
-                      child: CheckboxListTile(
-                        value: this.checkboxValue,
-                        onChanged: (bool value) {
-                          setState(() {
-                            this.checkboxValue = value;
-                          });
-                        },
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(
-                          widget.name,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 17,
-                          ),
-                        ),
+                  child: SwitchListTile(
+                    title: Text(
+                      widget.name,
+                      style: TextStyle(
+                        color: Colors.white,
                       ),
                     ),
-                    data: ThemeData(
-                      unselectedWidgetColor: Colors.white,
-                      toggleableActiveColor: Colors.blue,
-                    ),
+                    value: true,
+                    onChanged: (bool value) {
+                      setState(() {
+                        value = true;
+                      });
+                    },
+                    activeColor: Colors.blue,
                   ),
                 ),
               ],

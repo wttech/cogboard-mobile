@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/models/connection_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:cogboardmobileapp/models/settings_tab.dart';
 
 class SettingsProjectListScreen extends StatelessWidget {
-  final List<Project> projects;
+  final List<Connection> projects;
 
   SettingsProjectListScreen(this.projects);
 
@@ -19,39 +20,40 @@ class SettingsProjectListScreen extends StatelessWidget {
             return Row(
               children: <Widget>[
                 Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 7),
-                    padding: const EdgeInsets.all(4.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    child: Text(
-                      project.name,
-                      style: TextStyle(
+                  child: Dismissible(
+                    key: UniqueKey(),
+                    background: Container(
+                      color: Theme.of(context).errorColor,
+                      child: Icon(
+                        Icons.delete,
                         color: Colors.white,
-                        fontSize: 17,
+                        size: 40,
+                      ),
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.only(right: 20),
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 4,
                       ),
                     ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Container(
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
+                    direction: DismissDirection.endToStart,
+                    child: Card(
+                      color: Theme.of(context).primaryColor,
+                      elevation: 20,
+                      child: ListTile(
+                        title: Text(
+                          project.name,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        subtitle: Text(
+                          project.name,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),

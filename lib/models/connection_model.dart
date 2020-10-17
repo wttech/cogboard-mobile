@@ -1,22 +1,29 @@
-import 'package:flutter/rendering.dart';
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 
 class Connection {
-  final int id;
   final String url;
-  final int lastVisited;
+//  final bool lastVisited;
+  final String name;
+  bool isActive;
 
-  Connection({this.id, this.url, this.lastVisited});
+  Connection({this.url, this.name, this.isActive});
 
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {'url': url, 'lastVisited': lastVisited};
+  Map<String, dynamic> toJson() => {
+        'url': url,
+//        'lastVisited': lastVisited,
+        'name': name,
+        'isActive': isActive,
+      };
 
-    if (id != null) {
-      map['id'] = id;
-    }
-    return map;
+  factory Connection.fromJson(Map<String, dynamic> json) {
+    return Connection(
+      url: json['url'],
+//      lastVisited: json['lastVisited'],
+      name: json['name'],
+      isActive: json['isActive'],
+    );
   }
 
-  String toString() {
-    return "Connection $id: $url $lastVisited";
-  }
 }

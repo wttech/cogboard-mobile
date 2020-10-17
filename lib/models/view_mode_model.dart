@@ -1,0 +1,4 @@
+enum ViewMode {
+  List,
+  Tiles
+}

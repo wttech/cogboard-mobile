@@ -1,12 +1,20 @@
+import 'package:cogboardmobileapp/models/view_mode_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cogboardmobileapp/models/settings_tab.dart';
 
 class SettingsViewMode extends StatelessWidget {
+
+  final ViewMode viewAs;
+
+  SettingsViewMode(this.viewAs);
+
+
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = Provider.of<SettingsProvider>(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 32),
       margin: EdgeInsets.only(bottom: 20),
@@ -36,32 +44,36 @@ class SettingsViewMode extends StatelessWidget {
           Row(
             children: <Widget>[
               Expanded(
-                child: OutlineButton(
-                    borderSide: BorderSide(
-                      color: Colors.grey, //Color of the border
-                      style: BorderStyle.solid, //Style of the border
-                      width: 0.8, //width of the border
-                    ),
-                    textColor: Colors.white,
-                    splashColor: Colors.blue,
-                    onPressed: () {},
-                    child: Text("List"),
+                child: FlatButton(
+                  color: viewAs == ViewMode.List ? Colors.blue : Theme.of(context).primaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0.0),
+                      side: BorderSide(color: Colors.grey)
                   ),
+                  textColor: Colors.white,
+                  splashColor: Colors.blue,
+                  onPressed: () {
+                    settingsProvider.setViewWidgetsAs(ViewMode.List);
+                  },
+                  child: Text(describeEnum(ViewMode.List).toString()),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
               ),
               Expanded(
-                child: OutlineButton(
-                  borderSide: BorderSide(
-                    color: Colors.grey, //Color of the border
-                    style: BorderStyle.solid, //Style of the border
-                    width: 0.8, //width of the border
+                child: FlatButton(
+                  color: viewAs == ViewMode.Tiles ? Colors.blue : Theme.of(context).primaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0.0),
+                      side: BorderSide(color: Colors.grey)
                   ),
                   textColor: Colors.white,
                   splashColor: Colors.blue,
-                  onPressed: () {},
-                  child: Text("Tiles"),
+                  onPressed: () {
+                    settingsProvider.setViewWidgetsAs(ViewMode.Tiles);
+                  },
+                  child: Text(describeEnum(ViewMode.Tiles).toString()),
                 ),
               ),
             ],
