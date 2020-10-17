@@ -8,6 +8,12 @@ class WidgetStatus {
   static const String IN_PROGRESS = "IN_PROGRESS";
   static const String ERROR_CONFIGURATION = "ERROR_CONFIGURATION";
   static const String ERROR = "ERROR";
+  static const String ERROR_CONNECTION = "ERROR_CONNECTION";
+  static const String TRANSPARENT = "TRANSPARENT";
+  static const String CHECKBOX_OK = "CHECKBOX_OK";
+  static const String CHECKBOX_FAIL = "CHECKBOX_FAIL";
+  static const String CHECKBOX_UNKNOWN = "CHECKBOX_FAIL";
+  static const String NONE = "NONE";
 }
 
 class DashboardWidget {

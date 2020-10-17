@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -13,8 +14,17 @@ class WidgetStatusHeader extends StatelessWidget {
   });
 
   String convertTimestamp() {
-    var date = DateTime.fromMicrosecondsSinceEpoch(lastUpdated * 1000).toLocal();
-    return DateFormat("d.M.y H:m:s").format(date);
+    var date =
+        DateTime.fromMicrosecondsSinceEpoch(lastUpdated * 1000).toLocal();
+    return DateFormat("d.M.y H:mm:ss").format(date);
+  }
+
+  Icon getStatusIcon() {
+    return StatusIcons[status] != null ? StatusIcons[status] : null;
+  }
+
+  String getWidgetStatus() {
+    return StatusCodes[status] != null ? StatusCodes[status] : "";
   }
 
   @override
@@ -26,13 +36,21 @@ class WidgetStatusHeader extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  child: Text(
-                    status,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Row(
+                    children: [
+                      if (getStatusIcon() != null) getStatusIcon(),
+                      Container(
+                        child: Text(
+                          getWidgetStatus(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        margin: const EdgeInsets.fromLTRB(5.0, 0, 0, 0),
+                      ),
+                    ],
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -81,7 +99,7 @@ class WidgetStatusHeader extends StatelessWidget {
           ),
         ],
       ),
-      color: Colors.green,
+      color: StatusColors[status],
     );
   }
 }
