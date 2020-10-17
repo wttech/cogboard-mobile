@@ -1,7 +1,14 @@
+import 'dart:convert';
+
+import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/screens/settings_screen.dart';
+import 'package:cogboardmobileapp/widgets/dashboards_screen_bottom_navigation_bar.dart';
+import 'package:cogboardmobileapp/widgets/filters_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:web_socket_channel/io.dart';
 
 class DashboardsScreen extends StatelessWidget {
   static const routeName = '/dashboards';
@@ -10,6 +17,8 @@ class DashboardsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final dashboardsProvider = Provider.of<DashboardsProvider>(context);
     final dashboardTabs = dashboardsProvider.dashboardTabs;
+    final channel = IOWebSocketChannel.connect('ws://150.254.30.119/ws');
+
     return Scaffold(
       appBar: AppBar(
         title: Text(dashboardTabs[dashboardsProvider.dashboardTabIndex].title),
@@ -23,42 +32,57 @@ class DashboardsScreen extends StatelessWidget {
           )
         ],
       ),
-      body: dashboardTabs[dashboardsProvider.dashboardTabIndex].page,
-      backgroundColor: Theme.of(context).primaryColor,
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (index) => dashboardsProvider.setDashboardTabIndex(index),
-        selectedItemColor: dashboardTabs[dashboardsProvider.dashboardTabIndex]
-            .selectedTabColor,
-        unselectedItemColor: Theme.of(context).accentColor,
-        currentIndex: dashboardsProvider.dashboardTabIndex,
-        items: [
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.star),
-            title: Text('Favourite'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.block),
-            title: Text('Quarantine'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.error),
-            title: Text('Error'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.warning),
-            title: Text('Warning'),
-          ),
-        ],
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            FutureBuilder(
+              future:  Provider.of<ConfigProvider>(context, listen: false).fetchConfig(),
+              builder: (ctx, dataSnapshot) {
+                if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                  return Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else {
+                  if (dataSnapshot.error != null) {
+                    // TODO handling errors
+                    return Center(
+                      child: Text('An error occurred!'),
+                    );
+                  } else {
+                    return StreamBuilder(
+                      stream: channel.stream,
+                      builder: (context, snapshot) {
+                        if(snapshot.hasError) {
+                          // TODO handling errors
+                          return Center(
+                            child: Text('An error occurred!'),
+                          );
+                        }
+                        if(snapshot.hasData) {
+                          Map<String, dynamic> decodedData = Map<String, dynamic>.from(jsonDecode(snapshot.data));
+                          if(decodedData['eventType'] == 'widget-update') {
+                            Future.delayed(const Duration(milliseconds: 0), () {
+                              Provider.of<ConfigProvider>(context, listen: false).updateWidget(decodedData);
+                            });
+                          }
+                        }
+                        return WidgetsList(
+                            dashboardType: dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType
+                        );
+                      },
+                    );
+                  }
+                }
+              },
+            ),
+          ],
+        ),
       ),
+      backgroundColor: Theme.of(context).primaryColor,
+      bottomNavigationBar: DashboardsScreenBottomNavigationBar(),
+      floatingActionButton: Filters(),
     );
   }
 }

@@ -1,0 +1,36 @@
+import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class DashboardsScreenBottomNavigationBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final dashboardsProvider = Provider.of<DashboardsProvider>(context);
+
+    return BottomNavigationBar(
+      selectedItemColor: dashboardsProvider.dashboardTabs[dashboardsProvider.dashboardTabIndex].selectedTabColor,
+      unselectedItemColor: Theme.of(context).accentColor,
+      currentIndex: dashboardsProvider.dashboardTabIndex,
+      type: BottomNavigationBarType.fixed,
+      showUnselectedLabels: false,
+      items: [
+        BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).primaryColor,
+          icon: Icon(Icons.home),
+          title: Text('Home'),
+        ),
+        BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).primaryColor,
+          icon: Icon(Icons.star),
+          title: Text('Favourite'),
+        ),
+        BottomNavigationBarItem(
+          backgroundColor: Theme.of(context).primaryColor,
+          icon: Icon(Icons.block),
+          title: Text('Quarantine'),
+        ),
+      ],
+      onTap: (tabIndex) =>dashboardsProvider.setDashboardTabIndex(tabIndex),
+    );
+  }
+}

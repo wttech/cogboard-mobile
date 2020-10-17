@@ -1,13 +1,13 @@
 import 'package:cogboardmobileapp/db/db.dart';
+import 'package:cogboardmobileapp/providers/filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:provider/provider.dart';
-
+import 'providers/config_provider.dart';
 import 'models/material_colors_model.dart';
 import 'providers/settings_provider.dart';
 import 'providers/dashboards_provider.dart';
-
+import 'screens/widget_screen.dart';
 import 'screens/dashboards_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/settings_screen.dart';
@@ -33,12 +33,19 @@ class CogboardApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: DashboardsProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: ConfigProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: FilterProvider(),
+        ),
       ],
       child: MaterialApp(
           title: 'Cogboard',
           theme: ThemeData(
             primarySwatch: primarySwatchColor,
             accentColor: accentColor,
+            canvasColor: primarySwatchColor,
           ),
           initialRoute: LoginScreen.routeName,
           routes: {
@@ -46,6 +53,7 @@ class CogboardApp extends StatelessWidget {
             DashboardsScreen.routeName: (ctx) => DashboardsScreen(),
             SettingsScreen.routeName: (ctx) => SettingsScreen(),
             WidgetDetailsScreen.routeName: (ctx) => WidgetDetailsScreen(),
+            DashboardItemScreen.routeName: (ctx) => DashboardItemScreen(),
           }),
     );
   }
