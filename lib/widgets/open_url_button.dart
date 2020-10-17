@@ -9,12 +9,12 @@ class OpenUrlButton extends StatelessWidget {
     @required this.widget,
   });
 
-  String get _getWidgetUrl {
+  String get getWidgetUrl {
     return widget.content["url"];
   }
 
   void openDetailsUrl() {
-    print('url opened');
+    print(getWidgetUrl);
   }
 
   String get getUrlDisplayName {
@@ -36,6 +36,9 @@ class OpenUrlButton extends StatelessWidget {
         break;
       case WidgetTypes.SONAR_QUBE_WIDGET:
         return "OPEN DASHBOARD";
+        break;
+      case WidgetTypes.AEM_HEALTHCHECK_WIDGET:
+        return "OPEN REPORT";
         break;
       default:
         return null;

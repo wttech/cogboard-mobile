@@ -1,5 +1,6 @@
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/widgets/details_container.dart';
+import 'package:cogboardmobileapp/widgets/details_header.dart';
 import 'package:cogboardmobileapp/widgets/widget_details_item.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -35,6 +36,7 @@ class JenkinsJobWidgetDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return DetailsContainer(
       children: [
+        DetailsHeader(header: "Details"),
         if (getTimestamp != null) WidgetDetailsItem(detail: getTimestamp),
         if (getDuration != null) WidgetDetailsItem(detail: getDuration),
         if (getBranch != null) WidgetDetailsItem(detail: getBranch),

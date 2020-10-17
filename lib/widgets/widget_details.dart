@@ -1,5 +1,6 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/widgets/aem_healthcheck_widget_details.dart';
 import 'package:cogboardmobileapp/widgets/bamboo_deployment_widget_details.dart';
 import 'package:cogboardmobileapp/widgets/bamboo_plan_widget_details.dart';
 import 'package:cogboardmobileapp/widgets/checkbox_widget_details.dart';
@@ -17,29 +18,21 @@ class WidgetDetails extends StatelessWidget {
   Widget getWidgetDetails(DashboardWidget widget) {
     switch (widget.type) {
       case WidgetTypes.BAMBOO_PLAN_WIDGET:
-        return BambooPlanWidgetDetails(
-          widget: widget,
-        );
+        return BambooPlanWidgetDetails(widget: widget);
         break;
       case WidgetTypes.BAMBOO_DEPLOYMENT_WIDGET:
-        return BambooDeploymentWidgetDetails(
-          widget: widget,
-        );
+        return BambooDeploymentWidgetDetails(widget: widget);
         break;
       case WidgetTypes.JENKINS_JOB_WIDGET:
-        return JenkinsJobWidgetDetails(
-          widget: widget,
-        );
+        return JenkinsJobWidgetDetails(widget: widget);
         break;
       case WidgetTypes.SONAR_QUBE_WIDGET:
-        return SonarQubeWidgetDetails(
-          widget: widget,
-        );
+        return SonarQubeWidgetDetails(widget: widget);
         break;
       case WidgetTypes.CHECKBOX_WIDGET:
-        return CheckboxWidgetDetails(
-          widget: widget,
-        );
+        return CheckboxWidgetDetails(widget: widget);
+      case WidgetTypes.AEM_HEALTHCHECK_WIDGET:
+        return AemHealthcheckWidgetDetails(widget: widget);
       default:
         return null;
         break;
@@ -53,21 +46,6 @@ class WidgetDetails extends StatelessWidget {
         children: [
           Column(
             children: [
-              Row(
-                children: [
-                  Container(
-                    child: Text(
-                      "Details",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                    margin: const EdgeInsets.fromLTRB(30.0, 20.0, 0, 21.0),
-                  ),
-                ],
-              ),
               if (getWidgetDetails(widget) != null) getWidgetDetails(widget),
             ],
           ),

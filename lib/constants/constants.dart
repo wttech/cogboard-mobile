@@ -77,4 +77,12 @@ class WidgetTypes {
   static const String SONAR_QUBE_WIDGET = "SonarQubeWidget";
   static const String BAMBOO_DEPLOYMENT_WIDGET = "BambooDeploymentWidget";
   static const String CHECKBOX_WIDGET = "CheckboxWidget";
+  static const String AEM_HEALTHCHECK_WIDGET = "AemHealthcheckWidget";
+  static const String SERVICE_CHECK_WIDGET = "ServiceCheckWidget";
+  static const String AEM_BUNDLE_INFO_WIDGET = "AemBundleInfoWidget";
+  static const String TODO_LIST_WIDGET = "ToDoListWidget";
+  static const String LINK_LIST_WIDGET = "LinkListWidget";
+  static const String TEXT_WIDGET = "TextWidget";
+  static const String WORLD_CLOCK_WIDGET = "WorldClockWidget";
+  static const String PERSON_DRAW_WIDGET = "PersonDrawWidget";
 }
