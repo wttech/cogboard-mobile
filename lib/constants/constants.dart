@@ -76,4 +76,5 @@ class WidgetTypes {
   static const String JENKINS_JOB_WIDGET = "JenkinsJobWidget";
   static const String SONAR_QUBE_WIDGET = "SonarQubeWidget";
   static const String BAMBOO_DEPLOYMENT_WIDGET = "BambooDeploymentWidget";
+  static const String CHECKBOX_WIDGET = "CheckboxWidget";
 }

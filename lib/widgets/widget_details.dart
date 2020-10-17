@@ -2,6 +2,7 @@ import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/widgets/bamboo_deployment_widget_details.dart';
 import 'package:cogboardmobileapp/widgets/bamboo_plan_widget_details.dart';
+import 'package:cogboardmobileapp/widgets/checkbox_widget_details.dart';
 import 'package:cogboardmobileapp/widgets/jenkins_job_widget_details.dart';
 import 'package:cogboardmobileapp/widgets/sonar_qube_widget_details.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,10 @@ class WidgetDetails extends StatelessWidget {
           widget: widget,
         );
         break;
+      case WidgetTypes.CHECKBOX_WIDGET:
+        return CheckboxWidgetDetails(
+          widget: widget,
+        );
       default:
         return null;
         break;

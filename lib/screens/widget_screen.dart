@@ -18,7 +18,13 @@ class DashboardItemScreen extends StatelessWidget {
   }
 
   int getLastUpdated(DashboardWidget widget) {
-    return widget.content["lastUpdated"];
+    return widget.content["lastUpdated"] != null
+        ? widget.content["lastUpdated"]
+        : 0;
+  }
+
+  bool renderWidget(DashboardWidget widget) {
+    return widget.content.length != 0 ? true : false;
   }
 
   @override
@@ -47,12 +53,14 @@ class DashboardItemScreen extends StatelessWidget {
             status: getWidgetStatus(widget),
             lastUpdated: getLastUpdated(widget),
           ),
-          WidgetDetails(
-            widget: widget,
-          ),
-          OpenUrlButton(
-            widget: widget,
-          ),
+          if (renderWidget(widget))
+            WidgetDetails(
+              widget: widget,
+            ),
+          if (renderWidget(widget))
+            OpenUrlButton(
+              widget: widget,
+            ),
         ],
       ),
       backgroundColor: Theme.of(context).primaryColor,

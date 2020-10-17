@@ -14,6 +14,7 @@ class WidgetStatusHeader extends StatelessWidget {
   });
 
   String convertTimestamp() {
+    if (lastUpdated == 0) return null;
     var date =
         DateTime.fromMicrosecondsSinceEpoch(lastUpdated * 1000).toLocal();
     return DateFormat("d.M.y H:mm:ss").format(date);
@@ -87,16 +88,17 @@ class WidgetStatusHeader extends StatelessWidget {
           Container(
             child: Row(
               children: [
-                Container(
-                  child: Text(
-                    convertTimestamp(),
-                    style: TextStyle(
-                      fontSize: 9,
-                      color: Colors.white,
+                if (convertTimestamp() != null)
+                  Container(
+                    child: Text(
+                      convertTimestamp(),
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.white,
+                      ),
                     ),
+                    margin: const EdgeInsets.fromLTRB(30.0, 0, 0, 20.0),
                   ),
-                  margin: const EdgeInsets.fromLTRB(30.0, 0, 0, 20.0),
-                ),
               ],
             ),
           ),
