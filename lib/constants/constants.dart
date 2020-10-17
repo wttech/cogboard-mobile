@@ -7,6 +7,7 @@ const StatusColors = {
   "CHECKBOX_UNKNOWN": Color.fromRGBO(38, 36, 62, 1),
   "NONE": Color.fromRGBO(38, 36, 62, 1),
   "UNKNOWN": Color.fromRGBO(38, 36, 62, 1),
+  "DEFAULT": Color.fromRGBO(38, 36, 62, 1),
   "OK": Color.fromRGBO(1, 148, 48, 1),
   "IN_PROGRESS": Color.fromRGBO(25, 140, 189, 1),
   "UNSTABLE": Color.fromRGBO(255, 151, 36, 1),
@@ -68,13 +69,6 @@ const StatusIcons = {
     color: Colors.white,
     size: 16.0,
   )
-};
-
-const WidgetTypeDetails = {
-  "BambooPlanWidget",
-  "JenkinsJobWidget",
-  "SonarQubeWidget",
-  "BambooDeploymentWidget"
 };
 
 class WidgetTypes {
