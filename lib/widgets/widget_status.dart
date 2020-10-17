@@ -32,39 +32,40 @@ class WidgetStatusHeader extends StatelessWidget {
     return Container(
       child: Column(
         children: [
-          Container(
-            child: Row(
-              children: [
-                Container(
-                  child: Row(
-                    children: [
-                      if (getStatusIcon() != null) getStatusIcon(),
-                      Container(
-                        child: Text(
-                          getWidgetStatus(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+          if (getWidgetStatus() != "")
+            Container(
+              child: Row(
+                children: [
+                  Container(
+                    child: Row(
+                      children: [
+                        if (getStatusIcon() != null) getStatusIcon(),
+                        Container(
+                          child: Text(
+                            getWidgetStatus(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                          margin: const EdgeInsets.fromLTRB(5.0, 0, 0, 0),
                         ),
-                        margin: const EdgeInsets.fromLTRB(5.0, 0, 0, 0),
-                      ),
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 1.5,
+                      ],
                     ),
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  margin: const EdgeInsets.fromLTRB(30.0, 20.0, 20.0, 10.0),
-                  padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                )
-              ],
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    margin: const EdgeInsets.fromLTRB(30.0, 20.0, 20.0, 10.0),
+                    padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                  )
+                ],
+              ),
             ),
-          ),
           Container(
             child: Row(
               children: [
@@ -76,7 +77,9 @@ class WidgetStatusHeader extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  margin: const EdgeInsets.fromLTRB(30.0, 0, 0, 5.0),
+                  margin: getWidgetStatus() != ""
+                      ? const EdgeInsets.fromLTRB(30.0, 0, 0, 5.0)
+                      : const EdgeInsets.fromLTRB(30.0, 20.0, 0, 5.0),
                 ),
               ],
             ),
