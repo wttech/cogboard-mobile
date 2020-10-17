@@ -1,22 +1,23 @@
 import 'dart:convert';
 
-import 'package:flutter/rendering.dart';
-
 class Connection {
   final String url;
   final bool lastVisited;
+  final String name;
 
-  Connection({this.url, this.lastVisited});
+  Connection({this.url, this.lastVisited, this.name});
 
   Map<String, dynamic> toJson() => {
         'url': url,
         'lastVisited': lastVisited,
+        'name': name,
       };
 
   factory Connection.fromJson(Map<String, dynamic> json) {
     return Connection(
       url: json['url'],
       lastVisited: json['lastVisited'],
+      name: json['name'],
     );
   }
 
