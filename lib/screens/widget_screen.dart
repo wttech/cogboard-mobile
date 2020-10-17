@@ -34,9 +34,11 @@ class DashboardItemScreen extends StatelessWidget {
             status: getWidgetStatus(widget),
             lastUpdated: getLastUpdated(widget),
           ),
-          WidgetDetails(widget: widget),
+          WidgetDetails(
+            widget: widget,
+          ),
           OpenUrlButton(
-            widget,
+            widget: widget,
           ),
         ],
       ),
