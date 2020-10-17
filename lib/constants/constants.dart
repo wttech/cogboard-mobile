@@ -69,3 +69,17 @@ const StatusIcons = {
     size: 16.0,
   )
 };
+
+const WidgetTypeDetails = {
+  "BambooPlanWidget",
+  "JenkinsJobWidget",
+  "SonarQubeWidget",
+  "BambooDeploymentWidget"
+};
+
+class WidgetTypes {
+  static const String BAMBOO_PLAN_WIDGET = "BambooPlanWidget";
+  static const String JENKINS_JOB_WIDGET = "JenkinsJobWidget";
+  static const String SONAR_QUBE_WIDGET = "SonarQubeWidget";
+  static const String BAMBOO_DEPLOYMENT_WIDGET = "BambooDeploymentWidget";
+}
