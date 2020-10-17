@@ -26,7 +26,20 @@ class DashboardItemScreen extends StatelessWidget {
     final DashboardWidget widget = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.block),
+            color: Theme.of(context).accentColor,
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.star),
+            color: Theme.of(context).accentColor,
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: Column(
         children: [
           WidgetStatusHeader(
