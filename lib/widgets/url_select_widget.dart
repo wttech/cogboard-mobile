@@ -37,47 +37,65 @@ class _UrlSelectState extends State<UrlSelect> {
   }
 
   Future<void> loadConnections() async {
-    final settingsProvider =
-        Provider.of<SettingsProvider>(context, listen: false);
-    await settingsProvider.fetchConnections();
-    int c = getLastVisitedConnection(settingsProvider.connections);
+    try {
+      final settingsProvider =
+          Provider.of<SettingsProvider>(context, listen: false);
+      await settingsProvider.fetchConnections();
+      int c = getLastVisitedConnection(settingsProvider.connections);
 
-    setState(() {
-      _connections = settingsProvider.connections;
-      _connection = c;
-    });
+      setState(() {
+        _connections = settingsProvider.connections;
+        _connection = c;
+      });
+    } catch (Exception) {
+      print("No connections fetched");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final settingsProvider = Provider.of<SettingsProvider>(context);
-    return Container(
-      width: 150,
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        // borderRadius: BorderRadius.circular(10),
-      ),
-      child: new Theme(
-        data: Theme.of(context).copyWith(
-          canvasColor: Colors.white,
+
+    if (_connections != null && _connections.length > 0) {
+      return Container(
+        width: 150,
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          // borderRadius: BorderRadius.circular(10),
         ),
-        child: new DropdownButton<int>(
-          value: _connection,
-          underline: Container(),
-          isExpanded: true,
-          items: _connections.map((Connection c) {
-            return new DropdownMenuItem(
-              child: new Text(c.url),
-              value: _connections.indexOf(c),
-            );
-          }).toList(),
-          onChanged: (c) => setState(() {
-            _connection = c;
-            settingsProvider.setCurrentConnection(_connections[c]);
-          }),
+        child: new Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Colors.white,
+          ),
+          child: new DropdownButton<int>(
+            value: _connection,
+            underline: Container(),
+            isExpanded: true,
+            items: _connections.map((Connection c) {
+              return new DropdownMenuItem(
+                child: new Text(c.url),
+                value: _connections.indexOf(c),
+              );
+            }).toList(),
+            onChanged: (c) => setState(() {
+              _connection = c;
+              settingsProvider.setCurrentConnection(_connections[c]);
+            }),
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Container(
+        child: Text(
+          "There are no Connections saved.",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+        ),
+      );
+    }
   }
 }
