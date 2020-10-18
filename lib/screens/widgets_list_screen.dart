@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
+import 'package:cogboardmobileapp/models/board_model.dart';
 import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
@@ -7,10 +8,13 @@ import 'package:cogboardmobileapp/screens/widget_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class WidgetsList extends StatelessWidget {
-  final DashboardType dashboardType;
+import 'settings_screen.dart';
 
-  WidgetsList({@required this.dashboardType});
+class WidgetsListScreen extends StatelessWidget {
+  final DashboardType dashboardType;
+  final Board board;
+
+  WidgetsListScreen({@required this.dashboardType, this.board});
 
   @override
   Widget build(BuildContext context) {
@@ -19,36 +23,38 @@ class WidgetsList extends StatelessWidget {
     final List<DashboardWidget> widgetsList =
         getWidgetsList(configProvider, dashboardType);
 
-    return Expanded(
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
       child: ListView.builder(
-          itemCount: widgetsList.length,
-          itemBuilder: (ctx, index) {
-            return Card(
-              color: getWidgetColor(widgetsList[index]),
-              elevation: 5,
-              margin: EdgeInsets.symmetric(
-                vertical: 8,
-                horizontal: 16,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  title: Text(
-                    widgetsList[index].title,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  trailing: getWidgetIcon(widgetsList[index]),
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      DashboardItemScreen.routeName,
-                      arguments: widgetsList[index],
-                    );
-                  },
+            itemCount: widgetsList.length,
+            itemBuilder: (ctx, index) {
+              return Card(
+                color: getWidgetColor(widgetsList[index]),
+                elevation: 5,
+                margin: index == 0 ? EdgeInsets.fromLTRB(16, 0, 16, 8) : EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
                 ),
-              ),
-            );
-          }),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text(
+                      widgetsList[index].title,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    trailing: getWidgetIcon(widgetsList[index]),
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        DashboardItemScreen.routeName,
+                        arguments: widgetsList[index],
+                      );
+                    },
+                  ),
+                ),
+              );
+            }),
     );
   }
 
@@ -56,7 +62,7 @@ class WidgetsList extends StatelessWidget {
       ConfigProvider configProvider, DashboardType dashboardType) {
     switch (dashboardType) {
       case DashboardType.Home:
-        return configProvider.boardWidgets;
+        return configProvider.getBoardWidgets(board);
         break;
       case DashboardType.Favorites:
         return configProvider.favouriteWidgets;
@@ -65,7 +71,7 @@ class WidgetsList extends StatelessWidget {
         return configProvider.quarantineWidgets;
         break;
       default:
-        return configProvider.boardWidgets;
+        return [];
     }
   }
 

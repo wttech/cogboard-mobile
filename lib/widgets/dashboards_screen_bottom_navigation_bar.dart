@@ -12,7 +12,6 @@ class DashboardsScreenBottomNavigationBar extends StatelessWidget {
       unselectedItemColor: Theme.of(context).accentColor,
       currentIndex: dashboardsProvider.dashboardTabIndex,
       type: BottomNavigationBarType.fixed,
-      showUnselectedLabels: false,
       items: [
         BottomNavigationBarItem(
           backgroundColor: Theme.of(context).primaryColor,
