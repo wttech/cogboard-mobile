@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/board_model.dart';
 import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
@@ -19,7 +20,8 @@ class WidgetsListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final filterProvider = Provider.of<FilterProvider>(context);
     final configProvider = Provider.of<ConfigProvider>(context);
-    final List<DashboardWidget> widgetsList = getWidgetsList(configProvider, dashboardType);
+    final List<DashboardWidget> widgetsList =
+        getWidgetsList(configProvider, dashboardType);
 
     return MediaQuery.removePadding(
       context: context,
@@ -56,8 +58,9 @@ class WidgetsListScreen extends StatelessWidget {
     );
   }
 
-  List<DashboardWidget> getWidgetsList(ConfigProvider configProvider, DashboardType dashboardType) {
-    switch(dashboardType) {
+  List<DashboardWidget> getWidgetsList(
+      ConfigProvider configProvider, DashboardType dashboardType) {
+    switch (dashboardType) {
       case DashboardType.Home:
         return configProvider.getBoardWidgets(board);
         break;
@@ -76,32 +79,32 @@ class WidgetsListScreen extends StatelessWidget {
     if (dashboardWidget.content.containsKey("widgetStatus")) {
       switch (dashboardWidget.content["widgetStatus"]) {
         case WidgetStatus.OK:
-          return Color.fromRGBO(1, 148, 48, 1);
+          return StatusColors[WidgetStatus.OK];
           break;
         case WidgetStatus.ERROR:
-          return Color.fromRGBO(225, 49, 47, 1);
+          return StatusColors[WidgetStatus.ERROR];
           break;
         case WidgetStatus.ERROR_CONFIGURATION:
-          return Color.fromRGBO(225, 49, 47, 1);
+          return StatusColors[WidgetStatus.ERROR_CONFIGURATION];
           break;
         case WidgetStatus.FAIL:
-          return Color.fromRGBO(225, 49, 47, 1);
+          return StatusColors[WidgetStatus.FAIL];
           break;
         case WidgetStatus.UNSTABLE:
-          return Color.fromRGBO(225, 49, 47, 1);
+          return StatusColors[WidgetStatus.UNSTABLE];
           break;
         case WidgetStatus.UNKNOWN:
-          return Color.fromRGBO(38, 36, 62, 1);
+          return StatusColors[WidgetStatus.UNKNOWN];
           break;
         case WidgetStatus.IN_PROGRESS:
-          return Color.fromRGBO(25, 140, 189, 1);
+          return StatusColors[WidgetStatus.IN_PROGRESS];
           break;
         default:
-          return Color.fromRGBO(38, 36, 62, 1);
+          return StatusColors["DEFAULT"];
           break;
       }
     } else {
-      return Color.fromRGBO(38, 36, 62, 1);
+      return StatusColors["DEFAULT"];
     }
   }
 
@@ -154,11 +157,11 @@ class WidgetsListScreen extends StatelessWidget {
           break;
         case WidgetStatus.IN_PROGRESS:
           return SizedBox(
-            height: 25,
+              height: 25,
               width: 25,
               child: CircularProgressIndicator(
-            backgroundColor: Colors.white,
-          ));
+                backgroundColor: Colors.white,
+              ));
           break;
         default:
           return null;
