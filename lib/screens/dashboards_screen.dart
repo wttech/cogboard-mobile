@@ -6,6 +6,7 @@ import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/screens/home_screen.dart';
 import 'package:cogboardmobileapp/screens/widget_list_error_screen.dart';
 import 'package:cogboardmobileapp/screens/widget_list_loading_screen.dart';
+import 'package:cogboardmobileapp/screens/widgets_list_screen.dart';
 import 'package:cogboardmobileapp/widgets/dashboards_screen_bottom_navigation_bar.dart';
 import 'package:cogboardmobileapp/widgets/filters_widget.dart';
 import 'package:cogboardmobileapp/widgets/screen_with_appbar_widget.dart';
