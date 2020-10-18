@@ -1,22 +1,33 @@
-import 'package:flutter/rendering.dart';
+import 'dart:convert';
 
 class Connection {
-  final int id;
   final String url;
-  final int lastVisited;
+  final bool lastVisited;
+  final String name;
 
-  Connection({this.id, this.url, this.lastVisited});
+  Connection({this.url, this.lastVisited, this.name});
 
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {'url': url, 'lastVisited': lastVisited};
+  Map<String, dynamic> toJson() => {
+        'url': url,
+        'lastVisited': lastVisited,
+        'name': name,
+      };
 
-    if (id != null) {
-      map['id'] = id;
-    }
-    return map;
+  factory Connection.fromJson(Map<String, dynamic> json) {
+    return Connection(
+      url: json['url'],
+      lastVisited: json['lastVisited'],
+      name: json['name'],
+    );
   }
 
-  String toString() {
-    return "Connection $id: $url $lastVisited";
-  }
+  static String encodeConnections(List<Connection> connections) =>
+      json.encode(connections
+          .map<Map<String, dynamic>>((connection) => connection.toJson())
+          .toList());
+
+  static List<Connection> decodeConnections(String connections) =>
+      (json.decode(connections) as List<dynamic>)
+          .map<Connection>((connection) => Connection.fromJson(connection))
+          .toList();
 }

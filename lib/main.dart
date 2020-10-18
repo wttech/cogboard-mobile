@@ -1,5 +1,5 @@
-import 'package:cogboardmobileapp/db/db.dart';
 import 'package:cogboardmobileapp/providers/filter_provider.dart';
+import 'package:cogboardmobileapp/screens/add_connection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -17,8 +17,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-
-  await ApplicationDatabase.init();
   runApp(CogboardApp());
 }
 
@@ -54,6 +52,7 @@ class CogboardApp extends StatelessWidget {
             SettingsScreen.routeName: (ctx) => SettingsScreen(),
             WidgetDetailsScreen.routeName: (ctx) => WidgetDetailsScreen(),
             DashboardItemScreen.routeName: (ctx) => DashboardItemScreen(),
+            AddConnectionScreen.routeName: (ctx) => AddConnectionScreen(),
           }),
     );
   }
