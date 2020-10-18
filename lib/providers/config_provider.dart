@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class ConfigProvider with ChangeNotifier {
   Config _config;
-  int _currentBoardIndex = 2;
+  int _currentBoardIndex = 0;
   List<DashboardWidget> _boardWidgets;
   List<DashboardWidget> _favouriteWidgets = [];
   List<DashboardWidget> _quarantineWidgets = [];
