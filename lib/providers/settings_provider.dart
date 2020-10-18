@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 class SettingsProvider with ChangeNotifier {
   final SharedPref _sharedPref = new SharedPref();
   List<Connection> _connections;
-
-  // SettingsProvider() {
-  //   loadConenctions();
-  // }
+  Connection _currentConnection;
 
   Future<void> fetchConnections() async {
     _connections =
@@ -18,5 +15,15 @@ class SettingsProvider with ChangeNotifier {
 
   List<Connection> get connections {
     return _connections;
+  }
+
+  Connection get currentConnection {
+    return _currentConnection;
+  }
+
+  void setCurrentConnection(Connection c) {
+    _currentConnection = c;
+    // TODO set lastVisited = true to corresponding connection in _connections
+    notifyListeners();
   }
 }
