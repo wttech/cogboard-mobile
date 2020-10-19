@@ -4,10 +4,10 @@ import 'package:cogboardmobileapp/widgets/details_container.dart';
 import 'package:cogboardmobileapp/widgets/details_header.dart';
 import 'package:flutter/material.dart';
 
-class AemHealthcheckWidgetDetails extends StatelessWidget {
+class AemHealthcheckWidget extends StatelessWidget {
   final DashboardWidget widget;
 
-  AemHealthcheckWidgetDetails({
+  AemHealthcheckWidget({
     @required this.widget,
   });
 

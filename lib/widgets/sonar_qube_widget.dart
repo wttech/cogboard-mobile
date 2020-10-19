@@ -5,10 +5,10 @@ import 'package:cogboardmobileapp/widgets/widget_details_item.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class SonarQubeWidgetDetails extends StatelessWidget {
+class SonarQubeWidget extends StatelessWidget {
   final DashboardWidget widget;
 
-  SonarQubeWidgetDetails({
+  SonarQubeWidget({
     @required this.widget,
   });
 

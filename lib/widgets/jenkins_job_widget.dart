@@ -5,10 +5,10 @@ import 'package:cogboardmobileapp/widgets/widget_details_item.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class JenkinsJobWidgetDetails extends StatelessWidget {
+class JenkinsJobWidget extends StatelessWidget {
   final DashboardWidget widget;
 
-  JenkinsJobWidgetDetails({
+  JenkinsJobWidget({
     @required this.widget,
   });
 
