@@ -1,6 +1,8 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
+import 'package:cogboardmobileapp/providers/widget_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class WidgetStatusHeader extends StatelessWidget {
   final String widgetTitle;
@@ -17,7 +19,7 @@ class WidgetStatusHeader extends StatelessWidget {
     if (lastUpdated == 0) return null;
     var date =
         DateTime.fromMicrosecondsSinceEpoch(lastUpdated * 1000).toLocal();
-    return DateFormat("d.M.y H:mm:ss").format(date);
+    return DateFormat('d.M.y H:mm:ss').format(date);
   }
 
   Icon getStatusIcon() {
@@ -25,15 +27,17 @@ class WidgetStatusHeader extends StatelessWidget {
   }
 
   String getWidgetStatus() {
-    return StatusCodes[status] != null ? StatusCodes[status] : "";
+    return StatusCodes[status] != null ? StatusCodes[status] : '';
   }
 
   @override
   Widget build(BuildContext context) {
+    final widgetProvider = Provider.of<WidgetProvider>(context);
+
     return Container(
       child: Column(
         children: [
-          if (getWidgetStatus() != "")
+          if (getWidgetStatus() != '')
             Container(
               child: Row(
                 children: [
@@ -78,7 +82,7 @@ class WidgetStatusHeader extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  margin: getWidgetStatus() != ""
+                  margin: getWidgetStatus() != ''
                       ? const EdgeInsets.fromLTRB(30.0, 0, 0, 5.0)
                       : const EdgeInsets.fromLTRB(30.0, 20.0, 0, 5.0),
                 ),
@@ -104,7 +108,7 @@ class WidgetStatusHeader extends StatelessWidget {
           ),
         ],
       ),
-      color: StatusColors[status],
+      color: StatusColors[widgetProvider.widgetStatus ?? status],
     );
   }
 }

@@ -12,7 +12,6 @@ class AemHealthcheckItem extends StatelessWidget {
   });
 
   void openUrl() {
-    print(url);
   }
 
   @override
