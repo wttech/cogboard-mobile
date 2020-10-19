@@ -21,7 +21,7 @@ class WidgetsListScreen extends StatelessWidget {
     final filterProvider = Provider.of<FilterProvider>(context);
     final configProvider = Provider.of<ConfigProvider>(context);
     final List<DashboardWidget> widgetsList =
-        getWidgetsList(configProvider, dashboardType);
+        getWidgetsList(configProvider, dashboardType, filterProvider);
 
     return MediaQuery.removePadding(
       context: context,
@@ -59,16 +59,16 @@ class WidgetsListScreen extends StatelessWidget {
   }
 
   List<DashboardWidget> getWidgetsList(
-      ConfigProvider configProvider, DashboardType dashboardType) {
+      ConfigProvider configProvider, DashboardType dashboardType, FilterProvider filterProvider) {
     switch (dashboardType) {
       case DashboardType.Home:
-        return configProvider.getBoardWidgets(board);
+        return filterProvider.getFilteredWidgetList(configProvider.getBoardWidgets(board));
         break;
       case DashboardType.Favorites:
-        return configProvider.favouriteWidgets;
+        return filterProvider.getFilteredWidgetList(configProvider.favouriteWidgets);
         break;
       case DashboardType.Quarantine:
-        return configProvider.quarantineWidgets;
+        return filterProvider.getFilteredWidgetList(configProvider.quarantineWidgets);
         break;
       default:
         return [];
@@ -76,8 +76,8 @@ class WidgetsListScreen extends StatelessWidget {
   }
 
   Color getWidgetColor(DashboardWidget dashboardWidget) {
-    if (dashboardWidget.content.containsKey("widgetStatus")) {
-      switch (dashboardWidget.content["widgetStatus"]) {
+    if (dashboardWidget.content.containsKey('widgetStatus')) {
+      switch (dashboardWidget.content['widgetStatus']) {
         case WidgetStatus.OK:
           return StatusColors[WidgetStatus.OK];
           break;

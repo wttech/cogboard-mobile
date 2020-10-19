@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:flutter/material.dart';
 
 class FilterProvider with ChangeNotifier {
@@ -24,5 +25,47 @@ class FilterProvider with ChangeNotifier {
   void toggleErrorFilter() {
     _errorFilterPresent = !_errorFilterPresent;
     notifyListeners();
+  }
+
+  List<DashboardWidget> getFilteredWidgetList(List<DashboardWidget> widgetList) {
+    return widgetList.where((widget) {
+      if (this.isWarningFilterPresent && this.isErrorFilterPresent) {
+        return this.isWarningOrErrorWidget(widget);
+      } else if (this.isWarningFilterPresent) {
+        return isWarningWidget(widget);
+      } else if (this.isErrorFilterPresent) {
+        return isErrorWidget(widget);
+      } else {
+        return true;
+      }
+    }).toList();
+  }
+
+  bool isWarningOrErrorWidget(DashboardWidget widget) {
+    return isWarningWidget(widget) || isErrorWidget(widget);
+  }
+
+  bool isWarningWidget(DashboardWidget widget) {
+    if (widget.content.containsKey('widgetStatus')) {
+      String widgetStatus = widget.content['widgetStatus'];
+      return widgetStatus == WidgetStatus.CHECKBOX_UNKNOWN ||
+          widgetStatus == WidgetStatus.UNKNOWN ||
+          widgetStatus == WidgetStatus.UNSTABLE;
+    } else {
+      return false;
+    }
+  }
+
+  bool isErrorWidget(DashboardWidget widget) {
+    if (widget.content.containsKey('widgetStatus')) {
+      String widgetStatus = widget.content['widgetStatus'];
+      return widgetStatus == WidgetStatus.CHECKBOX_FAIL ||
+          widgetStatus == WidgetStatus.ERROR_CONNECTION ||
+          widgetStatus == WidgetStatus.ERROR_CONFIGURATION ||
+          widgetStatus == WidgetStatus.ERROR ||
+          widgetStatus == WidgetStatus.FAIL;
+    } else {
+      return false;
+    }
   }
 }
