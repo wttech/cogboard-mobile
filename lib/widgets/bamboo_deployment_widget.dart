@@ -4,12 +4,16 @@ import 'package:cogboardmobileapp/widgets/details_header.dart';
 import 'package:cogboardmobileapp/widgets/widget_details_item.dart';
 import 'package:flutter/material.dart';
 
-class BambooPlanWidgetDetails extends StatelessWidget {
+class BambooDeploymentWidget extends StatelessWidget {
   final DashboardWidget widget;
 
-  BambooPlanWidgetDetails({
+  BambooDeploymentWidget({
     @required this.widget,
   });
+
+  String get getDeploymentState {
+    return widget.content["deploymentState"];
+  }
 
   String get getLifeCycleState {
     return widget.content["lifeCycleState"];
@@ -20,7 +24,8 @@ class BambooPlanWidgetDetails extends StatelessWidget {
     return DetailsContainer(
       children: [
         DetailsHeader(header: "Details"),
-        WidgetDetailsItem(detail: "State: $getLifeCycleState"),
+        WidgetDetailsItem(detail: "Deployment state: $getDeploymentState"),
+        WidgetDetailsItem(detail: "Lifecycle  state: $getLifeCycleState"),
       ],
     );
   }

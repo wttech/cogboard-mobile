@@ -40,6 +40,8 @@ class OpenUrlButton extends StatelessWidget {
       case WidgetTypes.AEM_HEALTHCHECK_WIDGET:
         return "OPEN REPORT";
         break;
+      case WidgetTypes.AEM_BUNDLE_INFO_WIDGET:
+        return "VIEW BUNDLES";
       default:
         return null;
         break;
