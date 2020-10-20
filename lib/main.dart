@@ -41,9 +41,24 @@ class CogboardApp extends StatelessWidget {
       child: MaterialApp(
           title: 'Cogboard',
           theme: ThemeData(
-            primarySwatch: primarySwatchColor,
-            accentColor: accentColor,
-            canvasColor: primarySwatchColor,
+            // primaryColor: Color.fromRGBO(12, 12, 12, 1),
+            // primarySwatch: generateMaterialColor(Color.fromRGBO(12, 12, 12, 1)),
+            colorScheme: ColorScheme(
+                primary: Color(0xffbb86fc),
+                primaryVariant: Color(0xffbb86fc),
+                secondary: Color(0xff03dac6),
+                secondaryVariant: Color(0xff03dac6),
+                surface: Color(0xff121212),
+                background: Color(0xff121212),
+                error: Color(0xffcf6679),
+                onPrimary: Color(0xff000000),
+                onSecondary: Color(0xff000000),
+                onSurface: Color(0xffffffff),
+                onBackground: Color(0xffffffff),
+                onError: Color(0xff000000),
+                brightness: Brightness.dark),
+            // accentColor: accentColor,
+            // canvasColor: generateMaterialColor(Color.fromRGBO(23, 23, 23, 1)),
           ),
           initialRoute: LoginScreen.routeName,
           routes: {

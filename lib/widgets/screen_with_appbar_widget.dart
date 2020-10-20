@@ -31,7 +31,7 @@ class ScreenWithAppBar extends StatelessWidget {
                 ),
                 IconButton(
                   icon: Icon(Icons.settings),
-                  color: Theme.of(context).accentColor,
+                  color: Colors.grey,
                   padding: const EdgeInsets.all(0),
                   onPressed: () {
                     Navigator.of(context).pushNamed(SettingsScreen.routeName);
@@ -40,9 +40,7 @@ class ScreenWithAppBar extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(
-            child: body
-          ),
+          Expanded(child: body),
         ],
       ),
     );

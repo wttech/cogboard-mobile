@@ -25,18 +25,21 @@ class DashboardsScreen extends StatelessWidget {
 
     return Scaffold(
       body: FutureBuilder(
-        future: Provider.of<ConfigProvider>(context, listen: false).fetchConfig(),
+        future:
+            Provider.of<ConfigProvider>(context, listen: false).fetchConfig(),
         builder: (ctx, dataSnapshot) {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             return ScreenWithAppBar(
-              appBarTitle: dashboardTabs[dashboardsProvider.dashboardTabIndex].title,
+              appBarTitle:
+                  dashboardTabs[dashboardsProvider.dashboardTabIndex].title,
               body: WidgetListLoadingScreen(),
             );
           } else {
             if (dataSnapshot.error != null) {
               // TODO handling errors
               return ScreenWithAppBar(
-                appBarTitle: dashboardTabs[dashboardsProvider.dashboardTabIndex].title,
+                appBarTitle:
+                    dashboardTabs[dashboardsProvider.dashboardTabIndex].title,
                 body: WidgetListErrorScreen(),
               );
             } else {
@@ -46,24 +49,34 @@ class DashboardsScreen extends StatelessWidget {
                   if (snapshot.hasError) {
                     // TODO handling errors
                     return ScreenWithAppBar(
-                      appBarTitle: dashboardTabs[dashboardsProvider.dashboardTabIndex].title,
+                      appBarTitle:
+                          dashboardTabs[dashboardsProvider.dashboardTabIndex]
+                              .title,
                       body: WidgetListErrorScreen(),
                     );
                   }
                   if (snapshot.hasData) {
-                    Map<String, dynamic> decodedData = Map<String, dynamic>.from(jsonDecode(snapshot.data));
+                    Map<String, dynamic> decodedData =
+                        Map<String, dynamic>.from(jsonDecode(snapshot.data));
                     if (decodedData['eventType'] == 'widget-update') {
                       Future.delayed(const Duration(milliseconds: 0), () {
-                        Provider.of<ConfigProvider>(context, listen: false).updateWidget(decodedData);
+                        Provider.of<ConfigProvider>(context, listen: false)
+                            .updateWidget(decodedData);
                       });
                     }
                   }
-                  return dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType == DashboardType.Home
+                  return dashboardTabs[dashboardsProvider.dashboardTabIndex]
+                              .dashboardType ==
+                          DashboardType.Home
                       ? HomeWidgetScreen()
                       : ScreenWithAppBar(
-                          appBarTitle: dashboardTabs[dashboardsProvider.dashboardTabIndex].title,
+                          appBarTitle: dashboardTabs[
+                                  dashboardsProvider.dashboardTabIndex]
+                              .title,
                           body: WidgetsListScreen(
-                              dashboardType: dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType),
+                              dashboardType: dashboardTabs[
+                                      dashboardsProvider.dashboardTabIndex]
+                                  .dashboardType),
                         );
                 },
               );
@@ -71,7 +84,7 @@ class DashboardsScreen extends StatelessWidget {
           }
         },
       ),
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       bottomNavigationBar: DashboardsScreenBottomNavigationBar(),
       floatingActionButton: Filters(),
     );

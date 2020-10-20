@@ -8,28 +8,29 @@ class DashboardsScreenBottomNavigationBar extends StatelessWidget {
     final dashboardsProvider = Provider.of<DashboardsProvider>(context);
 
     return BottomNavigationBar(
-      selectedItemColor: dashboardsProvider.dashboardTabs[dashboardsProvider.dashboardTabIndex].selectedTabColor,
-      unselectedItemColor: Theme.of(context).accentColor,
+      selectedItemColor: dashboardsProvider
+          .dashboardTabs[dashboardsProvider.dashboardTabIndex].selectedTabColor,
+      unselectedItemColor: Colors.grey,
       currentIndex: dashboardsProvider.dashboardTabIndex,
       type: BottomNavigationBarType.fixed,
       items: [
         BottomNavigationBarItem(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           icon: Icon(Icons.home),
           title: Text('Home'),
         ),
         BottomNavigationBarItem(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           icon: Icon(Icons.star),
           title: Text('Favourite'),
         ),
         BottomNavigationBarItem(
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           icon: Icon(Icons.block),
           title: Text('Quarantine'),
         ),
       ],
-      onTap: (tabIndex) =>dashboardsProvider.setDashboardTabIndex(tabIndex),
+      onTap: (tabIndex) => dashboardsProvider.setDashboardTabIndex(tabIndex),
     );
   }
 }

@@ -23,7 +23,7 @@ class LoginScreen extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Container(
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.background,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -34,58 +34,34 @@ class LoginScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Material(
-                        color: Colors.blue,
-                        child: InkWell(
-                          onTap: () => {
-                            Navigator.of(context).pushReplacementNamed(
-                                DashboardsScreen.routeName)
-                          },
-                          child: Container(
-                            child: Center(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 15),
-                                child: Text(
-                                  "Connect",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                      FlatButton(
+                        onPressed: () => {
+                          Navigator.of(context)
+                              .pushReplacementNamed(DashboardsScreen.routeName)
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text('CONNECT'),
                         ),
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       SizedBox(
                         width: 30,
                       ),
-                      Material(
-                        color: Colors.green,
-                        child: InkWell(
-                          onTap: () => Navigator.of(context).push(
+                      FlatButton(
+                        color: Theme.of(context).colorScheme.secondary,
+                        onPressed: () => {
+                          Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => AddConnectionScreen(),
                             ),
-                          ),
-                          child: Container(
-                            child: Center(
-                              child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 15),
-                                  child: Text(
-                                    "+",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w300),
-                                  )),
-                            ),
-                          ),
+                          )
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text('+'),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ],
