@@ -39,13 +39,13 @@ class DashboardItemScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.block),
-            color: Theme.of(context).accentColor,
-            onPressed: () => configProvider.addQuarantineWidget(widget),
+            color:  getQuarantineIconColor(widget, configProvider, context),
+            onPressed: () => configProvider.updateQuarantineWidget(widget),
           ),
           IconButton(
             icon: Icon(Icons.star),
-            color: Theme.of(context).accentColor,
-            onPressed: () => configProvider.addFavouriteWidget(widget),
+            color: getFavouriteIconColor(widget, configProvider, context),
+            onPressed: () => configProvider.updateFavouriteWidget(widget),
           ),
         ],
       ),
@@ -68,5 +68,21 @@ class DashboardItemScreen extends StatelessWidget {
       ),
       backgroundColor: Theme.of(context).primaryColor,
     );
+  }
+
+  Color getFavouriteIconColor(DashboardWidget widget, ConfigProvider configProvider, BuildContext context) {
+    if(configProvider.favouriteWidgets.contains(widget)) {
+      return Colors.yellow;
+    } else {
+      return Theme.of(context).accentColor;
+    }
+  }
+
+  Color getQuarantineIconColor(DashboardWidget widget, ConfigProvider configProvider, BuildContext context) {
+    if(configProvider.quarantineWidgets.contains(widget)) {
+      return Colors.red;
+    } else {
+      return Theme.of(context).accentColor;
+    }
   }
 }

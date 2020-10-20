@@ -45,28 +45,30 @@ class WidgetListItem extends StatelessWidget {
       switch (dashboardWidget.content['widgetStatus']) {
         case WidgetStatus.OK:
           return StatusColors[WidgetStatus.OK];
-          break;
         case WidgetStatus.ERROR:
           return StatusColors[WidgetStatus.ERROR];
-          break;
         case WidgetStatus.ERROR_CONFIGURATION:
           return StatusColors[WidgetStatus.ERROR_CONFIGURATION];
-          break;
+        case WidgetStatus.ERROR_CONNECTION:
+          return StatusColors[WidgetStatus.ERROR_CONNECTION];
         case WidgetStatus.FAIL:
           return StatusColors[WidgetStatus.FAIL];
-          break;
         case WidgetStatus.UNSTABLE:
           return StatusColors[WidgetStatus.UNSTABLE];
-          break;
         case WidgetStatus.UNKNOWN:
           return StatusColors[WidgetStatus.UNKNOWN];
-          break;
         case WidgetStatus.IN_PROGRESS:
           return StatusColors[WidgetStatus.IN_PROGRESS];
-          break;
+        case WidgetStatus.CHECKBOX_FAIL:
+          return StatusColors[WidgetStatus.CHECKBOX_FAIL];
+        case WidgetStatus.CHECKBOX_OK:
+          return StatusColors[WidgetStatus.CHECKBOX_OK];
+        case WidgetStatus.CHECKBOX_UNKNOWN:
+          return StatusColors[WidgetStatus.CHECKBOX_UNKNOWN];
+        case WidgetStatus.NONE:
+          return StatusColors[WidgetStatus.NONE];
         default:
           return StatusColors["DEFAULT"];
-          break;
       }
     } else {
       return StatusColors["DEFAULT"];

@@ -14,34 +14,81 @@ class DismissibleWidgetListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: ValueKey(widget.id),
-      background: Container(
-        color: Theme.of(context).errorColor,
-        child: Icon(
-          Icons.delete,
-          color: Colors.white,
-          size: 35,
-        ),
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
-        margin: EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 4,
-        ),
-      ),
-      onDismissed: (_) {
-        if (dashboardType == DashboardType.Favorites) {
-          Provider.of<ConfigProvider>(context, listen: false).removeFavouriteWidget(widget);
-        } else if (dashboardType == DashboardType.Quarantine) {
-          Provider.of<ConfigProvider>(context, listen: false).removeQuarantineWidget(widget);
-        }
-      },
-      child: WidgetListItem(
-        widget: widget,
-        widgetIndex: widgetIndex,
-        dashboardType: dashboardType,
-      ),
-    );
+    final configProvider = Provider.of<ConfigProvider>(context);
+
+    return widgetIsGoingToBeDeleted(configProvider)
+        ? SizedBox()
+        : Dismissible(
+            key: ValueKey(widget.id),
+            background: Container(
+              color: Theme.of(context).errorColor,
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+                size: 35,
+              ),
+              alignment: Alignment.centerRight,
+              padding: EdgeInsets.only(right: 20),
+              margin: EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 4,
+              ),
+            ),
+            onDismissed: (_) => removeWidgetListItem(context, configProvider),
+            child: WidgetListItem(
+              widget: widget,
+              widgetIndex: widgetIndex,
+              dashboardType: dashboardType,
+            ),
+          );
+  }
+
+  bool widgetIsGoingToBeDeleted(ConfigProvider configProvider) {
+    return (dashboardType == DashboardType.Favorites &&
+            configProvider.favouriteWidgetsToBeDeleted.contains(widget.id)) ||
+        (dashboardType == DashboardType.Quarantine && configProvider.quarantineWidgetsToBeDeleted.contains(widget.id));
+  }
+
+  Future<void> removeWidgetListItem(BuildContext context, ConfigProvider configProvider) async {
+    if (dashboardType == DashboardType.Favorites) {
+      configProvider.setFavouriteWidgetToBeDeleted(widget);
+    } else if (dashboardType == DashboardType.Quarantine) {
+      configProvider.setQuarantineWidgetToBeDeleted(widget);
+    }
+    await showUndoSnackBar(context, configProvider);
+  }
+
+  Future<void> showUndoSnackBar(BuildContext context, ConfigProvider configProvider) async {
+    await Scaffold.of(context)
+        .showSnackBar(SnackBar(
+          duration: Duration(seconds: 5),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Removed ' + widget.title),
+              RaisedButton(
+                textColor: Colors.white,
+                padding: const EdgeInsets.all(0.0),
+                onPressed: () {
+                  if (dashboardType == DashboardType.Favorites) {
+                    configProvider.unsetFavouriteWidgetToBeDeleted(widget);
+                  } else if (dashboardType == DashboardType.Quarantine) {
+                    configProvider.unsetQuarantineWidgetToBeDeleted(widget);
+                  }
+                  Scaffold.of(context).removeCurrentSnackBar();
+                },
+                child: const Text('undo'),
+              )
+            ],
+          ),
+        ))
+        .closed;
+    if (widgetIsGoingToBeDeleted(configProvider)) {
+      if (dashboardType == DashboardType.Favorites) {
+        configProvider.removeFavouriteWidget(widget);
+      } else if (dashboardType == DashboardType.Quarantine) {
+        configProvider.removeQuarantineWidget(widget);
+      }
+    }
   }
 }

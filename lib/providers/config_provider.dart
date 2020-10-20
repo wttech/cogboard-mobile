@@ -12,6 +12,11 @@ class ConfigProvider with ChangeNotifier {
   List<Board> _boards;
   UrlPreferences _urlPreferences;
   String _currentUrl = 'http://150.254.30.119/api/config';
+  List<String> _favouriteWidgetsToBeDeleted = [];
+  List<String> _quarantineWidgetsToBeDeleted = [];
+
+  List<String> get favouriteWidgetsToBeDeleted => _favouriteWidgetsToBeDeleted;
+  List<String> get quarantineWidgetsToBeDeleted => _quarantineWidgetsToBeDeleted;
 
   List<DashboardWidget> get favouriteWidgets {
     return _config.widgets.widgetsById.entries
@@ -59,16 +64,24 @@ class ConfigProvider with ChangeNotifier {
     });
   }
 
-  Future<void> addFavouriteWidget(DashboardWidget widget) async {
-    _urlPreferences.favouriteWidgetIds.add(widget.id);
-    await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
-    notifyListeners();
+  Future<void> updateFavouriteWidget(DashboardWidget widget) async {
+    if(favouriteWidgets.contains(widget)) {
+      await removeFavouriteWidget(widget);
+    } else {
+      _urlPreferences.favouriteWidgetIds.add(widget.id);
+      await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+      notifyListeners();
+    }
   }
 
-  Future<void> addQuarantineWidget(DashboardWidget widget) async {
-    _urlPreferences.quarantineWidgetIds.add(widget.id);
-    await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
-    notifyListeners();
+  Future<void> updateQuarantineWidget(DashboardWidget widget) async {
+    if(quarantineWidgets.contains(widget)) {
+      await removeQuarantineWidget(widget);
+    } else {
+      _urlPreferences.quarantineWidgetIds.add(widget.id);
+      await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+      notifyListeners();
+    }
   }
 
   Future<void> removeFavouriteWidget(DashboardWidget widget) async {
@@ -81,5 +94,21 @@ class ConfigProvider with ChangeNotifier {
     _urlPreferences.quarantineWidgetIds.removeWhere((widgetId) => widgetId == widget.id);
     await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
     notifyListeners();
+  }
+
+  void setFavouriteWidgetToBeDeleted(DashboardWidget dashboardWidget) {
+    _favouriteWidgetsToBeDeleted.add(dashboardWidget.id);
+  }
+
+  void setQuarantineWidgetToBeDeleted(DashboardWidget dashboardWidget) {
+    _quarantineWidgetsToBeDeleted.add(dashboardWidget.id);
+  }
+
+  void unsetFavouriteWidgetToBeDeleted(DashboardWidget dashboardWidget) {
+    _favouriteWidgetsToBeDeleted.remove(dashboardWidget.id);
+  }
+
+  void unsetQuarantineWidgetToBeDeleted(DashboardWidget dashboardWidget) {
+    _quarantineWidgetsToBeDeleted.remove(dashboardWidget.id);
   }
 }
