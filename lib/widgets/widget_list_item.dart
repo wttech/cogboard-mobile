@@ -65,8 +65,10 @@ class WidgetListItem extends StatelessWidget {
         color: Colors.white,
       );
     }
-    if (dashboardWidget.content.containsKey("widgetStatus")) {
-      switch (dashboardWidget.content["widgetStatus"]) {
+    if (dashboardWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus =
+      EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+      switch (widgetStatus) {
         case WidgetStatus.OK:
           return Icon(
             Icons.check,
