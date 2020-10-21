@@ -21,7 +21,7 @@ class CheckboxWidget extends StatefulWidget {
 
 class _CheckboxWidgetState extends State<CheckboxWidget> {
   String get getWidgetStatus {
-    return widget.widget.content['widgetStatus'];
+    return widget.widget.content[DashboardWidget.WIDGET_STATUS_KEY];
   }
 
   String getNextStatus(String status) {

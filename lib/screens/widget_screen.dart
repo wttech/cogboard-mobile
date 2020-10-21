@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/widget_provider.dart';
 import 'package:cogboardmobileapp/screens/widget_list_error_screen.dart';
 import 'package:cogboardmobileapp/widgets/open_url_button.dart';
@@ -7,6 +8,7 @@ import 'package:cogboardmobileapp/widgets/widget_details.dart';
 import 'package:cogboardmobileapp/widgets/widget_status.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:web_socket_channel/io.dart';
 
 class DashboardItemScreen extends StatelessWidget {
@@ -17,8 +19,8 @@ class DashboardItemScreen extends StatelessWidget {
   }
 
   String getWidgetStatus(DashboardWidget widget) {
-    return widget.content['widgetStatus'] != null
-        ? widget.content['widgetStatus']
+    return widget.content[DashboardWidget.WIDGET_STATUS_KEY] != null
+        ? widget.content[DashboardWidget.WIDGET_STATUS_KEY]
         : '';
   }
 
@@ -35,6 +37,7 @@ class DashboardItemScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DashboardWidget widget = ModalRoute.of(context).settings.arguments;
+    final configProvider = Provider.of<ConfigProvider>(context);
     final channel = IOWebSocketChannel.connect('ws://150.254.30.119/ws');
 
     return Scaffold(
@@ -42,13 +45,13 @@ class DashboardItemScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.block),
-            color: Theme.of(context).accentColor,
-            onPressed: () {},
+            color:  getQuarantineIconColor(widget, configProvider, context),
+            onPressed: () => configProvider.updateQuarantineWidget(widget),
           ),
           IconButton(
             icon: Icon(Icons.star),
-            color: Theme.of(context).accentColor,
-            onPressed: () {},
+            color: getFavouriteIconColor(widget, configProvider, context),
+            onPressed: () => configProvider.updateFavouriteWidget(widget),
           ),
         ],
       ),
@@ -90,5 +93,21 @@ class DashboardItemScreen extends StatelessWidget {
       ),
       backgroundColor: Theme.of(context).primaryColor,
     );
+  }
+
+  Color getFavouriteIconColor(DashboardWidget widget, ConfigProvider configProvider, BuildContext context) {
+    if(configProvider.favouriteWidgets.contains(widget)) {
+      return Colors.yellow;
+    } else {
+      return Theme.of(context).accentColor;
+    }
+  }
+
+  Color getQuarantineIconColor(DashboardWidget widget, ConfigProvider configProvider, BuildContext context) {
+    if(configProvider.quarantineWidgets.contains(widget)) {
+      return Colors.red;
+    } else {
+      return Theme.of(context).accentColor;
+    }
   }
 }

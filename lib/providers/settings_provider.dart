@@ -3,13 +3,12 @@ import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:flutter/material.dart';
 
 class SettingsProvider with ChangeNotifier {
-  final SharedPref _sharedPref = new SharedPref();
   List<Connection> _connections;
   Connection _currentConnection;
 
   Future<void> fetchConnections() async {
     _connections =
-        Connection.decodeConnections(await _sharedPref.read('connections'));
+        Connection.decodeConnections(await SharedPref.read('connections'));
     notifyListeners();
   }
 

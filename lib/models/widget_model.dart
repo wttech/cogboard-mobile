@@ -1,19 +1,19 @@
 import 'package:cogboardmobileapp/models/widget_config_model.dart';
 
-class WidgetStatus {
-  static const String OK = "OK";
-  static const String UNSTABLE = "UNSTABLE";
-  static const String FAIL = "FAIL";
-  static const String UNKNOWN = "UNKNOWN";
-  static const String IN_PROGRESS = "IN_PROGRESS";
-  static const String ERROR_CONFIGURATION = "ERROR_CONFIGURATION";
-  static const String ERROR = "ERROR";
-  static const String ERROR_CONNECTION = "ERROR_CONNECTION";
-  static const String TRANSPARENT = "TRANSPARENT";
-  static const String CHECKBOX_OK = "CHECKBOX_OK";
-  static const String CHECKBOX_FAIL = "CHECKBOX_FAIL";
-  static const String CHECKBOX_UNKNOWN = "CHECKBOX_FAIL";
-  static const String NONE = "NONE";
+enum WidgetStatus {
+  OK,
+  UNSTABLE,
+  FAIL,
+  UNKNOWN,
+  IN_PROGRESS,
+  ERROR_CONFIGURATION,
+  ERROR,
+  ERROR_CONNECTION,
+  TRANSPARENT,
+  CHECKBOX_OK,
+  CHECKBOX_FAIL,
+  CHECKBOX_UNKNOWN,
+  NONE
 }
 
 class DashboardWidget {
@@ -23,6 +23,8 @@ class DashboardWidget {
   WidgetConfig config;
   bool disabled;
   Map<String, dynamic> content;
+
+  static const WIDGET_STATUS_KEY = 'widgetStatus';
 
   DashboardWidget({this.id, this.title, this.type, this.config, this.disabled, this.content});
 

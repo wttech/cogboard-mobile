@@ -1,4 +1,0 @@
-enum DashboardFilterType {
-  Error,
-  Warning
-}
