@@ -1,13 +1,19 @@
+import 'package:cogboardmobileapp/models/hints_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cogboardmobileapp/models/settings_tab.dart';
 
 class SettingsHints extends StatelessWidget {
 
+  final Hints showHints;
+
+  SettingsHints(this.showHints);
+
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = Provider.of<SettingsProvider>(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 32),
       margin: EdgeInsets.only(bottom: 20),
@@ -37,32 +43,36 @@ class SettingsHints extends StatelessWidget {
           Row(
             children: <Widget>[
               Expanded(
-                child: OutlineButton(
-                  borderSide: BorderSide(
-                    color: Colors.grey, //Color of the border
-                    style: BorderStyle.solid, //Style of the border
-                    width: 0.8, //width of the border
+                child: FlatButton(
+                  color: showHints == Hints.On ? Colors.blue : Theme.of(context).primaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0.0),
+                      side: BorderSide(color: Colors.grey)
                   ),
                   textColor: Colors.white,
                   splashColor: Colors.blue,
-                  onPressed: () {},
-                  child: Text("On"),
+                  onPressed: () {
+                    settingsProvider.setShowHints(Hints.On);
+                  },
+                  child: Text(describeEnum(Hints.On).toString()),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
               ),
               Expanded(
-                child: OutlineButton(
-                  borderSide: BorderSide(
-                    color: Colors.grey, //Color of the border
-                    style: BorderStyle.solid, //Style of the border
-                    width: 0.8, //width of the border
+                child: FlatButton(
+                  color: showHints == Hints.Off ? Colors.blue : Theme.of(context).primaryColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0.0),
+                      side: BorderSide(color: Colors.grey)
                   ),
                   textColor: Colors.white,
                   splashColor: Colors.blue,
-                  onPressed: () {},
-                  child: Text("Off"),
+                  onPressed: () {
+                    settingsProvider.setShowHints(Hints.Off);
+                  },
+                  child: Text(describeEnum(Hints.Off).toString()),
                 ),
               ),
             ],

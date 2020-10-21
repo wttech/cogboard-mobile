@@ -31,71 +31,25 @@ class SettingsScreen extends StatelessWidget {
                 child: Container(
                   child: Column(
                     children: <Widget>[
-                      Container(
-                        child: LayoutBuilder(builder: (ctx, constrains) {
-                          return Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 32,
-                            ),
-                            margin: EdgeInsets.only(
-                              top: 32,
-                              bottom: 15,
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Container(
-                                    child: Text(
-                                      "Projects",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 19,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-//                      SizedBox(
-//                        width: constrains.maxWidth * 0.50,
-//                      ),
-                                Container(
-//                        width: constrains.maxWidth * 0.3,
-                                  child: Icon(
-                                    Icons.add,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        }),
-                      ),
                       SettingsProjectListScreen(settingsProvider.connections),
                       Divider(
                         color: Colors.grey,
                         indent: 30,
                         endIndent: 30,
                       ),
-                      SettingsViewMode(settingsProvider.viewAs),
+                      SettingsViewMode(settingsProvider.viewMode),
                       Divider(
                         color: Colors.grey,
                         indent: 30,
                         endIndent: 30,
                       ),
-                      Container(
-                          padding: EdgeInsets.symmetric(horizontal: 32),
-                          margin: EdgeInsets.only(bottom: 20),
-                          child: SettingsWidgets(settingsProvider.widgets)),
+                      SettingsWidgets(settingsProvider.widgets, settingsProvider.sortBy),
                       Divider(
                         color: Colors.grey,
                         indent: 30,
                         endIndent: 30,
                       ),
-                      SettingsHints(),
-                      Divider(
-                        color: Colors.grey,
-                        indent: 30,
-                        endIndent: 30,
-                      ),
+                      SettingsHints(settingsProvider.showHints),
                     ],
                   ),
                 ),
