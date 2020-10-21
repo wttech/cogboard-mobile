@@ -54,7 +54,7 @@ class DismissibleWidgetListItem extends StatelessWidget {
     Scaffold.of(context).removeCurrentSnackBar();
     Scaffold.of(context)
         .showSnackBar(SnackBar(
-          duration: Duration(seconds: 5),
+          duration: Duration(seconds: 3),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

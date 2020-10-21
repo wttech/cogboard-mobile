@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 
 class FilterProvider with ChangeNotifier {
@@ -51,8 +52,9 @@ class FilterProvider with ChangeNotifier {
   }
 
   bool isWarningWidget(DashboardWidget widget) {
-    if (widget.content.containsKey('widgetStatus')) {
-      String widgetStatus = widget.content['widgetStatus'];
+    if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus =
+          EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
       return widgetStatus == WidgetStatus.CHECKBOX_UNKNOWN ||
           widgetStatus == WidgetStatus.UNKNOWN ||
           widgetStatus == WidgetStatus.UNSTABLE;
@@ -62,8 +64,9 @@ class FilterProvider with ChangeNotifier {
   }
 
   bool isErrorWidget(DashboardWidget widget) {
-    if (widget.content.containsKey('widgetStatus')) {
-      String widgetStatus = widget.content['widgetStatus'];
+    if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus =
+          EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
       return widgetStatus == WidgetStatus.CHECKBOX_FAIL ||
           widgetStatus == WidgetStatus.ERROR_CONNECTION ||
           widgetStatus == WidgetStatus.ERROR_CONFIGURATION ||

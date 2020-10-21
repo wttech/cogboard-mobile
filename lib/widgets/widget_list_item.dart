@@ -3,6 +3,7 @@ import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/providers/filter_provider.dart';
 import 'package:cogboardmobileapp/screens/widget_screen.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,35 +44,10 @@ class WidgetListItem extends StatelessWidget {
   }
 
   Color getWidgetColor(DashboardWidget dashboardWidget) {
-    if (dashboardWidget.content.containsKey('widgetStatus')) {
-      switch (dashboardWidget.content['widgetStatus']) {
-        case WidgetStatus.OK:
-          return StatusColors[WidgetStatus.OK];
-        case WidgetStatus.ERROR:
-          return StatusColors[WidgetStatus.ERROR];
-        case WidgetStatus.ERROR_CONFIGURATION:
-          return StatusColors[WidgetStatus.ERROR_CONFIGURATION];
-        case WidgetStatus.ERROR_CONNECTION:
-          return StatusColors[WidgetStatus.ERROR_CONNECTION];
-        case WidgetStatus.FAIL:
-          return StatusColors[WidgetStatus.FAIL];
-        case WidgetStatus.UNSTABLE:
-          return StatusColors[WidgetStatus.UNSTABLE];
-        case WidgetStatus.UNKNOWN:
-          return StatusColors[WidgetStatus.UNKNOWN];
-        case WidgetStatus.IN_PROGRESS:
-          return StatusColors[WidgetStatus.IN_PROGRESS];
-        case WidgetStatus.CHECKBOX_FAIL:
-          return StatusColors[WidgetStatus.CHECKBOX_FAIL];
-        case WidgetStatus.CHECKBOX_OK:
-          return StatusColors[WidgetStatus.CHECKBOX_OK];
-        case WidgetStatus.CHECKBOX_UNKNOWN:
-          return StatusColors[WidgetStatus.CHECKBOX_UNKNOWN];
-        case WidgetStatus.NONE:
-          return StatusColors[WidgetStatus.NONE];
-        default:
-          return StatusColors["DEFAULT"];
-      }
+    if (dashboardWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus =
+      EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+      return StatusColors[EnumToString.convertToString(widgetStatus)];
     } else {
       return StatusColors["DEFAULT"];
     }
