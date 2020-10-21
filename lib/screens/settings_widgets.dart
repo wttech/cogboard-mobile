@@ -1,4 +1,4 @@
-import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/models/widget_type_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';

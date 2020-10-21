@@ -1,7 +1,7 @@
 import 'package:cogboardmobileapp/models/connection_model.dart';
 import 'package:cogboardmobileapp/models/hints_model.dart';
 import 'package:cogboardmobileapp/models/view_mode_model.dart';
-import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/models/widget_type_model.dart';
 import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
