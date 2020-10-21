@@ -68,7 +68,25 @@ const StatusIcons = {
     Icons.block,
     color: Colors.white,
     size: 16.0,
-  )
+  ),
+};
+
+const CheckboxIcons = {
+  "CHECKBOX_OK": Icon(
+    Icons.check,
+    color: Colors.white,
+    size: 64.0,
+  ),
+  "CHECKBOX_FAIL": Icon(
+    Icons.clear,
+    color: Colors.white,
+    size: 64.0,
+  ),
+  "CHECKBOX_UNKNOWN": Icon(
+    Icons.remove,
+    color: Colors.white,
+    size: 64.0,
+  ),
 };
 
 class WidgetTypes {

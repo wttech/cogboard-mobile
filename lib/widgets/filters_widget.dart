@@ -111,6 +111,15 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
   }
 
   Widget filter(FilterProvider filterProvider) {
+    if(filterProvider.shouldResetFilterView) {
+        filterProvider.markRestarted();
+        Future.delayed(const Duration(milliseconds: 0), () {
+          setState(() {
+            this.isOpened = false;
+          });
+        });
+    }
+
     return Container(
       padding: const EdgeInsets.only(right: 25.0),
       child: FloatingActionButton(

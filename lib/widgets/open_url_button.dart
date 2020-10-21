@@ -14,7 +14,6 @@ class OpenUrlButton extends StatelessWidget {
   }
 
   void openDetailsUrl() {
-    print(getWidgetUrl);
   }
 
   String get getUrlDisplayName {

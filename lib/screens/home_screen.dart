@@ -14,6 +14,8 @@ class _HomeWidgetScreenState extends State<HomeWidgetScreen> {
   PageController _controller = PageController(
     initialPage: 0,
   );
+  String boardTitle;
+  int pageNumber = 0;
 
   @override
   void dispose() {
@@ -24,18 +26,25 @@ class _HomeWidgetScreenState extends State<HomeWidgetScreen> {
   @override
   Widget build(BuildContext context) {
     final configProvider = Provider.of<ConfigProvider>(context, listen: false);
-
-    return PageView(
-      controller: _controller,
-      children: configProvider.boards
-          .map((board) => ScreenWithAppBar(
-                appBarTitle: board.title,
-                body: WidgetsListScreen(
-                  dashboardType: DashboardType.Home,
-                  board: board,
-                ),
-              ))
-          .toList(),
+    boardTitle = configProvider.boards[pageNumber].title;
+    return ScreenWithAppBar(
+      appBarTitle: boardTitle,
+      body: PageView(
+        controller: _controller,
+        onPageChanged: (boardIndex) {
+          setState(() {
+            pageNumber = boardIndex;
+          });
+        },
+        children: configProvider.boards
+            .map(
+              (board) => WidgetsListScreen(
+                dashboardType: DashboardType.Home,
+                board: board,
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }

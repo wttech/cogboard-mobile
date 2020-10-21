@@ -48,7 +48,6 @@ class _UrlSelectState extends State<UrlSelect> {
         _connection = c;
       });
     } catch (Exception) {
-      print("No connections fetched");
     }
   }
 
