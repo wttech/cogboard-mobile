@@ -4,6 +4,7 @@ import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/filter_provider.dart';
+import 'package:cogboardmobileapp/screens/empty_widget_list_screen.dart';
 import 'package:cogboardmobileapp/screens/widget_screen.dart';
 import 'package:cogboardmobileapp/widgets/dismissible_widget_list_item.dart';
 import 'package:cogboardmobileapp/widgets/widget_list_item.dart';
@@ -24,25 +25,34 @@ class WidgetsListScreen extends StatelessWidget {
     final configProvider = Provider.of<ConfigProvider>(context);
     final List<DashboardWidget> widgetsList = getWidgetsList(configProvider, dashboardType, filterProvider);
 
-    return MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      child: ListView.builder(
-          itemCount: widgetsList.length,
-          itemBuilder: (ctx, index) {
-            return dashboardType == DashboardType.Home
-                ? WidgetListItem(
-                    widget: widgetsList[index],
-                    widgetIndex: index,
-                    dashboardType: dashboardType,
-                  )
-                : DismissibleWidgetListItem(
-                    widget: widgetsList[index],
-                    widgetIndex: index,
-                    dashboardType: dashboardType,
-                  );
-          }),
-    );
+    Future.delayed(const Duration(milliseconds: 0), () {
+      while (configProvider.snackBarsToRemove > 0) {
+        Scaffold.of(context).removeCurrentSnackBar();
+        configProvider.markSnackBarAsRemoved();
+      }
+    });
+
+    return widgetsList.length == 0
+        ? EmptyWidgetListScreen()
+        : MediaQuery.removePadding(
+            context: context,
+            removeTop: true,
+            child: ListView.builder(
+                itemCount: widgetsList.length,
+                itemBuilder: (ctx, index) {
+                  return dashboardType == DashboardType.Home
+                      ? WidgetListItem(
+                          widget: widgetsList[index],
+                          widgetIndex: index,
+                          dashboardType: dashboardType,
+                        )
+                      : DismissibleWidgetListItem(
+                          widget: widgetsList[index],
+                          widgetIndex: index,
+                          dashboardType: dashboardType,
+                        );
+                }),
+          );
   }
 
   List<DashboardWidget> getWidgetsList(

@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 class FilterProvider with ChangeNotifier {
   bool _warningFilterPresent = false;
   bool _errorFilterPresent = false;
+  bool _shouldResetFilterView = false;
+
+  bool get shouldResetFilterView {
+    return _shouldResetFilterView;
+  }
 
   bool get isWarningFilterPresent {
     return _warningFilterPresent;
@@ -67,5 +72,14 @@ class FilterProvider with ChangeNotifier {
     } else {
       return false;
     }
+  }
+
+  void resetFilterView() {
+    _shouldResetFilterView = true;
+    notifyListeners();
+  }
+
+  void markRestarted() {
+    _shouldResetFilterView = false;
   }
 }

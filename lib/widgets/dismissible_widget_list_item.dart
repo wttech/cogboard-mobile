@@ -16,9 +16,7 @@ class DismissibleWidgetListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final configProvider = Provider.of<ConfigProvider>(context);
 
-    return widgetIsGoingToBeDeleted(configProvider)
-        ? SizedBox()
-        : Dismissible(
+    return Dismissible(
             key: ValueKey(widget.id),
             background: Container(
               color: Theme.of(context).errorColor,
@@ -43,23 +41,18 @@ class DismissibleWidgetListItem extends StatelessWidget {
           );
   }
 
-  bool widgetIsGoingToBeDeleted(ConfigProvider configProvider) {
-    return (dashboardType == DashboardType.Favorites &&
-            configProvider.favouriteWidgetsToBeDeleted.contains(widget.id)) ||
-        (dashboardType == DashboardType.Quarantine && configProvider.quarantineWidgetsToBeDeleted.contains(widget.id));
-  }
-
-  Future<void> removeWidgetListItem(BuildContext context, ConfigProvider configProvider) async {
+  void removeWidgetListItem(BuildContext context, ConfigProvider configProvider) {
     if (dashboardType == DashboardType.Favorites) {
-      configProvider.setFavouriteWidgetToBeDeleted(widget);
+      configProvider.removeFavouriteWidget(widget);
     } else if (dashboardType == DashboardType.Quarantine) {
-      configProvider.setQuarantineWidgetToBeDeleted(widget);
+      configProvider.removeQuarantineWidget(widget);
     }
-    await showUndoSnackBar(context, configProvider);
+    showUndoSnackBar(context, configProvider);
   }
 
-  Future<void> showUndoSnackBar(BuildContext context, ConfigProvider configProvider) async {
-    await Scaffold.of(context)
+  void showUndoSnackBar(BuildContext context, ConfigProvider configProvider) {
+    Scaffold.of(context).removeCurrentSnackBar();
+    Scaffold.of(context)
         .showSnackBar(SnackBar(
           duration: Duration(seconds: 5),
           content: Row(
@@ -71,24 +64,16 @@ class DismissibleWidgetListItem extends StatelessWidget {
                 padding: const EdgeInsets.all(0.0),
                 onPressed: () {
                   if (dashboardType == DashboardType.Favorites) {
-                    configProvider.unsetFavouriteWidgetToBeDeleted(widget);
+                    configProvider.addFavouriteWidget(widget);
                   } else if (dashboardType == DashboardType.Quarantine) {
-                    configProvider.unsetQuarantineWidgetToBeDeleted(widget);
+                  configProvider.addQuarantineWidget(widget);
                   }
-                  Scaffold.of(context).removeCurrentSnackBar();
+                  configProvider.addSnackBarToRemove();
                 },
                 child: const Text('undo'),
               )
             ],
           ),
-        ))
-        .closed;
-    if (widgetIsGoingToBeDeleted(configProvider)) {
-      if (dashboardType == DashboardType.Favorites) {
-        configProvider.removeFavouriteWidget(widget);
-      } else if (dashboardType == DashboardType.Quarantine) {
-        configProvider.removeQuarantineWidget(widget);
-      }
-    }
+        ));
   }
 }

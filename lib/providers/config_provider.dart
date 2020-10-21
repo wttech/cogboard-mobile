@@ -14,9 +14,11 @@ class ConfigProvider with ChangeNotifier {
   String _currentUrl = 'http://150.254.30.119/api/config';
   List<String> _favouriteWidgetsToBeDeleted = [];
   List<String> _quarantineWidgetsToBeDeleted = [];
+  int _snackBarsToRemove = 0;
 
   List<String> get favouriteWidgetsToBeDeleted => _favouriteWidgetsToBeDeleted;
   List<String> get quarantineWidgetsToBeDeleted => _quarantineWidgetsToBeDeleted;
+  int get snackBarsToRemove => _snackBarsToRemove;
 
   List<DashboardWidget> get favouriteWidgets {
     return _config.widgets.widgetsById.entries
@@ -68,9 +70,7 @@ class ConfigProvider with ChangeNotifier {
     if(favouriteWidgets.contains(widget)) {
       await removeFavouriteWidget(widget);
     } else {
-      _urlPreferences.favouriteWidgetIds.add(widget.id);
-      await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
-      notifyListeners();
+     await addFavouriteWidget(widget);
     }
   }
 
@@ -78,10 +78,20 @@ class ConfigProvider with ChangeNotifier {
     if(quarantineWidgets.contains(widget)) {
       await removeQuarantineWidget(widget);
     } else {
-      _urlPreferences.quarantineWidgetIds.add(widget.id);
-      await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
-      notifyListeners();
+     await addQuarantineWidget(widget);
     }
+  }
+
+  Future<void> addFavouriteWidget(DashboardWidget widget) async {
+    _urlPreferences.favouriteWidgetIds.add(widget.id);
+    await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+    notifyListeners();
+  }
+
+  Future<void> addQuarantineWidget(DashboardWidget widget) async {
+    _urlPreferences.quarantineWidgetIds.add(widget.id);
+    await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+    notifyListeners();
   }
 
   Future<void> removeFavouriteWidget(DashboardWidget widget) async {
@@ -96,19 +106,11 @@ class ConfigProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setFavouriteWidgetToBeDeleted(DashboardWidget dashboardWidget) {
-    _favouriteWidgetsToBeDeleted.add(dashboardWidget.id);
+  void addSnackBarToRemove() {
+    _snackBarsToRemove++;
   }
 
-  void setQuarantineWidgetToBeDeleted(DashboardWidget dashboardWidget) {
-    _quarantineWidgetsToBeDeleted.add(dashboardWidget.id);
-  }
-
-  void unsetFavouriteWidgetToBeDeleted(DashboardWidget dashboardWidget) {
-    _favouriteWidgetsToBeDeleted.remove(dashboardWidget.id);
-  }
-
-  void unsetQuarantineWidgetToBeDeleted(DashboardWidget dashboardWidget) {
-    _quarantineWidgetsToBeDeleted.remove(dashboardWidget.id);
+  void markSnackBarAsRemoved() {
+    _snackBarsToRemove--;
   }
 }

@@ -29,7 +29,10 @@ class DashboardsScreenBottomNavigationBar extends StatelessWidget {
           title: Text('Quarantine'),
         ),
       ],
-      onTap: (tabIndex) =>dashboardsProvider.setDashboardTabIndex(tabIndex),
+      onTap: (tabIndex) {
+        Scaffold.of(context).removeCurrentSnackBar();
+        dashboardsProvider.setDashboardTabIndex(tabIndex);
+      },
     );
   }
 }
