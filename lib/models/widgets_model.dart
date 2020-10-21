@@ -4,6 +4,9 @@ class Widgets {
   Map<String, DashboardWidget> widgetsById;
   List<String> allWidgets;
 
+  static const QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY = 'QuarantineWidgetsExpirationDate';
+
+
   Widgets({this.widgetsById, this.allWidgets});
 
   factory Widgets.fromJson(Map<String, dynamic> json) => Widgets(
