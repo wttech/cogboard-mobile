@@ -4,6 +4,8 @@ import 'package:cogboardmobileapp/models/view_mode_model.dart';
 import 'package:cogboardmobileapp/models/widget_type_model.dart';
 import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:flutter/foundation.dart';
+import 'package:cogboardmobileapp/models/connection_model.dart';
+import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:flutter/material.dart';
 
 class SettingsProvider with ChangeNotifier {
@@ -11,6 +13,8 @@ class SettingsProvider with ChangeNotifier {
   ViewMode _viewAs;
   Hints _showHints;
   bool _settingsConfigFetched = false;
+  List<Connection> _connections;
+  Connection _currentConnection;
 
   final List<Connection> _connections = [
     Connection(url: 'http://cognifide.com', name: 'Cogboard', isActive: false),
@@ -150,6 +154,25 @@ class SettingsProvider with ChangeNotifier {
   setShowHints(Hints newShowHints) {
     _showHints = newShowHints;
     SharedPref.save('showHints', describeEnum(_showHints).toString());
+    notifyListeners();
+  }
+  Future<void> fetchConnections() async {
+    _connections =
+        Connection.decodeConnections(await SharedPref.read('connections'));
+    notifyListeners();
+  }
+
+  List<Connection> get connections {
+    return _connections;
+  }
+
+  Connection get currentConnection {
+    return _currentConnection;
+  }
+
+  void setCurrentConnection(Connection c) {
+    _currentConnection = c;
+    // TODO set lastVisited = true to corresponding connection in _connections
     notifyListeners();
   }
 }

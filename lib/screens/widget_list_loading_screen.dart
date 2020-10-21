@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class ErrorWidgetsScreen extends StatelessWidget {
+class WidgetListLoadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('error widgets'),
+      child: CircularProgressIndicator(),
     );
   }
 }

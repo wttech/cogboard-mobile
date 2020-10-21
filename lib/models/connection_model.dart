@@ -4,26 +4,32 @@ import 'package:flutter/cupertino.dart';
 
 class Connection {
   final String url;
-//  final bool lastVisited;
+  final bool lastVisited;
   final String name;
-  bool isActive;
 
-  Connection({this.url, this.name, this.isActive});
+  Connection({this.url, this.lastVisited, this.name});
 
   Map<String, dynamic> toJson() => {
         'url': url,
-//        'lastVisited': lastVisited,
+        'lastVisited': lastVisited,
         'name': name,
-        'isActive': isActive,
       };
 
   factory Connection.fromJson(Map<String, dynamic> json) {
     return Connection(
       url: json['url'],
-//      lastVisited: json['lastVisited'],
+      lastVisited: json['lastVisited'],
       name: json['name'],
-      isActive: json['isActive'],
     );
   }
 
+  static String encodeConnections(List<Connection> connections) =>
+      json.encode(connections
+          .map<Map<String, dynamic>>((connection) => connection.toJson())
+          .toList());
+
+  static List<Connection> decodeConnections(String connections) =>
+      (json.decode(connections) as List<dynamic>)
+          .map<Connection>((connection) => Connection.fromJson(connection))
+          .toList();
 }
