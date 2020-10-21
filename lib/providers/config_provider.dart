@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:cogboardmobileapp/models/board_model.dart';
 import 'package:cogboardmobileapp/models/config_model.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/models/widgets_model.dart';
 import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,12 +14,32 @@ class ConfigProvider with ChangeNotifier {
   List<Board> _boards;
   UrlPreferences _urlPreferences;
   String _currentUrl = 'http://150.254.30.119/api/config';
-  List<String> _favouriteWidgetsToBeDeleted = [];
-  List<String> _quarantineWidgetsToBeDeleted = [];
   int _snackBarsToRemove = 0;
 
-  List<String> get favouriteWidgetsToBeDeleted => _favouriteWidgetsToBeDeleted;
-  List<String> get quarantineWidgetsToBeDeleted => _quarantineWidgetsToBeDeleted;
+  ConfigProvider() {
+    _urlPreferences = new UrlPreferences(favouriteWidgetIds: [], quarantineWidgetIds: []);
+    checkIfQuarantineExpirationDateHasExceeded();
+    new Timer.periodic(const Duration(hours: 1), everyHourCheckTimer);
+  }
+
+  void everyHourCheckTimer(Timer timer) async {
+    await checkIfQuarantineExpirationDateHasExceeded();
+  }
+
+  Future<void> checkIfQuarantineExpirationDateHasExceeded() async {
+    DateTime currentTime = new DateTime.now();
+    print(currentTime);
+    if(await SharedPref.containsKey(Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY)) {
+      DateTime expirationDate = DateTime.parse(await SharedPref.read((Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY)));
+      if(currentTime.day > expirationDate.day) {
+        await SharedPref.save(Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY, currentTime.toString());
+        await(removeQuarantineWidgets());
+      }
+    } else {
+      await SharedPref.save(Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY, currentTime.toString());
+    }
+  }
+
   int get snackBarsToRemove => _snackBarsToRemove;
 
   List<DashboardWidget> get favouriteWidgets {
@@ -44,8 +66,6 @@ class ConfigProvider with ChangeNotifier {
     _boards = _config.boards.boardsById.entries.map((entry) => entry.value).toList();
     if (await SharedPref.containsKey(_currentUrl)) {
       _urlPreferences = UrlPreferences.fromJson(jsonDecode(await SharedPref.read(_currentUrl)));
-    } else {
-      _urlPreferences = new UrlPreferences(favouriteWidgetIds: [], quarantineWidgetIds: []);
     }
     notifyListeners();
   }
@@ -102,6 +122,12 @@ class ConfigProvider with ChangeNotifier {
 
   Future<void> removeQuarantineWidget(DashboardWidget widget) async {
     _urlPreferences.quarantineWidgetIds.removeWhere((widgetId) => widgetId == widget.id);
+    await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+    notifyListeners();
+  }
+
+  Future<void> removeQuarantineWidgets() async {
+    _urlPreferences.quarantineWidgetIds = [];
     await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
     notifyListeners();
   }
