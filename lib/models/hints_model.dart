@@ -1,4 +1,0 @@
-enum Hints {
-  On,
-  Off
-}
