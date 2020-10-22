@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/view_mode_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,11 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SettingsViewMode extends StatelessWidget {
-
   final ViewMode viewAs;
 
   SettingsViewMode(this.viewAs);
-
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class SettingsViewMode extends StatelessWidget {
             child: Text(
               "View mode",
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 19,
               ),
             ),
@@ -45,13 +44,16 @@ class SettingsViewMode extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: FlatButton(
-                  color: viewAs == ViewMode.List ? Colors.blue : Theme.of(context).primaryColor,
+                  color: viewAs == ViewMode.List
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.background,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0.0),
-                      side: BorderSide(color: Colors.grey)
-                  ),
-                  textColor: Colors.white,
-                  splashColor: Colors.blue,
+                      borderRadius: BorderRadius.circular(standardBorderRadius),
+                      side: BorderSide(color: Colors.grey)),
+                  textColor: viewAs == ViewMode.List
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.onBackground,
+                  splashColor: Theme.of(context).colorScheme.primary,
                   onPressed: () {
                     settingsProvider.setViewWidgetsAs(ViewMode.List);
                   },
@@ -63,13 +65,16 @@ class SettingsViewMode extends StatelessWidget {
               ),
               Expanded(
                 child: FlatButton(
-                  color: viewAs == ViewMode.Tiles ? Colors.blue : Theme.of(context).primaryColor,
+                  color: viewAs == ViewMode.Tiles
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.background,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0.0),
-                      side: BorderSide(color: Colors.grey)
-                  ),
-                  textColor: Colors.white,
-                  splashColor: Colors.blue,
+                      borderRadius: BorderRadius.circular(standardBorderRadius),
+                      side: BorderSide(color: Colors.grey)),
+                  textColor: viewAs == ViewMode.Tiles
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.onBackground,
+                  splashColor: Theme.of(context).colorScheme.primary,
                   onPressed: () {
                     settingsProvider.setViewWidgetsAs(ViewMode.Tiles);
                   },

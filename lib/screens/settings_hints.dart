@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/hints_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SettingsHints extends StatelessWidget {
-
   final Hints showHints;
 
   SettingsHints(this.showHints);
@@ -44,13 +44,16 @@ class SettingsHints extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: FlatButton(
-                  color: showHints == Hints.On ? Colors.blue : Theme.of(context).primaryColor,
+                  color: showHints == Hints.On
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.background,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0.0),
-                      side: BorderSide(color: Colors.grey)
-                  ),
-                  textColor: Colors.white,
-                  splashColor: Colors.blue,
+                      borderRadius: BorderRadius.circular(standardBorderRadius),
+                      side: BorderSide(color: Colors.grey)),
+                  textColor: showHints == Hints.On
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.onBackground,
+                  splashColor: Theme.of(context).colorScheme.primary,
                   onPressed: () {
                     settingsProvider.setShowHints(Hints.On);
                   },
@@ -62,13 +65,16 @@ class SettingsHints extends StatelessWidget {
               ),
               Expanded(
                 child: FlatButton(
-                  color: showHints == Hints.Off ? Colors.blue : Theme.of(context).primaryColor,
+                  color: showHints == Hints.Off
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.background,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0.0),
-                      side: BorderSide(color: Colors.grey)
-                  ),
-                  textColor: Colors.white,
-                  splashColor: Colors.blue,
+                      borderRadius: BorderRadius.circular(standardBorderRadius),
+                      side: BorderSide(color: Colors.grey)),
+                  textColor: showHints == Hints.Off
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.onBackground,
+                  splashColor: Theme.of(context).colorScheme.primary,
                   onPressed: () {
                     settingsProvider.setShowHints(Hints.Off);
                   },

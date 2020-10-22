@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/widget_type_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SettingsWidgets extends StatelessWidget {
-
   final WidgetSortBy sortBy;
 
   final List<WidgetType> widgetTypes;
@@ -25,7 +25,7 @@ class SettingsWidgets extends StatelessWidget {
             child: Text(
               "Widgets",
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 19,
               ),
             ),
@@ -44,13 +44,16 @@ class SettingsWidgets extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: FlatButton(
-                  color: sortBy == WidgetSortBy.None ? Colors.blue : Theme.of(context).primaryColor,
+                  color: sortBy == WidgetSortBy.None
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.background,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0.0),
-                      side: BorderSide(color: Colors.grey)
-                  ),
-                  textColor: Colors.white,
-                  splashColor: Colors.blue,
+                      borderRadius: BorderRadius.circular(standardBorderRadius),
+                      side: BorderSide(color: Colors.grey)),
+                  textColor: sortBy == WidgetSortBy.None
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.onSurface,
+                  splashColor: Theme.of(context).colorScheme.primary,
                   onPressed: () {
                     settingsProvider.setWidgetsSortBy(WidgetSortBy.None);
                   },
@@ -62,13 +65,16 @@ class SettingsWidgets extends StatelessWidget {
               ),
               Expanded(
                 child: FlatButton(
-                  color: sortBy == WidgetSortBy.Name ? Colors.blue : Theme.of(context).primaryColor,
+                  color: sortBy == WidgetSortBy.Name
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.background,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0.0),
-                      side: BorderSide(color: Colors.grey)
-                  ),
-                  textColor: Colors.white,
-                  splashColor: Colors.blue,
+                      borderRadius: BorderRadius.circular(standardBorderRadius),
+                      side: BorderSide(color: Colors.grey)),
+                  textColor: sortBy == WidgetSortBy.Name
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.onSurface,
+                  splashColor: Theme.of(context).colorScheme.onPrimary,
                   onPressed: () {
                     settingsProvider.setWidgetsSortBy(WidgetSortBy.Name);
                   },
@@ -80,13 +86,17 @@ class SettingsWidgets extends StatelessWidget {
               ),
               Expanded(
                 child: FlatButton(
-                  color: sortBy == WidgetSortBy.Status ? Colors.blue : Theme.of(context).primaryColor,
+                  color: sortBy == WidgetSortBy.Status
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.background,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0.0),
-                      side: BorderSide(color: Colors.grey)
+                    borderRadius: BorderRadius.circular(standardBorderRadius),
+                    side: BorderSide(color: Colors.grey),
                   ),
-                  textColor: Colors.white,
-                  splashColor: Colors.blue,
+                  textColor: sortBy == WidgetSortBy.Status
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : Theme.of(context).colorScheme.onSurface,
+                  splashColor: Theme.of(context).colorScheme.primary,
                   onPressed: () {
                     settingsProvider.setWidgetsSortBy(WidgetSortBy.Status);
                   },
@@ -114,14 +124,15 @@ class SettingsWidgets extends StatelessWidget {
                       title: Text(
                         widget.name,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onBackground,
                         ),
                       ),
                       value: widgetTypes[widgetTypes.indexOf(widget)].isVisible,
                       onChanged: (bool value) {
-                        settingsProvider.setWidgetTypeVisible(widgetTypes.indexOf(widget), value);
+                        settingsProvider.setWidgetTypeVisible(
+                            widgetTypes.indexOf(widget), value);
                       },
-                      activeColor: Colors.blue,
+                      activeColor: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ],
