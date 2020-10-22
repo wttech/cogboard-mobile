@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/connection_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
@@ -47,8 +48,7 @@ class _UrlSelectState extends State<UrlSelect> {
         _connections = settingsProvider.connections;
         _connection = c;
       });
-    } catch (Exception) {
-    }
+    } catch (Exception) {}
   }
 
   @override
@@ -58,36 +58,35 @@ class _UrlSelectState extends State<UrlSelect> {
     if (_connections != null && _connections.length > 0) {
       return Container(
         width: 150,
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
         decoration: BoxDecoration(
-          color: Colors.white,
-          // borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(standardBorderRadius),
+          ),
         ),
-        child: new Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: Colors.white,
-          ),
-          child: new DropdownButton<int>(
-            value: _connection,
-            underline: Container(),
-            isExpanded: true,
-            items: _connections.map((Connection c) {
-              return new DropdownMenuItem(
-                child: new Text(c.url),
-                value: _connections.indexOf(c),
-              );
-            }).toList(),
-            onChanged: (c) => setState(() {
-              _connection = c;
-              settingsProvider.setCurrentConnection(_connections[c]);
-            }),
-          ),
+        child: new DropdownButton<int>(
+          value: _connection,
+          underline: Container(),
+          isExpanded: true,
+          items: _connections.map((Connection c) {
+            return new DropdownMenuItem(
+              child: new Text(c.name),
+              value: _connections.indexOf(c),
+            );
+          }).toList(),
+          onChanged: (c) => setState(() {
+            _connection = c;
+            settingsProvider.setCurrentConnection(_connections[c]);
+          }),
         ),
       );
     } else {
       return Container(
         child: Text(
-          "There are no Connections saved.",
+          'There are no Connections saved.',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,

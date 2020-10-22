@@ -7,8 +7,7 @@ class Filters extends StatefulWidget {
   _FiltersState createState() => _FiltersState();
 }
 
-class _FiltersState extends State<Filters> with TickerProviderStateMixin  {
-
+class _FiltersState extends State<Filters> with TickerProviderStateMixin {
   bool isOpened = false;
   bool isWarningFilterChecked = false;
   bool isErrorFilterChecked = false;
@@ -22,12 +21,17 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin  {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _filterToggleAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500))
-      ..addListener(() {
-        setState(() {});
-      });
-    _inactiveFilterButtonColor = filterButtonColor(Theme.of(context).primaryColor, Colors.red);
-    _activeFilterButtonColor = filterButtonColor(Colors.blue, Colors.red);
+    _filterToggleAnimationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+          ..addListener(() {
+            setState(() {});
+          });
+    _inactiveFilterButtonColor = filterButtonColor(
+        Theme.of(context).colorScheme.primary,
+        Theme.of(context).colorScheme.error);
+    _activeFilterButtonColor = filterButtonColor(
+        Theme.of(context).colorScheme.primary,
+        Theme.of(context).colorScheme.error);
     _translateButton = Tween<double>(
       begin: _fabHeight,
       end: -14.0,
@@ -35,7 +39,7 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin  {
       parent: _filterToggleAnimationController,
       curve: Interval(
         0.0,
-        0.75,
+        1,
         curve: _curve,
       ),
     ));
@@ -47,7 +51,7 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin  {
     super.dispose();
   }
 
-  Animation<Color> filterButtonColor(MaterialColor beginColor, MaterialColor endColor) {
+  Animation<Color> filterButtonColor(Color beginColor, Color endColor) {
     return ColorTween(
       begin: beginColor,
       end: endColor,
@@ -72,14 +76,16 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin  {
 
   Widget error(FilterProvider filterProvider) {
     return Container(
-      padding: const EdgeInsets.only(right: 25.0),
+      padding: const EdgeInsets.only(right: 16.0),
       child: FloatingActionButton(
         heroTag: 'error',
-        foregroundColor: Colors.white,
-        backgroundColor: filterProvider.isErrorFilterPresent ? Colors.blue: Colors.blueGrey[800],
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
+        backgroundColor: filterProvider.isErrorFilterPresent
+            ? Theme.of(context).colorScheme.secondary
+            : Colors.grey,
         child: Icon(
           Icons.error,
-          size: 25,
+          size: 22,
         ),
         onPressed: () => filterProvider.toggleErrorFilter(),
       ),
@@ -88,14 +94,16 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin  {
 
   Widget warning(FilterProvider filterProvider) {
     return Container(
-      padding: const EdgeInsets.only(right: 25.0),
+      padding: const EdgeInsets.only(right: 16.0),
       child: FloatingActionButton(
         heroTag: 'warning',
-        foregroundColor: Colors.white,
-        backgroundColor:  filterProvider.isWarningFilterPresent ? Colors.blue : Colors.blueGrey[800],
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
+        backgroundColor: filterProvider.isWarningFilterPresent
+            ? Theme.of(context).colorScheme.secondary
+            : Colors.grey,
         child: Icon(
           Icons.warning,
-          size: 25,
+          size: 22,
         ),
         onPressed: () => filterProvider.toggleWarningFilter(),
       ),
@@ -103,20 +111,21 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin  {
   }
 
   Widget filter(FilterProvider filterProvider) {
-    if(filterProvider.shouldResetFilterView) {
-        filterProvider.markRestarted();
-        Future.delayed(const Duration(milliseconds: 0), () {
-          setState(() {
-            this.isOpened = false;
-          });
+    if (filterProvider.shouldResetFilterView) {
+      filterProvider.markRestarted();
+      Future.delayed(const Duration(milliseconds: 0), () {
+        setState(() {
+          this.isOpened = false;
         });
+      });
     }
 
     return Container(
-      padding: const EdgeInsets.only(right: 25.0),
+      padding: const EdgeInsets.only(right: 16.0),
       child: FloatingActionButton(
         heroTag: 'filter',
-        backgroundColor: filterProvider.isAnyFilterPresent ? _activeFilterButtonColor.value: _inactiveFilterButtonColor.value,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: animateFilterToggle,
         child: !this.isOpened
             ? Image.asset(
@@ -126,8 +135,9 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin  {
               )
             : Image.asset(
                 'assets/images/cancel_icon.png',
-                width: 25,
-                height: 25,
+                width: 18,
+                height: 18,
+                color: Theme.of(context).colorScheme.onSecondary,
               ),
       ),
     );
@@ -145,8 +155,7 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin  {
             0.0,
           ),
           child: Consumer<FilterProvider>(
-            builder: (ctx, filterProvider, child) =>  error(filterProvider)
-          ),
+              builder: (ctx, filterProvider, child) => error(filterProvider)),
         ),
         Transform(
           transform: Matrix4.translationValues(
@@ -155,12 +164,10 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin  {
             0.0,
           ),
           child: Consumer<FilterProvider>(
-              builder: (ctx, filterProvider, child) =>  warning(filterProvider)
-          ),
+              builder: (ctx, filterProvider, child) => warning(filterProvider)),
         ),
         Consumer<FilterProvider>(
-            builder: (ctx, filterProvider, child) =>  filter(filterProvider)
-        ),
+            builder: (ctx, filterProvider, child) => filter(filterProvider)),
       ],
     );
   }

@@ -12,16 +12,24 @@ class WidgetListItem extends StatelessWidget {
   final int widgetIndex;
   final DashboardType dashboardType;
 
-  WidgetListItem({@required this.widget, @required this.widgetIndex, @required this.dashboardType});
+  WidgetListItem(
+      {@required this.widget,
+      @required this.widgetIndex,
+      @required this.dashboardType});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       color: getWidgetColor(widget),
       elevation: 5,
-      margin: widgetIndex == 0 ? EdgeInsets.fromLTRB(16, 0, 16, 8) : EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 16,
+      margin: widgetIndex == 0
+          ? EdgeInsets.fromLTRB(16, 0, 16, 8)
+          : EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 16,
+            ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(standardBorderRadius),
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -36,7 +44,10 @@ class WidgetListItem extends StatelessWidget {
               context,
               DashboardItemScreen.routeName,
               arguments: widget,
-            ).then((_) => Provider.of<FilterProvider>(context, listen: false).resetFilterView());
+            ).then((_) => Provider.of<FilterProvider>(
+                  context,
+                  listen: false,
+                ).resetFilterView());
           },
         ),
       ),
@@ -44,9 +55,11 @@ class WidgetListItem extends StatelessWidget {
   }
 
   Color getWidgetColor(DashboardWidget dashboardWidget) {
-    if (dashboardWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-      final WidgetStatus widgetStatus =
-      EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+    if (dashboardWidget.content
+        .containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus = EnumToString.fromString(
+          WidgetStatus.values,
+          widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
       return StatusColors[EnumToString.convertToString(widgetStatus)];
     } else {
       return StatusColors["DEFAULT"];
@@ -65,9 +78,11 @@ class WidgetListItem extends StatelessWidget {
         color: Colors.white,
       );
     }
-    if (dashboardWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-      final WidgetStatus widgetStatus =
-      EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+    if (dashboardWidget.content
+        .containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus = EnumToString.fromString(
+          WidgetStatus.values,
+          widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
       switch (widgetStatus) {
         case WidgetStatus.OK:
           return Icon(
