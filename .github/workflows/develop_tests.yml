@@ -3,7 +3,7 @@ name: Dart CI
 on:
   push:
     branches:
-      - master
+      - develop
 
 jobs:
   build:
@@ -16,11 +16,4 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
       - run: flutter pub get
-      - run: flutter test
-      - run: flutter build apk
-      - name: Create a Release artifacts
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "build/app/outputs/flutter-apk/*.apk"
-          tag: ${{github.run_number}}
-          token: ${{ secrets.TOKEN }}
+#       - run: flutter test
