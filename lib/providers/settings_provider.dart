@@ -157,8 +157,12 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
   Future<void> fetchConnections() async {
-    _connections =
-        Connection.decodeConnections(await SharedPref.read('connections'));
+    if (await SharedPref.containsKey('connections')) {
+      _connections =
+          Connection.decodeConnections(await SharedPref.read('connections'));
+    } else {
+      _connections = List();
+    }
     notifyListeners();
   }
 
@@ -173,6 +177,13 @@ class SettingsProvider with ChangeNotifier {
   void setCurrentConnection(Connection c) {
     _currentConnection = c;
     // TODO set lastVisited = true to corresponding connection in _connections
+    notifyListeners();
+  }
+
+  void addConnection(Connection c) async {
+    _connections.add(c);
+    await SharedPref.save(
+        'connections', Connection.encodeConnections(_connections));
     notifyListeners();
   }
 }

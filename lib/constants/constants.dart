@@ -104,3 +104,5 @@ class WidgetTypes {
   static const String WORLD_CLOCK_WIDGET = "WorldClockWidget";
   static const String PERSON_DRAW_WIDGET = "PersonDrawWidget";
 }
+
+const standardBorderRadius = 10.0;
