@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/connection_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:cogboardmobileapp/screens/login_screen.dart';
@@ -64,15 +65,28 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                     name: nameController.text,
                     lastVisited: false,
                   );
-                  final settingsProvider =
-                      Provider.of<SettingsProvider>(context, listen: false);
+                  final settingsProvider = Provider.of<SettingsProvider>(
+                    context,
+                    listen: false,
+                  );
 
                   settingsProvider.addConnection(c);
                   Navigator.of(context)
                       .pushReplacementNamed(LoginScreen.routeName);
                   // print(urlController);
                 },
-                child: Text('ADD CONNECTION'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(standardBorderRadius),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text(
+                    'ADD CONNECTION',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
               )
             ],
           ),

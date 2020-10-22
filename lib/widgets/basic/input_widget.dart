@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class Input extends StatelessWidget {
@@ -13,22 +14,26 @@ class Input extends StatelessWidget {
         controller: controller,
         decoration: new InputDecoration(
           labelText: labelText,
-          // hintText: 'Enter connection name',
+          labelStyle: TextStyle(
+            color: Theme.of(context).colorScheme.onBackground,
+          ),
           enabledBorder: OutlineInputBorder(
-            // normal state
             borderSide: BorderSide(
               color: Theme.of(context).colorScheme.onBackground.withAlpha(150),
             ),
+            borderRadius: BorderRadius.circular(standardBorderRadius),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: Theme.of(context).colorScheme.primary,
             ),
+            borderRadius: BorderRadius.circular(standardBorderRadius),
           ),
           errorBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: Theme.of(context).colorScheme.error,
             ),
+            borderRadius: BorderRadius.circular(standardBorderRadius),
           ),
         ),
         style: TextStyle(

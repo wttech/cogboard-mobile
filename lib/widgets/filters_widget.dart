@@ -76,16 +76,16 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
 
   Widget error(FilterProvider filterProvider) {
     return Container(
-      padding: const EdgeInsets.only(right: 25.0),
+      padding: const EdgeInsets.only(right: 16.0),
       child: FloatingActionButton(
         heroTag: 'error',
-        foregroundColor: Colors.white,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
         backgroundColor: filterProvider.isErrorFilterPresent
             ? Theme.of(context).colorScheme.secondary
             : Colors.grey,
         child: Icon(
           Icons.error,
-          size: 25,
+          size: 22,
         ),
         onPressed: () => filterProvider.toggleErrorFilter(),
       ),
@@ -94,16 +94,16 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
 
   Widget warning(FilterProvider filterProvider) {
     return Container(
-      padding: const EdgeInsets.only(right: 25.0),
+      padding: const EdgeInsets.only(right: 16.0),
       child: FloatingActionButton(
         heroTag: 'warning',
-        foregroundColor: Colors.white,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
         backgroundColor: filterProvider.isWarningFilterPresent
             ? Theme.of(context).colorScheme.secondary
             : Colors.grey,
         child: Icon(
           Icons.warning,
-          size: 25,
+          size: 22,
         ),
         onPressed: () => filterProvider.toggleWarningFilter(),
       ),
@@ -111,19 +111,20 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
   }
 
   Widget filter(FilterProvider filterProvider) {
-    if(filterProvider.shouldResetFilterView) {
-        filterProvider.markRestarted();
-        Future.delayed(const Duration(milliseconds: 0), () {
-          setState(() {
-            this.isOpened = false;
-          });
+    if (filterProvider.shouldResetFilterView) {
+      filterProvider.markRestarted();
+      Future.delayed(const Duration(milliseconds: 0), () {
+        setState(() {
+          this.isOpened = false;
         });
+      });
     }
 
     return Container(
-      padding: const EdgeInsets.only(right: 25.0),
+      padding: const EdgeInsets.only(right: 16.0),
       child: FloatingActionButton(
         heroTag: 'filter',
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: animateFilterToggle,
         child: !this.isOpened
@@ -134,8 +135,9 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
               )
             : Image.asset(
                 'assets/images/cancel_icon.png',
-                width: 25,
-                height: 25,
+                width: 18,
+                height: 18,
+                color: Theme.of(context).colorScheme.onSecondary,
               ),
       ),
     );

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'providers/config_provider.dart';
-import 'models/material_colors_model.dart';
 import 'providers/settings_provider.dart';
 import 'providers/dashboards_provider.dart';
 import 'screens/widget_screen.dart';
@@ -41,14 +40,12 @@ class CogboardApp extends StatelessWidget {
       child: MaterialApp(
           title: 'Cogboard',
           theme: ThemeData(
-            // primaryColor: Color.fromRGBO(12, 12, 12, 1),
-            // primarySwatch: generateMaterialColor(Color.fromRGBO(12, 12, 12, 1)),
             colorScheme: ColorScheme(
-                primary: Color(0xffbb86fc),
-                primaryVariant: Color(0xffbb86fc),
-                secondary: Color(0xff03dac6),
-                secondaryVariant: Color(0xff03dac6),
-                surface: Color(0xff121212),
+                primary: Color(0xff81D4FA),
+                primaryVariant: Color(0xff81D4FA),
+                secondary: Color(0xffaed581),
+                secondaryVariant: Color(0xffaed581),
+                surface: Color(0xff202020),
                 background: Color(0xff121212),
                 error: Color(0xffcf6679),
                 onPrimary: Color(0xff000000),
@@ -57,8 +54,6 @@ class CogboardApp extends StatelessWidget {
                 onBackground: Color(0xffffffff),
                 onError: Color(0xff000000),
                 brightness: Brightness.dark),
-            // accentColor: accentColor,
-            // canvasColor: generateMaterialColor(Color.fromRGBO(23, 23, 23, 1)),
           ),
           initialRoute: LoginScreen.routeName,
           routes: {

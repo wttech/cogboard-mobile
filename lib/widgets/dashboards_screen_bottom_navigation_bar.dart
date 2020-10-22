@@ -8,6 +8,7 @@ class DashboardsScreenBottomNavigationBar extends StatelessWidget {
     final dashboardsProvider = Provider.of<DashboardsProvider>(context);
 
     return BottomNavigationBar(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       selectedItemColor: dashboardsProvider
           .dashboardTabs[dashboardsProvider.dashboardTabIndex].selectedTabColor,
       unselectedItemColor: Colors.grey,

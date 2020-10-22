@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/screens/add_connection_screen.dart';
 import 'package:cogboardmobileapp/screens/dashboards_screen.dart';
 import 'package:cogboardmobileapp/widgets/url_select_widget.dart';
@@ -40,8 +41,17 @@ class LoginScreen extends StatelessWidget {
                               .pushReplacementNamed(DashboardsScreen.routeName)
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text('CONNECT'),
+                          padding: const EdgeInsets.all(15),
+                          child: Text(
+                            'CONNECT',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              new BorderRadius.circular(standardBorderRadius),
                         ),
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -58,8 +68,17 @@ class LoginScreen extends StatelessWidget {
                           )
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text('+'),
+                          padding: const EdgeInsets.all(15),
+                          child: Text(
+                            '+',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSecondary,
+                            ),
+                          ),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              new BorderRadius.circular(standardBorderRadius),
                         ),
                       ),
                     ],
