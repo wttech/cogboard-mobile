@@ -56,7 +56,7 @@ class SettingsScreen extends StatelessWidget {
               );
             });
           }),
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
 }

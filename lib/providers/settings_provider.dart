@@ -4,8 +4,6 @@ import 'package:cogboardmobileapp/models/view_mode_model.dart';
 import 'package:cogboardmobileapp/models/widget_type_model.dart';
 import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:flutter/foundation.dart';
-import 'package:cogboardmobileapp/models/connection_model.dart';
-import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:flutter/material.dart';
 
 class SettingsProvider with ChangeNotifier {
@@ -16,13 +14,13 @@ class SettingsProvider with ChangeNotifier {
   List<Connection> _connections;
   Connection _currentConnection;
 
-  final List<Connection> _connections = [
-    Connection(url: 'http://cognifide.com', name: 'Cogboard', isActive: false),
-    Connection(url: 'http://cognifide.com', name: 'HSBC', isActive: false),
-    Connection(url: 'http://cognifide.com', name: 'Douglas', isActive: false),
-    Connection(url: 'http://cognifide.com', name: 'EY', isActive: false),
-    Connection(url: 'http://cognifide.com', name: 'Coutts', isActive: false),
-  ];
+//  final List<Connection> _connections = [
+//    Connection(url: 'http://cognifide.com', name: 'Cogboard', isActive: false),
+//    Connection(url: 'http://cognifide.com', name: 'HSBC', isActive: false),
+//    Connection(url: 'http://cognifide.com', name: 'Douglas', isActive: false),
+//    Connection(url: 'http://cognifide.com', name: 'EY', isActive: false),
+//    Connection(url: 'http://cognifide.com', name: 'Coutts', isActive: false),
+//  ];
 
   final List<WidgetType> _widgetTypes = [
     WidgetType(
@@ -75,15 +73,6 @@ class SettingsProvider with ChangeNotifier {
 
   T enumFromString<T>(Iterable<T> values, String value) {
     return values.firstWhere((type) => type.toString().split(".").last == value, orElse: () => null);
-  }
-
-  Future<void> fetchConnections() async {
-    List<Connection> allConnections =
-        (await SharedPref.read('connections') as List).map((connection) => Connection.fromJson(connection)).toList();
-
-    for (var con in allConnections) {
-      print(con.name);
-    }
   }
 
   Future<void> fetchViewWidgetsAs() async {
@@ -164,10 +153,6 @@ class SettingsProvider with ChangeNotifier {
       _connections = List();
     }
     notifyListeners();
-  }
-
-  List<Connection> get connections {
-    return _connections;
   }
 
   Connection get currentConnection {
