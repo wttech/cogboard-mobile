@@ -89,7 +89,7 @@ class _UrlSelectState extends State<UrlSelect> {
           'There are no Connections saved.',
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.onBackground,
+            color: Colors.white,
             fontSize: 20,
           ),
         ),

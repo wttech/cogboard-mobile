@@ -37,9 +37,7 @@ class WidgetDetails extends StatelessWidget {
       case WidgetTypes.AEM_BUNDLE_INFO_WIDGET:
         return AemBundleInfoWidget(widget: widget);
       default:
-        return Container(
-          child: null,
-        );
+        return null;
         break;
     }
   }
