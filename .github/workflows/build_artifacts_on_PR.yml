@@ -17,8 +17,11 @@ jobs:
       - run: flutter pub get
 #      - run: flutter test
       - run: flutter build apk
+      - name: Set outputs
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: app_${{github.sha}}_${{github.job}}.apk
+          name: app_${{steps.vars.outputs.sha_short}}_${{github.run_number}}.apk
           path: build/app/outputs/flutter-apk/app-release.apk
