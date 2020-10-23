@@ -2,7 +2,7 @@ name: Build artifact on PR
 
 on:
   pull_request:
-    types: [assigned, opened, synchronize, reopened]
+    types: [assigned, opened, synchronize, reopened, edited]
 
 jobs:
   build:
@@ -20,5 +20,5 @@ jobs:
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: app_${{github.head_ref}}_${{github.run_id}}.apk
+          name: app_${{github.sha}}_${{github.job}}.apk
           path: build/app/outputs/flutter-apk/app-release.apk
