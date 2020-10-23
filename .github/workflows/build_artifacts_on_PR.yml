@@ -20,5 +20,5 @@ jobs:
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: application_artifact_${{github.run_number}}.apk
+          name: app_${{github.head_ref}}_${{github.run_id}}.apk
           path: build/app/outputs/flutter-apk/app-release.apk
