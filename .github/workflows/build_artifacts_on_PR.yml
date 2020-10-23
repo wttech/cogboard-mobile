@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: Set outputs
         id: vars
-        run: echo "::set-output name=sha_short::${{github.sha}}"
+        run: echo "::set-output name=sha_short::$(git show -s --format=%h)"
       - name: Check outputs
         run: echo ${{ steps.vars.outputs.sha_short }}
       - uses: actions/setup-java@v1
