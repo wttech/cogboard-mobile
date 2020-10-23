@@ -9,12 +9,12 @@ jobs:
     name: Build Release artifacts
     runs-on: [macos-latest]
     steps:
-      - uses: actions/checkout@v1
       - name: Set outputs
         id: vars
         run: echo "::set-output name=sha_short::$(git show -s --format=%h)"
       - name: Check outputs
         run: echo ${{ steps.vars.outputs.sha_short }}
+      - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
