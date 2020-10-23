@@ -17,9 +17,8 @@ jobs:
       - run: flutter pub get
 #      - run: flutter test
       - run: flutter build apk
-      - name: Create a Release artifacts
-        uses: ncipollo/release-action@v1
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
         with:
-          artifacts: "build/app/outputs/flutter-apk/*.apk"
-#          tag: ${{github.run_number}}
-#          token: ${{ secrets.TOKEN }}
+          name: application_artifact.apk
+          path: build/app/outputs/flutter-apk/*.apk
