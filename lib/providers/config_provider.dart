@@ -15,6 +15,7 @@ class ConfigProvider with ChangeNotifier {
   UrlPreferences _urlPreferences;
   String _currentUrl = 'http://150.254.30.119/api/config';
   int _snackBarsToRemove = 0;
+  bool webSocketConnectionErrorPresent = false;
 
   ConfigProvider() {
     _urlPreferences = new UrlPreferences(favouriteWidgetIds: [], quarantineWidgetIds: []);
@@ -40,6 +41,16 @@ class ConfigProvider with ChangeNotifier {
     }
   }
 
+  Future<void> fetchConfig() async {
+    final response = await http.get(_currentUrl);
+    _config = Config.fromJson(json.decode(response.body) as Map<String, dynamic>);
+    _boards = _config.boards.boardsById.entries.map((entry) => entry.value).toList();
+    if (await SharedPref.containsKey(_currentUrl)) {
+      _urlPreferences = UrlPreferences.fromJson(jsonDecode(await SharedPref.read(_currentUrl)));
+    }
+    notifyListeners();
+  }
+
   int get snackBarsToRemove => _snackBarsToRemove;
 
   List<DashboardWidget> get favouriteWidgets {
@@ -60,16 +71,6 @@ class ConfigProvider with ChangeNotifier {
     return [..._boards];
   }
 
-  Future<void> fetchConfig() async {
-    final response = await http.get(_currentUrl);
-    _config = Config.fromJson(json.decode(response.body) as Map<String, dynamic>);
-    _boards = _config.boards.boardsById.entries.map((entry) => entry.value).toList();
-    if (await SharedPref.containsKey(_currentUrl)) {
-      _urlPreferences = UrlPreferences.fromJson(jsonDecode(await SharedPref.read(_currentUrl)));
-    }
-    notifyListeners();
-  }
-
   List<DashboardWidget> getBoardWidgets(Board board) {
     return _config.widgets.widgetsById.entries
         .map((entry) => entry.value)
@@ -78,12 +79,14 @@ class ConfigProvider with ChangeNotifier {
   }
 
   void updateWidget(Map<String, dynamic> widgetData) {
-    this._config.widgets.widgetsById.forEach((key, value) {
-      if (key == widgetData['id']) {
-        value.updateWidget(widgetData);
-        notifyListeners();
-      }
-    });
+    if(_config != null) {
+      _config.widgets.widgetsById.forEach((key, value) {
+        if (key == widgetData['id']) {
+          value.updateWidget(widgetData);
+          notifyListeners();
+        }
+      });
+    }
   }
 
   Future<void> updateFavouriteWidget(DashboardWidget widget) async {
@@ -138,5 +141,10 @@ class ConfigProvider with ChangeNotifier {
 
   void markSnackBarAsRemoved() {
     _snackBarsToRemove--;
+  }
+
+  void setWebSocketConnectionErrorPresent() {
+    webSocketConnectionErrorPresent = true;
+    notifyListeners();
   }
 }

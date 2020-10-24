@@ -5,8 +5,10 @@ import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/filter_provider.dart';
 import 'package:cogboardmobileapp/screens/empty_widget_list_screen.dart';
+import 'package:cogboardmobileapp/screens/widget_list_error_screen.dart';
 import 'package:cogboardmobileapp/screens/widget_screen.dart';
 import 'package:cogboardmobileapp/widgets/dismissible_widget_list_item.dart';
+import 'package:cogboardmobileapp/widgets/screen_with_appbar_widget.dart';
 import 'package:cogboardmobileapp/widgets/widget_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,27 +34,32 @@ class WidgetsListScreen extends StatelessWidget {
       }
     });
 
-    return widgetsList.length == 0
-        ? EmptyWidgetListScreen()
-        : MediaQuery.removePadding(
-            context: context,
-            removeTop: true,
-            child: ListView.builder(
-                itemCount: widgetsList.length,
-                itemBuilder: (ctx, index) {
-                  return dashboardType == DashboardType.Home
-                      ? WidgetListItem(
-                          widget: widgetsList[index],
-                          widgetIndex: index,
-                          dashboardType: dashboardType,
-                        )
-                      : DismissibleWidgetListItem(
-                          widget: widgetsList[index],
-                          widgetIndex: index,
-                          dashboardType: dashboardType,
-                        );
-                }),
-          );
+    return configProvider.webSocketConnectionErrorPresent
+        ? ScreenWithAppBar(
+            appBarTitle: 'dashboard',
+            body: WidgetListErrorScreen("websocket connection error occurred!"),
+          )
+        : widgetsList.length == 0
+            ? EmptyWidgetListScreen()
+            : MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: ListView.builder(
+                    itemCount: widgetsList.length,
+                    itemBuilder: (ctx, index) {
+                      return dashboardType == DashboardType.Home
+                          ? WidgetListItem(
+                              widget: widgetsList[index],
+                              widgetIndex: index,
+                              dashboardType: dashboardType,
+                            )
+                          : DismissibleWidgetListItem(
+                              widget: widgetsList[index],
+                              widgetIndex: index,
+                              dashboardType: dashboardType,
+                            );
+                    }),
+              );
   }
 
   List<DashboardWidget> getWidgetsList(

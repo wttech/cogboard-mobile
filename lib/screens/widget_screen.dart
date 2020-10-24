@@ -25,9 +25,7 @@ class DashboardItemScreen extends StatelessWidget {
   }
 
   int getLastUpdated(DashboardWidget widget) {
-    return widget.content['lastUpdated'] != null
-        ? widget.content['lastUpdated']
-        : 0;
+    return widget.content['lastUpdated'] != null ? widget.content['lastUpdated'] : 0;
   }
 
   bool renderWidget(DashboardWidget widget) {
@@ -45,7 +43,7 @@ class DashboardItemScreen extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.block),
-            color:  getQuarantineIconColor(widget, configProvider, context),
+            color: getQuarantineIconColor(widget, configProvider, context),
             onPressed: () => configProvider.updateQuarantineWidget(widget),
           ),
           IconButton(
@@ -65,9 +63,10 @@ class DashboardItemScreen extends StatelessWidget {
           stream: channel.stream,
           builder: (context, snapshot) {
             if (snapshot.error != null) {
+              debugPrint('ws error ${snapshot.error}');
               return ScreenWithAppBar(
                 appBarTitle: 'Widget details',
-                body: WidgetListErrorScreen(),
+                body: WidgetListErrorScreen("websocket connection error occurred!"),
               );
             } else {
               return Column(
@@ -96,7 +95,7 @@ class DashboardItemScreen extends StatelessWidget {
   }
 
   Color getFavouriteIconColor(DashboardWidget widget, ConfigProvider configProvider, BuildContext context) {
-    if(configProvider.favouriteWidgets.contains(widget)) {
+    if (configProvider.favouriteWidgets.contains(widget)) {
       return Colors.yellow;
     } else {
       return Theme.of(context).accentColor;
@@ -104,7 +103,7 @@ class DashboardItemScreen extends StatelessWidget {
   }
 
   Color getQuarantineIconColor(DashboardWidget widget, ConfigProvider configProvider, BuildContext context) {
-    if(configProvider.quarantineWidgets.contains(widget)) {
+    if (configProvider.quarantineWidgets.contains(widget)) {
       return Colors.red;
     } else {
       return Theme.of(context).accentColor;

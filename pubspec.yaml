@@ -30,7 +30,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   flutter_launcher_icons: ^0.8.1
-  websocket_manager: ^0.2.2
 
 dev_dependencies:
   flutter_test:
