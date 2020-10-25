@@ -23,6 +23,15 @@ class DashboardItemScreen extends StatefulWidget {
 class _DashboardItemScreenState extends State<DashboardItemScreen> {
   PageController _controller;
   DashboardWidget currentWidget;
+  bool currentWidgetFetched = false;
+
+  @override
+  void initState() {
+    super.initState();
+//    Future.delayed(const Duration(milliseconds: 0), () {
+//      currentWidget = ModalRoute.of(context).settings.arguments;
+//    });
+  }
 
   @override
   void dispose() {
@@ -53,7 +62,13 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
     final configProvider = Provider.of<ConfigProvider>(context);
     final dashboardProvider = Provider.of<DashboardsProvider>(context);
     final channel = IOWebSocketChannel.connect('ws://150.254.30.119/ws');
-    currentWidget = ModalRoute.of(context).settings.arguments;
+
+    if(!currentWidgetFetched) {
+      setState(() {
+        currentWidgetFetched = true;
+        currentWidget = ModalRoute.of(context).settings.arguments;
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
