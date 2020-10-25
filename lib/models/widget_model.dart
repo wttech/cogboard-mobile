@@ -36,6 +36,15 @@ class DashboardWidget {
       disabled: json['disabled'],
       content: (json['content']) as Map<String, dynamic>);
 
+  factory DashboardWidget.deepCopy(DashboardWidget dashboardWidget) => new DashboardWidget(
+      id: dashboardWidget.id,
+      title: dashboardWidget.title,
+      type: dashboardWidget.type,
+      config: WidgetConfig.deepCopy(dashboardWidget.config),
+      disabled: dashboardWidget.disabled,
+      content: new Map<String, dynamic>.from(dashboardWidget.content),
+  );
+
   void updateWidget(Map<String, dynamic> json) {
     this.id = json['id'] ?? this.id;
     this.title = json['title'] ?? this.title;

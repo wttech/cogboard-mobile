@@ -90,23 +90,25 @@ class DashboardItemScreen extends StatelessWidget {
           },
         ),
       ),
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
 
-  Color getFavouriteIconColor(DashboardWidget widget, ConfigProvider configProvider, BuildContext context) {
+  Color getFavouriteIconColor(DashboardWidget widget,
+      ConfigProvider configProvider, BuildContext context) {
     if (configProvider.favouriteWidgets.contains(widget)) {
       return Colors.yellow;
     } else {
-      return Theme.of(context).accentColor;
+      return Theme.of(context).colorScheme.onBackground;
     }
   }
 
-  Color getQuarantineIconColor(DashboardWidget widget, ConfigProvider configProvider, BuildContext context) {
+  Color getQuarantineIconColor(DashboardWidget widget,
+      ConfigProvider configProvider, BuildContext context) {
     if (configProvider.quarantineWidgets.contains(widget)) {
       return Colors.red;
     } else {
-      return Theme.of(context).accentColor;
+      return Theme.of(context).colorScheme.onBackground;
     }
   }
 }

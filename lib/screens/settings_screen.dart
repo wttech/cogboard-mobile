@@ -14,7 +14,7 @@ class SettingsScreen extends StatelessWidget {
         title: Text("Settings"),
       ),
       body: Container(),
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
 }

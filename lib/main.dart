@@ -1,75 +1,27 @@
-import 'dart:async';
-
 import 'package:cogboardmobileapp/providers/filter_provider.dart';
 import 'package:cogboardmobileapp/screens/add_connection_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+
 import 'providers/config_provider.dart';
-import 'models/material_colors_model.dart';
-import 'providers/settings_provider.dart';
 import 'providers/dashboards_provider.dart';
-import 'screens/widget_screen.dart';
+import 'providers/settings_provider.dart';
 import 'screens/dashboards_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/widget_details_screen.dart';
+import 'screens/widget_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(CogboardApp());
 }
 
-class CogboardApp extends StatefulWidget {
+class CogboardApp extends StatelessWidget {
   static final navigatorKey = new GlobalKey<NavigatorState>();
-
-  @override
-  _CogboardAppState createState() => _CogboardAppState();
-}
-
-class _CogboardAppState extends State<CogboardApp> with WidgetsBindingObserver {
-
-  AppLifecycleState _notification;
-
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  AndroidInitializationSettings androidInitializationSettings;
-  IOSInitializationSettings iosInitializationSettings;
-  InitializationSettings initializationSettings;
-
-  bool appResumedBySelectingNotification = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    notificationSetup();
-    Future.delayed(const Duration(milliseconds: 0), () {
-      new Timer.periodic(const Duration(seconds: 2), (timer) => checkForWidgetErrorUpdate(timer));
-    });
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    setState(() {
-      _notification = state;
-    });
-    if(_notification==AppLifecycleState.resumed) {
-      if(appResumedBySelectingNotification) {
-        CogboardApp.navigatorKey.currentState.popUntil(ModalRoute.withName(DashboardsScreen.routeName));
-        appResumedBySelectingNotification = false;
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,11 +43,22 @@ class _CogboardAppState extends State<CogboardApp> with WidgetsBindingObserver {
       child: MaterialApp(
           title: 'Cogboard',
           theme: ThemeData(
-            primarySwatch: primarySwatchColor,
-            accentColor: accentColor,
-            canvasColor: primarySwatchColor,
+            colorScheme: ColorScheme(
+                primary: Color(0xff81D4FA),
+                primaryVariant: Color(0xff81D4FA),
+                secondary: Color(0xffaed581),
+                secondaryVariant: Color(0xffaed581),
+                surface: Color(0xff202020),
+                background: Color(0xff121212),
+                error: Color(0xffcf6679),
+                onPrimary: Color(0xff000000),
+                onSecondary: Color(0xff000000),
+                onSurface: Color(0xffffffff),
+                onBackground: Color(0xffffffff),
+                onError: Color(0xff000000),
+                brightness: Brightness.dark),
           ),
-          navigatorKey:CogboardApp.navigatorKey,
+          navigatorKey: CogboardApp.navigatorKey,
           initialRoute: LoginScreen.routeName,
           routes: {
             LoginScreen.routeName: (ctx) => LoginScreen(),
@@ -106,37 +69,5 @@ class _CogboardAppState extends State<CogboardApp> with WidgetsBindingObserver {
             AddConnectionScreen.routeName: (ctx) => AddConnectionScreen(),
           }),
     );
-  }
-
-  void notificationSetup() async {
-    androidInitializationSettings = AndroidInitializationSettings('cogboard_icon');
-    iosInitializationSettings = IOSInitializationSettings();
-    initializationSettings =
-        InitializationSettings(android: androidInitializationSettings, iOS: iosInitializationSettings);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
-  }
-
-  void checkForWidgetErrorUpdate(Timer timer) async {
-    if (_notification == AppLifecycleState.paused) {
-      await showNotification();
-    }
-  }
-
-  Future<void> showNotification() async {
-    AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-        'Channel ID', 'Channel title', 'channel body',
-        priority: Priority.high, importance: Importance.max, ticker: 'test');
-
-    IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
-
-    NotificationDetails notificationDetails =
-    NotificationDetails(android: androidNotificationDetails, iOS: iosNotificationDetails);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'Some widgets have changed their status', 'test', notificationDetails);
-  }
-
-  Future<dynamic> onSelectNotification(String payLoad) async {
-    appResumedBySelectingNotification = true;
   }
 }

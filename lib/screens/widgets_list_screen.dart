@@ -34,32 +34,35 @@ class WidgetsListScreen extends StatelessWidget {
       }
     });
 
-    return configProvider.webSocketConnectionErrorPresent
-        ? ScreenWithAppBar(
-            appBarTitle: 'dashboard',
-            body: WidgetListErrorScreen("websocket connection error occurred!"),
-          )
-        : widgetsList.length == 0
-            ? EmptyWidgetListScreen()
-            : MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                child: ListView.builder(
-                    itemCount: widgetsList.length,
-                    itemBuilder: (ctx, index) {
-                      return dashboardType == DashboardType.Home
-                          ? WidgetListItem(
-                              widget: widgetsList[index],
-                              widgetIndex: index,
-                              dashboardType: dashboardType,
-                            )
-                          : DismissibleWidgetListItem(
-                              widget: widgetsList[index],
-                              widgetIndex: index,
-                              dashboardType: dashboardType,
-                            );
-                    }),
-              );
+    return RefreshIndicator(
+      onRefresh: configProvider.fetchConfig,
+      child: configProvider.webSocketConnectionErrorPresent
+          ? ScreenWithAppBar(
+              appBarTitle: 'dashboard',
+              body: WidgetListErrorScreen("websocket connection error occurred!"),
+            )
+          : widgetsList.length == 0
+              ? EmptyWidgetListScreen()
+              : MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: ListView.builder(
+                      itemCount: widgetsList.length,
+                      itemBuilder: (ctx, index) {
+                        return dashboardType == DashboardType.Home
+                            ? WidgetListItem(
+                                widget: widgetsList[index],
+                                widgetIndex: index,
+                                dashboardType: dashboardType,
+                              )
+                            : DismissibleWidgetListItem(
+                                widget: widgetsList[index],
+                                widgetIndex: index,
+                                dashboardType: dashboardType,
+                              );
+                      }),
+                ),
+    );
   }
 
   List<DashboardWidget> getWidgetsList(

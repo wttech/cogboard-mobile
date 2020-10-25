@@ -6,6 +6,7 @@ import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/models/widgets_model.dart';
 import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,7 +16,10 @@ class ConfigProvider with ChangeNotifier {
   UrlPreferences _urlPreferences;
   String _currentUrl = 'http://150.254.30.119/api/config';
   int _snackBarsToRemove = 0;
-  bool webSocketConnectionErrorPresent = false;
+  bool _webSocketConnectionErrorPresent = false;
+  List<DashboardWidget> _lastNotificationUpdateWidgetsState;
+  String _lastNotificationUpdateUrl;
+  String _notificationPayload;
 
   ConfigProvider() {
     _urlPreferences = new UrlPreferences(favouriteWidgetIds: [], quarantineWidgetIds: []);
@@ -29,12 +33,11 @@ class ConfigProvider with ChangeNotifier {
 
   Future<void> checkIfQuarantineExpirationDateHasExceeded() async {
     DateTime currentTime = new DateTime.now();
-    print(currentTime);
-    if(await SharedPref.containsKey(Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY)) {
+    if (await SharedPref.containsKey(Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY)) {
       DateTime expirationDate = DateTime.parse(await SharedPref.read((Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY)));
-      if(currentTime.day > expirationDate.day) {
+      if (currentTime.day > expirationDate.day) {
         await SharedPref.save(Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY, currentTime.toString());
-        await(removeQuarantineWidgets());
+        await (removeQuarantineWidgets());
       }
     } else {
       await SharedPref.save(Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY, currentTime.toString());
@@ -45,6 +48,8 @@ class ConfigProvider with ChangeNotifier {
     final response = await http.get(_currentUrl);
     _config = Config.fromJson(json.decode(response.body) as Map<String, dynamic>);
     _boards = _config.boards.boardsById.entries.map((entry) => entry.value).toList();
+    _lastNotificationUpdateUrl = _currentUrl;
+    _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
     if (await SharedPref.containsKey(_currentUrl)) {
       _urlPreferences = UrlPreferences.fromJson(jsonDecode(await SharedPref.read(_currentUrl)));
     }
@@ -52,6 +57,10 @@ class ConfigProvider with ChangeNotifier {
   }
 
   int get snackBarsToRemove => _snackBarsToRemove;
+
+  bool get webSocketConnectionErrorPresent => _webSocketConnectionErrorPresent;
+
+  String get notificationPayload => _notificationPayload;
 
   List<DashboardWidget> get favouriteWidgets {
     return _config.widgets.widgetsById.entries
@@ -71,15 +80,29 @@ class ConfigProvider with ChangeNotifier {
     return [..._boards];
   }
 
+  List<DashboardWidget> getAllWidgets() {
+    return _config.widgets.widgetsById.entries.map((entry) => entry.value).toList();
+  }
+
+  List<DashboardWidget> getAllWidgetsDeepCopy() {
+    return new List<DashboardWidget>.from(getAllWidgets().map((widget) => DashboardWidget.deepCopy(widget)).toList());
+  }
+
   List<DashboardWidget> getBoardWidgets(Board board) {
-    return _config.widgets.widgetsById.entries
-        .map((entry) => entry.value)
-        .where((widget) => board.widgets.contains(widget.id))
-        .toList();
+    return [
+      ..._config.widgets.widgetsById.entries
+          .map((entry) => entry.value)
+          .where((widget) => board.widgets.contains(widget.id))
+          .toList()
+    ];
+  }
+
+  String getWidgetName(DashboardWidget widget) {
+    return (widget.title != null && widget.title.isNotEmpty) ? widget.title : widget.type;
   }
 
   void updateWidget(Map<String, dynamic> widgetData) {
-    if(_config != null) {
+    if (_config != null) {
       _config.widgets.widgetsById.forEach((key, value) {
         if (key == widgetData['id']) {
           value.updateWidget(widgetData);
@@ -90,18 +113,18 @@ class ConfigProvider with ChangeNotifier {
   }
 
   Future<void> updateFavouriteWidget(DashboardWidget widget) async {
-    if(favouriteWidgets.contains(widget)) {
+    if (favouriteWidgets.contains(widget)) {
       await removeFavouriteWidget(widget);
     } else {
-     await addFavouriteWidget(widget);
+      await addFavouriteWidget(widget);
     }
   }
 
   Future<void> updateQuarantineWidget(DashboardWidget widget) async {
-    if(quarantineWidgets.contains(widget)) {
+    if (quarantineWidgets.contains(widget)) {
       await removeQuarantineWidget(widget);
     } else {
-     await addQuarantineWidget(widget);
+      await addQuarantineWidget(widget);
     }
   }
 
@@ -144,7 +167,75 @@ class ConfigProvider with ChangeNotifier {
   }
 
   void setWebSocketConnectionErrorPresent() {
-    webSocketConnectionErrorPresent = true;
+    _webSocketConnectionErrorPresent = true;
     notifyListeners();
+  }
+
+  bool shouldNotify() {
+    if (_currentUrl != _lastNotificationUpdateUrl) {
+      _lastNotificationUpdateUrl = _currentUrl;
+      _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
+      return false;
+    } else {
+      bool shouldNotify = false;
+      getAllWidgets().forEach((widget) {
+        DashboardWidget notificationStateWidget =
+            _lastNotificationUpdateWidgetsState.firstWhere((element) => element.id == widget.id);
+        if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+          WidgetStatus widgetStatus =
+              EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+          if (isErrorWidgetStatus(widgetStatus)) {
+            if (notificationStateWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+              WidgetStatus notificationStateWidgetStatus = EnumToString.fromString(
+                  WidgetStatus.values, notificationStateWidget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+              if (widgetStatus != notificationStateWidgetStatus) {
+                shouldNotify = true;
+                return true;
+              }
+            } else {
+              shouldNotify = true;
+            }
+          }
+        }
+      });
+      if(shouldNotify) {
+        setNotificationPayload();
+      }
+      _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
+      return shouldNotify;
+    }
+  }
+
+  bool isErrorWidgetStatus(WidgetStatus widgetStatus) {
+    return widgetStatus == WidgetStatus.CHECKBOX_FAIL ||
+        widgetStatus == WidgetStatus.ERROR ||
+        widgetStatus == WidgetStatus.ERROR_CONFIGURATION ||
+        widgetStatus == WidgetStatus.ERROR_CONNECTION ||
+        widgetStatus == WidgetStatus.FAIL;
+  }
+
+  void setNotificationPayload() {
+    _notificationPayload = '';
+    getAllWidgets().forEach((widget) {
+      DashboardWidget notificationStateWidget =
+          _lastNotificationUpdateWidgetsState.firstWhere((element) => element.id == widget.id);
+      if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+        WidgetStatus widgetStatus =
+            EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+        if (isErrorWidgetStatus(widgetStatus)) {
+          if (notificationStateWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+            WidgetStatus notificationStateWidgetStatus = EnumToString.fromString(
+                WidgetStatus.values, notificationStateWidget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+            if (widgetStatus != notificationStateWidgetStatus) {
+              _notificationPayload +=
+                  '${getWidgetName(widget)} has changed status to ${widget.content[DashboardWidget.WIDGET_STATUS_KEY]}\n';
+            }
+          } else {
+            _notificationPayload +=
+                '${getWidgetName(widget)} has changed status to ${widget.content[DashboardWidget.WIDGET_STATUS_KEY]}\n';
+          }
+        }
+      }
+    });
   }
 }
