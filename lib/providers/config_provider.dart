@@ -20,6 +20,7 @@ class ConfigProvider with ChangeNotifier {
   List<DashboardWidget> _lastNotificationUpdateWidgetsState;
   String _lastNotificationUpdateUrl;
   String _notificationPayload;
+  List<DashboardWidget> _widgetsInNotificationPayload = [];
 
   ConfigProvider() {
     _urlPreferences = new UrlPreferences(favouriteWidgetIds: [], quarantineWidgetIds: []);
@@ -189,8 +190,8 @@ class ConfigProvider with ChangeNotifier {
               WidgetStatus notificationStateWidgetStatus = EnumToString.fromString(
                   WidgetStatus.values, notificationStateWidget.content[DashboardWidget.WIDGET_STATUS_KEY]);
               if (widgetStatus != notificationStateWidgetStatus) {
+                updateWidgetsInNotificationPayload(widget);
                 shouldNotify = true;
-                return true;
               }
             } else {
               shouldNotify = true;
@@ -206,6 +207,15 @@ class ConfigProvider with ChangeNotifier {
     }
   }
 
+  void updateWidgetsInNotificationPayload(DashboardWidget widget) {
+    DashboardWidget notificationWidgetToUpdate = _widgetsInNotificationPayload.firstWhere((element) => element.id == widget.id, orElse:() => null);
+    if(notificationWidgetToUpdate == null) {
+      _widgetsInNotificationPayload.add(DashboardWidget.deepCopy(widget));
+    } else {
+      notificationWidgetToUpdate.content = new Map<String, dynamic>.from(widget.content);
+    }
+  }
+
   bool isErrorWidgetStatus(WidgetStatus widgetStatus) {
     return widgetStatus == WidgetStatus.CHECKBOX_FAIL ||
         widgetStatus == WidgetStatus.ERROR ||
@@ -216,26 +226,15 @@ class ConfigProvider with ChangeNotifier {
 
   void setNotificationPayload() {
     _notificationPayload = '';
-    getAllWidgets().forEach((widget) {
-      DashboardWidget notificationStateWidget =
-          _lastNotificationUpdateWidgetsState.firstWhere((element) => element.id == widget.id);
+    _widgetsInNotificationPayload.forEach((widget) {
       if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-        WidgetStatus widgetStatus =
-            EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
-        if (isErrorWidgetStatus(widgetStatus)) {
-          if (notificationStateWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-            WidgetStatus notificationStateWidgetStatus = EnumToString.fromString(
-                WidgetStatus.values, notificationStateWidget.content[DashboardWidget.WIDGET_STATUS_KEY]);
-            if (widgetStatus != notificationStateWidgetStatus) {
-              _notificationPayload +=
-                  '${getWidgetName(widget)} has changed status to ${widget.content[DashboardWidget.WIDGET_STATUS_KEY]}\n';
-            }
-          } else {
-            _notificationPayload +=
-                '${getWidgetName(widget)} has changed status to ${widget.content[DashboardWidget.WIDGET_STATUS_KEY]}\n';
-          }
-        }
+        _notificationPayload +=
+        '${getWidgetName(widget)} has changed status to ${widget.content[DashboardWidget.WIDGET_STATUS_KEY]}\n';
       }
     });
+  }
+
+  void removeWidgetsInNotificationPayload() {
+    _widgetsInNotificationPayload = [];
   }
 }

@@ -52,6 +52,7 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
       _notification = state;
     });
     if (_notification == AppLifecycleState.resumed) {
+      Provider.of<ConfigProvider>(context, listen: false).removeWidgetsInNotificationPayload();
       if (_appResumedBySelectingNotification) {
         CogboardApp.navigatorKey.currentState.popUntil(ModalRoute.withName(DashboardsScreen.routeName));
         _appResumedBySelectingNotification = false;
@@ -135,7 +136,6 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
   }
 
   void checkForWidgetErrorUpdate(Timer timer) async {
-
     if (_notification == AppLifecycleState.paused) {
       if (Provider.of<ConfigProvider>(context, listen: false).shouldNotify()) {
         await showNotification();
@@ -145,8 +145,14 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
 
   Future<void> showNotification() async {
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-        'Channel ID', 'Channel title', 'channel body',
-        priority: Priority.high, importance: Importance.max, ticker: 'test');
+      'Channel ID',
+      'Channel title',
+      'channel body',
+      priority: Priority.high,
+      importance: Importance.max,
+      ticker: 'test',
+      styleInformation: BigTextStyleInformation(''),
+    );
 
     IOSNotificationDetails iosNotificationDetails = IOSNotificationDetails();
 
