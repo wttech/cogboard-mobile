@@ -21,6 +21,7 @@ class ConfigProvider with ChangeNotifier {
   String _lastNotificationUpdateUrl;
   String _notificationPayload;
   List<DashboardWidget> _widgetsInNotificationPayload = [];
+  Board _currentBoard;
 
   ConfigProvider() {
     _urlPreferences = new UrlPreferences(favouriteWidgetIds: [], quarantineWidgetIds: []);
@@ -62,6 +63,8 @@ class ConfigProvider with ChangeNotifier {
   bool get webSocketConnectionErrorPresent => _webSocketConnectionErrorPresent;
 
   String get notificationPayload => _notificationPayload;
+
+  Board get currentBoard => _currentBoard;
 
   List<DashboardWidget> get favouriteWidgets {
     return _config.widgets.widgetsById.entries
@@ -236,5 +239,9 @@ class ConfigProvider with ChangeNotifier {
 
   void removeWidgetsInNotificationPayload() {
     _widgetsInNotificationPayload = [];
+  }
+
+  void setCurrentBoard(Board board) {
+    this._currentBoard = board;
   }
 }

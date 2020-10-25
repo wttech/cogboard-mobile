@@ -11,7 +11,6 @@ import 'providers/settings_provider.dart';
 import 'screens/dashboards_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/settings_screen.dart';
-import 'screens/widget_details_screen.dart';
 import 'screens/widget_screen.dart';
 
 void main() async {
@@ -64,7 +63,6 @@ class CogboardApp extends StatelessWidget {
             LoginScreen.routeName: (ctx) => LoginScreen(),
             DashboardsScreen.routeName: (ctx) => DashboardsScreen(),
             SettingsScreen.routeName: (ctx) => SettingsScreen(),
-            WidgetDetailsScreen.routeName: (ctx) => WidgetDetailsScreen(),
             DashboardItemScreen.routeName: (ctx) => DashboardItemScreen(),
             AddConnectionScreen.routeName: (ctx) => AddConnectionScreen(),
           }),
