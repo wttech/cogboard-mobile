@@ -26,14 +26,6 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
   bool currentWidgetFetched = false;
 
   @override
-  void initState() {
-    super.initState();
-//    Future.delayed(const Duration(milliseconds: 0), () {
-//      currentWidget = ModalRoute.of(context).settings.arguments;
-//    });
-  }
-
-  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
