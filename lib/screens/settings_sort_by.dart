@@ -1,5 +1,5 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
-import 'package:cogboardmobileapp/models/widget_type_model.dart';
+import 'package:cogboardmobileapp/models/widget_sort_by_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -9,8 +9,7 @@ import 'package:provider/provider.dart';
 class SettingsWidgets extends StatelessWidget {
   final WidgetSortBy sortBy;
 
-  final List<WidgetType> widgetTypes;
-  SettingsWidgets(this.widgetTypes, this.sortBy);
+  SettingsWidgets(this.sortBy);
 
   @override
   Widget build(BuildContext context) {
@@ -104,40 +103,6 @@ class SettingsWidgets extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 12),
-            child: Text(
-              "Visible widgets types",
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 15,
-              ),
-            ),
-          ),
-          Column(
-            children: widgetTypes.map((widget) {
-              return Row(
-                children: <Widget>[
-                  Expanded(
-                    child: SwitchListTile(
-                      title: Text(
-                        widget.name,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
-                      ),
-                      value: widgetTypes[widgetTypes.indexOf(widget)].isVisible,
-                      onChanged: (bool value) {
-                        settingsProvider.setWidgetTypeVisible(
-                            widgetTypes.indexOf(widget), value);
-                      },
-                      activeColor: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ],
-              );
-            }).toList(),
           ),
         ],
       ),

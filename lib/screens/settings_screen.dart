@@ -1,8 +1,7 @@
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:cogboardmobileapp/screens/settings_hints.dart';
 import 'package:cogboardmobileapp/screens/settings_project_list.dart';
-import 'package:cogboardmobileapp/screens/settings_view_mode.dart';
-import 'package:cogboardmobileapp/screens/settings_widgets.dart';
+import 'package:cogboardmobileapp/screens/settings_sort_by.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,13 +36,7 @@ class SettingsScreen extends StatelessWidget {
                         indent: 30,
                         endIndent: 30,
                       ),
-                      SettingsViewMode(settingsProvider.viewMode),
-                      Divider(
-                        color: Colors.grey,
-                        indent: 30,
-                        endIndent: 30,
-                      ),
-                      SettingsWidgets(settingsProvider.widgets, settingsProvider.sortBy),
+                      SettingsWidgets(settingsProvider.sortBy),
                       Divider(
                         color: Colors.grey,
                         indent: 30,

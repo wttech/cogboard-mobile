@@ -3,7 +3,6 @@ import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cogboardmobileapp/models/settings_tab.dart';
 
 class SettingsProjectListScreen extends StatelessWidget {
   final List<Connection> projects;
