@@ -30,6 +30,10 @@ class DashboardsProvider with ChangeNotifier {
         .indexWhere((element) => element.dashboardType == DashboardType.Home);
   }
 
+  DashboardType get currentDashboardType {
+    return _dashboardTabs[dashboardTabIndex].dashboardType;
+  }
+
   int get dashboardTabIndex {
     return _dashboardTabIndex;
   }

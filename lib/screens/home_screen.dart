@@ -26,12 +26,14 @@ class _HomeWidgetScreenState extends State<HomeWidgetScreen> {
   @override
   Widget build(BuildContext context) {
     final configProvider = Provider.of<ConfigProvider>(context, listen: false);
+    configProvider.setCurrentBoard(configProvider.boards[pageNumber]);
     boardTitle = configProvider.boards[pageNumber].title;
     return ScreenWithAppBar(
       appBarTitle: boardTitle,
       body: PageView(
         controller: _controller,
         onPageChanged: (boardIndex) {
+          configProvider.setCurrentBoard(configProvider.boards[pageNumber]);
           setState(() {
             pageNumber = boardIndex;
           });
