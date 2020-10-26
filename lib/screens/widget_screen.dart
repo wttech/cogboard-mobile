@@ -4,10 +4,10 @@ import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/providers/widget_provider.dart';
 import 'package:cogboardmobileapp/screens/widget_list_error_screen.dart';
-import 'package:cogboardmobileapp/widgets/open_url_button.dart';
+import 'file:///F:/cogboard-mobile/lib/widgets/widgets/open_url_button.dart';
 import 'package:cogboardmobileapp/widgets/screen_with_appbar_widget.dart';
-import 'package:cogboardmobileapp/widgets/widget_details.dart';
-import 'package:cogboardmobileapp/widgets/widget_status.dart';
+import 'file:///F:/cogboard-mobile/lib/widgets/widgets/widget_details.dart';
+import 'file:///F:/cogboard-mobile/lib/widgets/widgets/widget_status.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

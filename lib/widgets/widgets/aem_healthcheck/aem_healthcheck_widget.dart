@@ -1,7 +1,7 @@
 import 'package:cogboardmobileapp/models/widget_model.dart';
-import 'package:cogboardmobileapp/widgets/aem_healthcheck_item.dart';
-import 'package:cogboardmobileapp/widgets/details_container.dart';
-import 'package:cogboardmobileapp/widgets/details_header.dart';
+import 'package:cogboardmobileapp/widgets/widgets/aem_healthcheck/aem_healthcheck_item.dart';
+import 'package:cogboardmobileapp/widgets/widgets/details_container.dart';
+import 'package:cogboardmobileapp/widgets/widgets/details_header.dart';
 import 'package:flutter/material.dart';
 
 class AemHealthcheckWidget extends StatelessWidget {
