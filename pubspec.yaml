@@ -55,7 +55,6 @@ flutter:
   assets:
     - assets/images/filter_icon.png
     - assets/images/cancel_icon.png
-#    - packages/timezone/lib/data/2015b.tzf
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
