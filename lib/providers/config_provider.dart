@@ -24,13 +24,13 @@ class ConfigProvider with ChangeNotifier {
   Board _currentBoard;
 
   ConfigProvider() {
-    _urlPreferences = new UrlPreferences(favouriteWidgets: [], quarantineWidgets: []);
-    checkIfQuarantineExpirationDateHasExceeded();
     new Timer.periodic(const Duration(minutes: 1), everyMinuteCheckTimer);
   }
 
   void everyMinuteCheckTimer(Timer timer) async {
-    await checkIfQuarantineExpirationDateHasExceeded();
+    if(_urlPreferences!=null) {
+      await checkIfQuarantineExpirationDateHasExceeded();
+    }
   }
 
   Future<void> checkIfQuarantineExpirationDateHasExceeded() async {
@@ -58,6 +58,10 @@ class ConfigProvider with ChangeNotifier {
     _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
     if (await SharedPref.containsKey(_currentUrl)) {
       _urlPreferences = UrlPreferences.fromJson(jsonDecode(await SharedPref.read(_currentUrl)));
+      await checkIfQuarantineExpirationDateHasExceeded();
+    } else {
+      _urlPreferences = new UrlPreferences(favouriteWidgets: [], quarantineWidgets: []);
+      await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
     }
     notifyListeners();
   }
