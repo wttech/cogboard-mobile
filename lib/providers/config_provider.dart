@@ -58,6 +58,7 @@ class ConfigProvider with ChangeNotifier {
     _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
     if (await SharedPref.containsKey(_currentUrl)) {
       _urlPreferences = UrlPreferences.fromJson(jsonDecode(await SharedPref.read(_currentUrl)));
+      await checkIfQuarantineExpirationDateHasExceeded();
     } else {
       _urlPreferences = new UrlPreferences(favouriteWidgets: [], quarantineWidgets: []);
       await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
