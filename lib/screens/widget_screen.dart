@@ -38,7 +38,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
   String getWidgetStatus(DashboardWidget widget) {
     return widget.content[DashboardWidget.WIDGET_STATUS_KEY] != null
         ? widget.content[DashboardWidget.WIDGET_STATUS_KEY]
-        : '';
+        : 'DEFAULT';
   }
 
   int getLastUpdated(DashboardWidget widget) {

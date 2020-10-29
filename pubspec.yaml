@@ -26,6 +26,7 @@ dependencies:
   web_socket_channel: ^1.1.0
   intl: ^0.16.1
   flutter_local_notifications: ^3.0.0
+  timezone: ^0.5.9
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
@@ -54,6 +55,7 @@ flutter:
   assets:
     - assets/images/filter_icon.png
     - assets/images/cancel_icon.png
+#    - packages/timezone/lib/data/2015b.tzf
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

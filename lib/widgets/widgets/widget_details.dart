@@ -7,6 +7,7 @@ import 'package:cogboardmobileapp/widgets/widgets/bamboo_plan/bamboo_plan_widget
 import 'package:cogboardmobileapp/widgets/widgets/checkbox/checkbox_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/jenkins_job/jenkins_job_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/sonar_qube/sonar_qube_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/world_clock/world_clock_widget.dart';
 import 'package:flutter/material.dart';
 
 class WidgetDetails extends StatelessWidget {
@@ -32,11 +33,12 @@ class WidgetDetails extends StatelessWidget {
         return AemHealthcheckWidget(widget: widget);
       case WidgetTypes.AEM_BUNDLE_INFO_WIDGET:
         return AemBundleInfoWidget(widget: widget);
+      case WidgetTypes.WORLD_CLOCK_WIDGET:
+        return WorldClockWidget(widget: widget);
       default:
         return Container(
           child: null,
         );
-        break;
     }
   }
 
@@ -49,13 +51,11 @@ class WidgetDetails extends StatelessWidget {
       case WidgetTypes.AEM_HEALTHCHECK_WIDGET:
       case WidgetTypes.AEM_BUNDLE_INFO_WIDGET:
         return true;
-        break;
       case WidgetTypes.CHECKBOX_WIDGET:
+      case WidgetTypes.WORLD_CLOCK_WIDGET:
         return false;
-        break;
       default:
         return false;
-        break;
     }
   }
 
@@ -67,8 +67,7 @@ class WidgetDetails extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    if (getWidgetDetails(widget) != null)
-                      getWidgetDetails(widget),
+                    if (getWidgetDetails(widget) != null) getWidgetDetails(widget),
                   ],
                 ),
               ],
