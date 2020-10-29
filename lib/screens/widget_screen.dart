@@ -10,7 +10,6 @@ import 'package:cogboardmobileapp/widgets/widgets/widget_details.dart';
 import 'package:cogboardmobileapp/widgets/widgets/widget_status.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:web_socket_channel/io.dart';
 
 class DashboardItemScreen extends StatefulWidget {
@@ -22,6 +21,7 @@ class DashboardItemScreen extends StatefulWidget {
 
 class _DashboardItemScreenState extends State<DashboardItemScreen> {
   PageController _controller;
+  int pageNumber = 0;
   DashboardWidget currentWidget;
   bool currentWidgetFetched = false;
 
@@ -55,7 +55,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
     final dashboardProvider = Provider.of<DashboardsProvider>(context);
     final channel = IOWebSocketChannel.connect('ws://150.254.30.119/ws');
 
-    if(!currentWidgetFetched) {
+    if (!currentWidgetFetched) {
       setState(() {
         currentWidgetFetched = true;
         currentWidget = ModalRoute.of(context).settings.arguments;
@@ -68,7 +68,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
           IconButton(
             icon: Icon(Icons.block),
             color: getQuarantineIconColor(currentWidget, configProvider, context),
-            onPressed: () => configProvider.updateQuarantineWidget(currentWidget),
+            onPressed: () => onChangeWidgetStateClicked(currentWidget, configProvider, dashboardProvider),
           ),
           IconButton(
             icon: Icon(Icons.star),
@@ -96,6 +96,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
               _controller = PageController(
                 initialPage: getInitialPage(configProvider, dashboardProvider),
               );
+              pageNumber = getInitialPage(configProvider, dashboardProvider);
               return PageView.builder(
                 controller: _controller,
                 scrollDirection: Axis.horizontal,
@@ -103,6 +104,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
                 onPageChanged: (widgetIndex) {
                   setState(() {
                     setCurrentWidget(configProvider, dashboardProvider, widgetIndex);
+                    pageNumber = widgetIndex;
                   });
                 },
                 itemBuilder: (context, widgetIndex) {
@@ -132,6 +134,72 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
+  }
+
+  Future<void> onChangeWidgetStateClicked(DashboardWidget currentWidget, ConfigProvider configProvider, DashboardsProvider dashboardsProvider) async {
+    if(configProvider.isWidgetInQuarantine(currentWidget)) {
+      if(dashboardsProvider.currentDashboardType == DashboardType.Quarantine) {
+        Navigator.of(context).pop();
+      }
+      configProvider.removeQuarantineWidget(currentWidget);
+      return;
+    }
+    bool shouldAddWidgetToQuarantine = false;
+    bool shouldWidgetExpireFromQuarantine = true;
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        content: Text(
+          'Do you want this widget to be removed form quarantine at expiration date',
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          FlatButton(
+            textColor: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.surface,
+            padding: const EdgeInsets.all(0.0),
+            child: Text('NO'),
+            onPressed: () {
+              shouldAddWidgetToQuarantine = true;
+              shouldWidgetExpireFromQuarantine = false;
+              Navigator.of(ctx).pop(false);
+            },
+          ),
+          FlatButton(
+            textColor: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.surface,
+            padding: const EdgeInsets.all(0.0),
+            child: Text('YES'),
+            onPressed: () {
+              shouldAddWidgetToQuarantine = true;
+              shouldWidgetExpireFromQuarantine = true;
+              Navigator.of(ctx).pop(true);
+            },
+          ),
+        ],
+      ),
+    );
+    if (shouldWidgetExpireFromQuarantine) {
+      await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now().subtract(Duration(days: 0)),
+        lastDate: DateTime.now().add(Duration(days: 365)),
+      ).then((pickedDate) {
+        if (pickedDate == null) {
+          shouldAddWidgetToQuarantine = false;
+          return;
+        }
+        currentWidget.expirationDate = pickedDate;
+      });
+    }
+    if (shouldAddWidgetToQuarantine) {
+      if(dashboardsProvider.currentDashboardType == DashboardType.Home) {
+        Navigator.of(context).pop();
+      }
+      configProvider.addQuarantineWidget(currentWidget);
+    }
   }
 
   int getInitialPage(ConfigProvider configProvider, DashboardsProvider dashboardsProvider) {
