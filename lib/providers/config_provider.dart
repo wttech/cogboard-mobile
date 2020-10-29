@@ -80,6 +80,10 @@ class ConfigProvider with ChangeNotifier {
         .toList();
   }
 
+  bool isWidgetInQuarantine(DashboardWidget widget) {
+    return quarantineWidgets.indexWhere((element) => element.id == widget.id) > -1;
+  }
+
   List<Board> get boards {
     return [..._boards];
   }
@@ -96,7 +100,9 @@ class ConfigProvider with ChangeNotifier {
     return [
       ..._config.widgets.widgetsById.entries
           .map((entry) => entry.value)
-          .where((widget) => board.widgets.contains(widget.id))
+          .where((widget) =>
+              board.widgets.contains(widget.id) &&
+              quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1)
           .toList()
     ];
   }
@@ -183,26 +189,28 @@ class ConfigProvider with ChangeNotifier {
     } else {
       bool shouldNotify = false;
       getAllWidgets().forEach((widget) {
-        DashboardWidget notificationStateWidget =
-            _lastNotificationUpdateWidgetsState.firstWhere((element) => element.id == widget.id);
-        if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-          WidgetStatus widgetStatus =
-              EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
-          if (isErrorWidgetStatus(widgetStatus)) {
-            if (notificationStateWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-              WidgetStatus notificationStateWidgetStatus = EnumToString.fromString(
-                  WidgetStatus.values, notificationStateWidget.content[DashboardWidget.WIDGET_STATUS_KEY]);
-              if (widgetStatus != notificationStateWidgetStatus) {
-                updateWidgetsInNotificationPayload(widget);
+        if(quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1) {
+          DashboardWidget notificationStateWidget =
+          _lastNotificationUpdateWidgetsState.firstWhere((element) => element.id == widget.id);
+          if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+            WidgetStatus widgetStatus =
+            EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+            if (isErrorWidgetStatus(widgetStatus)) {
+              if (notificationStateWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+                WidgetStatus notificationStateWidgetStatus = EnumToString.fromString(
+                    WidgetStatus.values, notificationStateWidget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+                if (widgetStatus != notificationStateWidgetStatus) {
+                  updateWidgetsInNotificationPayload(widget);
+                  shouldNotify = true;
+                }
+              } else {
                 shouldNotify = true;
               }
-            } else {
-              shouldNotify = true;
             }
           }
         }
       });
-      if(shouldNotify) {
+      if (shouldNotify) {
         setNotificationPayload();
       }
       _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
@@ -211,8 +219,9 @@ class ConfigProvider with ChangeNotifier {
   }
 
   void updateWidgetsInNotificationPayload(DashboardWidget widget) {
-    DashboardWidget notificationWidgetToUpdate = _widgetsInNotificationPayload.firstWhere((element) => element.id == widget.id, orElse:() => null);
-    if(notificationWidgetToUpdate == null) {
+    DashboardWidget notificationWidgetToUpdate =
+        _widgetsInNotificationPayload.firstWhere((element) => element.id == widget.id, orElse: () => null);
+    if (notificationWidgetToUpdate == null) {
       _widgetsInNotificationPayload.add(DashboardWidget.deepCopy(widget));
     } else {
       notificationWidgetToUpdate.content = new Map<String, dynamic>.from(widget.content);
@@ -232,7 +241,7 @@ class ConfigProvider with ChangeNotifier {
     _widgetsInNotificationPayload.forEach((widget) {
       if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
         _notificationPayload +=
-        '${getWidgetName(widget)} has changed status to ${widget.content[DashboardWidget.WIDGET_STATUS_KEY]}\n';
+            '${getWidgetName(widget)} has changed status to ${widget.content[DashboardWidget.WIDGET_STATUS_KEY]}\n';
       }
     });
   }

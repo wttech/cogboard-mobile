@@ -23,10 +23,11 @@ class DashboardWidget {
   WidgetConfig config;
   bool disabled;
   Map<String, dynamic> content;
+  DateTime expirationDate;
 
   static const WIDGET_STATUS_KEY = 'widgetStatus';
 
-  DashboardWidget({this.id, this.title, this.type, this.config, this.disabled, this.content});
+  DashboardWidget({this.id, this.title, this.type, this.config, this.disabled, this.content, this.expirationDate});
 
   factory DashboardWidget.fromJson(Map<String, dynamic> json) => DashboardWidget(
       id: json['id'],

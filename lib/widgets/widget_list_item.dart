@@ -5,6 +5,7 @@ import 'package:cogboardmobileapp/providers/filter_provider.dart';
 import 'package:cogboardmobileapp/screens/widget_screen.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class WidgetListItem extends StatelessWidget {
@@ -12,10 +13,7 @@ class WidgetListItem extends StatelessWidget {
   final int widgetIndex;
   final DashboardType dashboardType;
 
-  WidgetListItem(
-      {@required this.widget,
-      @required this.widgetIndex,
-      @required this.dashboardType});
+  WidgetListItem({@required this.widget, @required this.widgetIndex, @required this.dashboardType});
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +36,7 @@ class WidgetListItem extends StatelessWidget {
             widget.title,
             style: TextStyle(color: Colors.white),
           ),
+          subtitle: getWidgetTileSubtitle(),
           trailing: getWidgetIcon(widget),
           onTap: () {
             Navigator.pushNamed(
@@ -54,12 +53,16 @@ class WidgetListItem extends StatelessWidget {
     );
   }
 
+  Widget getWidgetTileSubtitle() {
+    return dashboardType == DashboardType.Quarantine
+        ? (widget.expirationDate != null ? Text(DateFormat('yyyy-MM-dd').format(widget.expirationDate)) : null)
+        : null;
+  }
+
   Color getWidgetColor(DashboardWidget dashboardWidget) {
-    if (dashboardWidget.content
-        .containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-      final WidgetStatus widgetStatus = EnumToString.fromString(
-          WidgetStatus.values,
-          widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+    if (dashboardWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus =
+          EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
       return StatusColors[EnumToString.convertToString(widgetStatus)];
     } else {
       return StatusColors["DEFAULT"];
@@ -67,24 +70,23 @@ class WidgetListItem extends StatelessWidget {
   }
 
   Widget getWidgetIcon(DashboardWidget dashboardWidget) {
-    if (dashboardWidget.type == "CheckboxWidget") {
-      return Icon(
-        Icons.indeterminate_check_box,
-        color: Colors.white,
-      );
-    } else if (dashboardWidget.type == "AemHealthcheckWidget") {
+    if (dashboardWidget.type == "AemHealthcheckWidget") {
       return Icon(
         Icons.show_chart,
         color: Colors.white,
       );
     }
-    if (dashboardWidget.content
-        .containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-      final WidgetStatus widgetStatus = EnumToString.fromString(
-          WidgetStatus.values,
-          widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+    if (dashboardWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus =
+          EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
       switch (widgetStatus) {
         case WidgetStatus.OK:
+          return Icon(
+            Icons.check,
+            color: Colors.white,
+          );
+          break;
+        case WidgetStatus.CHECKBOX_OK:
           return Icon(
             Icons.check,
             color: Colors.white,
@@ -108,12 +110,24 @@ class WidgetListItem extends StatelessWidget {
             color: Colors.white,
           );
           break;
+        case WidgetStatus.CHECKBOX_FAIL:
+          return Icon(
+            Icons.clear,
+            color: Colors.white,
+          );
+          break;
         case WidgetStatus.UNSTABLE:
           return null;
           break;
         case WidgetStatus.UNKNOWN:
           return Icon(
             Icons.help_outline,
+            color: Colors.white,
+          );
+          break;
+        case WidgetStatus.CHECKBOX_UNKNOWN:
+          return Icon(
+            Icons.remove,
             color: Colors.white,
           );
           break;
