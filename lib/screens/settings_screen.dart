@@ -12,7 +12,7 @@ class SettingsScreen extends StatelessWidget {
   // TODO: #13, #14
   @override
   Widget build(BuildContext context) {
-//    final settingsProvider = Provider.of<SettingsProvider>(context);
+    final settingsProvider = Provider.of<SettingsProvider>(context);
 //    final settingsProjects = settingsProvider.connections;
 //    final widgetProjects = settingsProvider.widgets;
 
@@ -22,33 +22,27 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Settings"),
       ),
-      body: FutureBuilder(
-          future: Provider.of<SettingsProvider>(context, listen: false).fetchSettingsConfig(),
-          builder: (ctx, dataSnapshot) {
-            return Consumer<SettingsProvider>(builder: (ctx, settingsProvider, child) {
-              return SingleChildScrollView(
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      SettingsProjectListScreen(settingsProvider.connections),
-                      Divider(
-                        color: Colors.grey,
-                        indent: 30,
-                        endIndent: 30,
-                      ),
-                      SettingsWidgets(settingsProvider.sortBy),
-                      Divider(
-                        color: Colors.grey,
-                        indent: 30,
-                        endIndent: 30,
-                      ),
-                      SettingsHints(settingsProvider.showHints),
-                    ],
-                  ),
-                ),
-              );
-            });
-          }),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              SettingsProjectListScreen(settingsProvider.connections),
+              Divider(
+                color: Colors.grey,
+                indent: 30,
+                endIndent: 30,
+              ),
+              SettingsWidgets(settingsProvider.sortBy),
+              Divider(
+                color: Colors.grey,
+                indent: 30,
+                endIndent: 30,
+              ),
+              SettingsHints(settingsProvider.showHints),
+            ],
+          ),
+        ),
+      ),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
   }

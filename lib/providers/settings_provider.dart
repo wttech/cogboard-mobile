@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 class SettingsProvider with ChangeNotifier {
   WidgetSortBy _sortBy;
   Hints _showHints;
-  bool _settingsConfigFetched = false;
   List<Connection> _connections;
   Connection _currentConnection;
 
@@ -37,12 +36,14 @@ class SettingsProvider with ChangeNotifier {
   }
 
   T enumFromString<T>(Iterable<T> values, String value) {
-    return values.firstWhere((type) => type.toString().split(".").last == value, orElse: () => null);
+    return values.firstWhere((type) => type.toString().split(".").last == value,
+        orElse: () => null);
   }
 
   Future<void> fetchWidgetsSortBy() async {
-    if(await SharedPref.containsKey('widgetsSortBy')) {
-      _sortBy = enumFromString(WidgetSortBy.values, await SharedPref.read('widgetsSortBy'));
+    if (await SharedPref.containsKey('widgetsSortBy')) {
+      _sortBy = enumFromString(
+          WidgetSortBy.values, await SharedPref.read('widgetsSortBy'));
     } else {
       _sortBy = WidgetSortBy.None;
     }
@@ -60,8 +61,9 @@ class SettingsProvider with ChangeNotifier {
   }
 
   Future<void> fetchShowHints() async {
-    if(await SharedPref.containsKey('showHints')) {
-      _showHints = enumFromString(Hints.values, await SharedPref.read('showHints'));
+    if (await SharedPref.containsKey('showHints')) {
+      _showHints =
+          enumFromString(Hints.values, await SharedPref.read('showHints'));
     } else {
       _showHints = Hints.On;
     }
@@ -69,13 +71,10 @@ class SettingsProvider with ChangeNotifier {
   }
 
   Future<void> fetchSettingsConfig() async {
-    if (!_settingsConfigFetched) {
-      await fetchConnections();
-      await fetchWidgetsSortBy();
-      await fetchShowHints();
-      _settingsConfigFetched = true;
-      notifyListeners();
-    }
+    await fetchConnections();
+    await fetchWidgetsSortBy();
+    await fetchShowHints();
+    notifyListeners();
   }
 
   void addNewConnection(Connection newConnection) {
@@ -86,7 +85,11 @@ class SettingsProvider with ChangeNotifier {
 
   void removeConnection(Connection removedConnection) {
     _connections.remove(removedConnection);
-    SharedPref.save('connections', _connections);
+    if (_connections.length == 0) {
+      SharedPref.remove('connections');
+    } else {
+      SharedPref.save('connections', _connections);
+    }
     notifyListeners();
   }
 

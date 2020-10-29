@@ -41,7 +41,7 @@ class _UrlSelectState extends State<UrlSelect> {
     try {
       final settingsProvider =
           Provider.of<SettingsProvider>(context, listen: false);
-      await settingsProvider.fetchConnections();
+      await settingsProvider.fetchSettingsConfig();
       int c = getLastVisitedConnection(settingsProvider.connections);
 
       setState(() {
