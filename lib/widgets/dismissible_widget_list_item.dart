@@ -21,6 +21,7 @@ class DismissibleWidgetListItem extends StatelessWidget {
 
     return Dismissible(
       key: ValueKey(widget.id),
+      direction: DismissDirection.endToStart,
       background: Container(
         color: Theme.of(context).errorColor,
         child: Icon(
