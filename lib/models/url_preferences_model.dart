@@ -9,15 +9,6 @@ class UrlPreferences {
   UrlPreferences({this.favouriteWidgets, this.quarantineWidgets});
 
   factory UrlPreferences.fromJson(Map<String, dynamic> json) => UrlPreferences(
-//        favouriteWidgetIds: (json['favouriteWidgetIds'] as List<dynamic>).cast<String>(),
-//        quarantineWidgetIds: (json['quarantineWidgetIds'] as List<dynamic>).cast<String>(),
-
-
-
-//    favouriteWidgets: ((json['favouriteWidgets']) as List).map((e) => DashboardWidget.fromJson(e)).toList(),
-//      quarantineWidgets: ((json['quarantineWidgets']) as List).map((e) => DashboardWidget.fromJson(e)).toList(),
-
-
     favouriteWidgets: List<dynamic>.from(jsonDecode(json['favouriteWidgets'])).map((e) => DashboardWidget.fromJson(e)).toList(),
     quarantineWidgets: List<dynamic>.from(jsonDecode(json['quarantineWidgets'])).map((e) => DashboardWidget.fromJson(e)).toList(),
       );
