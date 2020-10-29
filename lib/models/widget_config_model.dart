@@ -14,4 +14,10 @@ class WidgetConfig {
     rows: json['rows'],
     goNewLine: json['goNewLine'],
   );
+
+  factory WidgetConfig.deepCopy(WidgetConfig widgetConfig) => new WidgetConfig(
+    columns: widgetConfig.columns,
+    rows: widgetConfig.rows,
+    goNewLine: widgetConfig.goNewLine,
+  );
 }

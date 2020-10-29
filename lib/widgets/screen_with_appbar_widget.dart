@@ -1,11 +1,13 @@
+import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ScreenWithAppBar extends StatelessWidget {
   final String appBarTitle;
   final Widget body;
 
-  ScreenWithAppBar({@required this.appBarTitle, @required this.body});
+  ScreenWithAppBar({this.appBarTitle, @required this.body});
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +22,23 @@ class ScreenWithAppBar extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 9),
-                  child: Text(
+                  child:  appBarTitle != null ?
+                  Text(
                     appBarTitle,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22,
                       fontWeight: FontWeight.w400,
                     ),
-                  ),
+                  ) :  Consumer<DashboardsProvider>(
+                    builder: (ctx, dashboardsProvider, child) =>  Text(
+                      dashboardsProvider.dashboardTabs[dashboardsProvider.dashboardTabIndex].title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )),
                 ),
                 IconButton(
                   icon: Icon(Icons.settings),

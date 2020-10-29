@@ -1,4 +1,1 @@
-enum Hints {
-  On,
-  Off
-}
+enum Hints { On, Off }

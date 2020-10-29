@@ -73,7 +73,6 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                   settingsProvider.addConnection(c);
                   Navigator.of(context)
                       .pushReplacementNamed(LoginScreen.routeName);
-                  // print(urlController);
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(standardBorderRadius),
