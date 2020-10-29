@@ -9,6 +9,7 @@ import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfigProvider with ChangeNotifier {
   Config _config;
@@ -24,8 +25,6 @@ class ConfigProvider with ChangeNotifier {
   Board _currentBoard;
 
   ConfigProvider() {
-    _urlPreferences = new UrlPreferences(favouriteWidgets: [], quarantineWidgets: []);
-    checkIfQuarantineExpirationDateHasExceeded();
     new Timer.periodic(const Duration(minutes: 1), everyMinuteCheckTimer);
   }
 
@@ -51,6 +50,8 @@ class ConfigProvider with ChangeNotifier {
   }
 
   Future<void> fetchConfig() async {
+    final pref = await SharedPreferences.getInstance();
+    await pref.clear();
     final response = await http.get(_currentUrl);
     _config = Config.fromJson(json.decode(response.body) as Map<String, dynamic>);
     _boards = _config.boards.boardsById.entries.map((entry) => entry.value).toList();
@@ -58,6 +59,9 @@ class ConfigProvider with ChangeNotifier {
     _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
     if (await SharedPref.containsKey(_currentUrl)) {
       _urlPreferences = UrlPreferences.fromJson(jsonDecode(await SharedPref.read(_currentUrl)));
+    } else {
+      _urlPreferences = new UrlPreferences(favouriteWidgets: [], quarantineWidgets: []);
+      await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
     }
     notifyListeners();
   }
