@@ -34,7 +34,10 @@ class WidgetListItem extends StatelessWidget {
         child: ListTile(
           title: Text(
             widget.title,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
           ),
           subtitle: getWidgetTileSubtitle(),
           trailing: getWidgetIcon(widget),
@@ -55,7 +58,26 @@ class WidgetListItem extends StatelessWidget {
 
   Widget getWidgetTileSubtitle() {
     return dashboardType == DashboardType.Quarantine
-        ? (widget.expirationDate != null ? Text(DateFormat('yyyy-MM-dd').format(widget.expirationDate)) : null)
+        ? (widget.expirationDate != null
+            ? Padding(
+                padding: const EdgeInsets.only(
+                  top: 6,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.alarm,
+                      size: 22,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(DateFormat('yyyy-MM-dd').format(widget.expirationDate)),
+                  ],
+                ),
+              )
+            : null)
         : null;
   }
 

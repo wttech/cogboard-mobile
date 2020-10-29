@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:cogboardmobileapp/models/board_model.dart';
 import 'package:cogboardmobileapp/models/config_model.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
-import 'package:cogboardmobileapp/models/widgets_model.dart';
 import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
@@ -24,25 +24,29 @@ class ConfigProvider with ChangeNotifier {
   Board _currentBoard;
 
   ConfigProvider() {
-    _urlPreferences = new UrlPreferences(favouriteWidgetIds: [], quarantineWidgetIds: []);
+    _urlPreferences = new UrlPreferences(favouriteWidgets: [], quarantineWidgets: []);
     checkIfQuarantineExpirationDateHasExceeded();
-    new Timer.periodic(const Duration(hours: 1), everyHourCheckTimer);
+    new Timer.periodic(const Duration(minutes: 1), everyMinuteCheckTimer);
   }
 
-  void everyHourCheckTimer(Timer timer) async {
+  void everyMinuteCheckTimer(Timer timer) async {
     await checkIfQuarantineExpirationDateHasExceeded();
   }
 
   Future<void> checkIfQuarantineExpirationDateHasExceeded() async {
     DateTime currentTime = new DateTime.now();
-    if (await SharedPref.containsKey(Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY)) {
-      DateTime expirationDate = DateTime.parse(await SharedPref.read((Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY)));
-      if (currentTime.day > expirationDate.day) {
-        await SharedPref.save(Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY, currentTime.toString());
-        await (removeQuarantineWidgets());
-      }
-    } else {
-      await SharedPref.save(Widgets.QUARANTINE_WIDGETS_EXPIRATION_DATE_KEY, currentTime.toString());
+    bool someWidgetsWereRemoved = false;
+    _urlPreferences.quarantineWidgets.removeWhere(
+            (widget) {
+              bool shouldRemoveWidget = widget.expirationDate != null ? widget.expirationDate.day < currentTime.day : false;
+              if(shouldRemoveWidget) {
+                someWidgetsWereRemoved = true;
+              }
+              return shouldRemoveWidget;
+            });
+    if(someWidgetsWereRemoved) {
+      await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+      notifyListeners();
     }
   }
 
@@ -67,17 +71,11 @@ class ConfigProvider with ChangeNotifier {
   Board get currentBoard => _currentBoard;
 
   List<DashboardWidget> get favouriteWidgets {
-    return _config.widgets.widgetsById.entries
-        .map((entry) => entry.value)
-        .where((widget) => _urlPreferences.favouriteWidgetIds.contains(widget.id))
-        .toList();
+    return _urlPreferences.favouriteWidgets;
   }
 
   List<DashboardWidget> get quarantineWidgets {
-    return _config.widgets.widgetsById.entries
-        .map((entry) => entry.value)
-        .where((widget) => _urlPreferences.quarantineWidgetIds.contains(widget.id))
-        .toList();
+    return _urlPreferences.quarantineWidgets;
   }
 
   bool isWidgetInQuarantine(DashboardWidget widget) {
@@ -139,31 +137,31 @@ class ConfigProvider with ChangeNotifier {
   }
 
   Future<void> addFavouriteWidget(DashboardWidget widget) async {
-    _urlPreferences.favouriteWidgetIds.add(widget.id);
+    _urlPreferences.favouriteWidgets.add(widget);
     await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> addQuarantineWidget(DashboardWidget widget) async {
-    _urlPreferences.quarantineWidgetIds.add(widget.id);
+    _urlPreferences.quarantineWidgets.add(widget);
     await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> removeFavouriteWidget(DashboardWidget widget) async {
-    _urlPreferences.favouriteWidgetIds.removeWhere((widgetId) => widgetId == widget.id);
+    _urlPreferences.favouriteWidgets.removeWhere((favouriteWidget) => favouriteWidget.id == widget.id);
     await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> removeQuarantineWidget(DashboardWidget widget) async {
-    _urlPreferences.quarantineWidgetIds.removeWhere((widgetId) => widgetId == widget.id);
+    _urlPreferences.quarantineWidgets.removeWhere((quarantineWidget) => quarantineWidget.id == widget.id);
     await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> removeQuarantineWidgets() async {
-    _urlPreferences.quarantineWidgetIds = [];
+    _urlPreferences.quarantineWidgets = [];
     await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
     notifyListeners();
   }
@@ -189,12 +187,12 @@ class ConfigProvider with ChangeNotifier {
     } else {
       bool shouldNotify = false;
       getAllWidgets().forEach((widget) {
-        if(quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1) {
+        if (quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1) {
           DashboardWidget notificationStateWidget =
-          _lastNotificationUpdateWidgetsState.firstWhere((element) => element.id == widget.id);
+              _lastNotificationUpdateWidgetsState.firstWhere((element) => element.id == widget.id);
           if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
             WidgetStatus widgetStatus =
-            EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+                EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
             if (isErrorWidgetStatus(widgetStatus)) {
               if (notificationStateWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
                 WidgetStatus notificationStateWidgetStatus = EnumToString.fromString(

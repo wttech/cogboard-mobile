@@ -184,8 +184,8 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
       await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(2019),
-        lastDate: DateTime.now(),
+        firstDate: DateTime.now().subtract(Duration(days: 0)),
+        lastDate: DateTime.now().add(Duration(days: 365)),
       ).then((pickedDate) {
         if (pickedDate == null) {
           shouldAddWidgetToQuarantine = false;

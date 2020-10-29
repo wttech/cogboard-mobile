@@ -15,6 +15,14 @@ class WidgetConfig {
     goNewLine: json['goNewLine'],
   );
 
+  Map toJson() {
+    return {
+      "columns": columns,
+      "rows": rows,
+      "goNewLine": goNewLine,
+    };
+  }
+
   factory WidgetConfig.deepCopy(WidgetConfig widgetConfig) => new WidgetConfig(
     columns: widgetConfig.columns,
     rows: widgetConfig.rows,
