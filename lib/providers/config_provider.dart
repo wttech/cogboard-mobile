@@ -50,8 +50,6 @@ class ConfigProvider with ChangeNotifier {
   }
 
   Future<void> fetchConfig() async {
-    final pref = await SharedPreferences.getInstance();
-    await pref.clear();
     final response = await http.get(_currentUrl);
     _config = Config.fromJson(json.decode(response.body) as Map<String, dynamic>);
     _boards = _config.boards.boardsById.entries.map((entry) => entry.value).toList();
