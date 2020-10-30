@@ -17,8 +17,7 @@ class WidgetStatusHeader extends StatelessWidget {
 
   String convertTimestamp() {
     if (lastUpdated == 0) return null;
-    var date =
-        DateTime.fromMicrosecondsSinceEpoch(lastUpdated * 1000).toLocal();
+    var date = DateTime.fromMicrosecondsSinceEpoch(lastUpdated * 1000).toLocal();
     return DateFormat('d.M.y H:mm:ss').format(date);
   }
 
@@ -37,40 +36,44 @@ class WidgetStatusHeader extends StatelessWidget {
     return Container(
       child: Column(
         children: [
-          if (getWidgetStatus() != '')
-            Container(
-              child: Row(
-                children: [
-                  Container(
-                    child: Row(
-                      children: [
-                        if (getStatusIcon() != null) getStatusIcon(),
-                        Container(
-                          child: Text(
-                            getWidgetStatus(),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
+          getWidgetStatus() != ''
+              ? Container(
+                  child: Row(
+                    children: [
+                      Container(
+                        child: Row(
+                          children: [
+                            if (getStatusIcon() != null) getStatusIcon(),
+                            Container(
+                              child: Text(
+                                getWidgetStatus(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              margin: const EdgeInsets.fromLTRB(5.0, 0, 0, 0),
                             ),
-                          ),
-                          margin: const EdgeInsets.fromLTRB(5.0, 0, 0, 0),
+                          ],
                         ),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 1.5,
-                      ),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    margin: const EdgeInsets.fromLTRB(30.0, 20.0, 20.0, 10.0),
-                    padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                  )
-                ],
-              ),
-            ),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 1.5,
+                          ),
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        margin: const EdgeInsets.fromLTRB(30.0, 20.0, 20.0, 10.0),
+                        padding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                      )
+                    ],
+                  ),
+                )
+              : Container(
+                  child: null,
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 40.0),
+                ),
           Container(
             child: Row(
               children: [

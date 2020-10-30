@@ -4,10 +4,10 @@ import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/providers/widget_provider.dart';
 import 'package:cogboardmobileapp/screens/widget_list_error_screen.dart';
-import 'package:cogboardmobileapp/widgets/open_url_button.dart';
 import 'package:cogboardmobileapp/widgets/screen_with_appbar_widget.dart';
-import 'package:cogboardmobileapp/widgets/widget_details.dart';
-import 'package:cogboardmobileapp/widgets/widget_status.dart';
+import 'package:cogboardmobileapp/widgets/widgets/open_url_button.dart';
+import 'package:cogboardmobileapp/widgets/widgets/widget_details.dart';
+import 'package:cogboardmobileapp/widgets/widgets/widget_status.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
@@ -38,7 +38,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
   String getWidgetStatus(DashboardWidget widget) {
     return widget.content[DashboardWidget.WIDGET_STATUS_KEY] != null
         ? widget.content[DashboardWidget.WIDGET_STATUS_KEY]
-        : '';
+        : 'DEFAULT';
   }
 
   int getLastUpdated(DashboardWidget widget) {

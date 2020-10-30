@@ -351,7 +351,7 @@ packages:
     source: hosted
     version: "0.2.19-nullsafety.2"
   timezone:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: timezone
       url: "https://pub.dartlang.org"

@@ -1,12 +1,13 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
-import 'package:cogboardmobileapp/widgets/aem_bundle_info_widget.dart';
-import 'package:cogboardmobileapp/widgets/aem_healthcheck_widget.dart';
-import 'package:cogboardmobileapp/widgets/bamboo_deployment_widget.dart';
-import 'package:cogboardmobileapp/widgets/bamboo_plan_widget.dart';
-import 'package:cogboardmobileapp/widgets/checkbox_widget.dart';
-import 'package:cogboardmobileapp/widgets/jenkins_job_widget.dart';
-import 'package:cogboardmobileapp/widgets/sonar_qube_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/aem_bundle_info/aem_bundle_info_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/aem_healthcheck/aem_healthcheck_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/bamboo_deployment/bamboo_deployment_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/bamboo_plan/bamboo_plan_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/checkbox/checkbox_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/jenkins_job/jenkins_job_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/sonar_qube/sonar_qube_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/world_clock/world_clock_widget.dart';
 import 'package:flutter/material.dart';
 
 class WidgetDetails extends StatelessWidget {
@@ -20,27 +21,24 @@ class WidgetDetails extends StatelessWidget {
     switch (widget.type) {
       case WidgetTypes.BAMBOO_PLAN_WIDGET:
         return BambooPlanWidget(widget: widget);
-        break;
       case WidgetTypes.BAMBOO_DEPLOYMENT_WIDGET:
         return BambooDeploymentWidget(widget: widget);
-        break;
       case WidgetTypes.JENKINS_JOB_WIDGET:
         return JenkinsJobWidget(widget: widget);
-        break;
       case WidgetTypes.SONAR_QUBE_WIDGET:
         return SonarQubeWidget(widget: widget);
-        break;
       case WidgetTypes.CHECKBOX_WIDGET:
         return CheckboxWidget(widget: widget);
       case WidgetTypes.AEM_HEALTHCHECK_WIDGET:
         return AemHealthcheckWidget(widget: widget);
       case WidgetTypes.AEM_BUNDLE_INFO_WIDGET:
         return AemBundleInfoWidget(widget: widget);
+      case WidgetTypes.WORLD_CLOCK_WIDGET:
+        return WorldClockWidget(widget: widget);
       default:
         return Container(
           child: null,
         );
-        break;
     }
   }
 
@@ -53,13 +51,11 @@ class WidgetDetails extends StatelessWidget {
       case WidgetTypes.AEM_HEALTHCHECK_WIDGET:
       case WidgetTypes.AEM_BUNDLE_INFO_WIDGET:
         return true;
-        break;
       case WidgetTypes.CHECKBOX_WIDGET:
+      case WidgetTypes.WORLD_CLOCK_WIDGET:
         return false;
-        break;
       default:
         return false;
-        break;
     }
   }
 
@@ -71,8 +67,7 @@ class WidgetDetails extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    if (getWidgetDetails(widget) != null)
-                      getWidgetDetails(widget),
+                    if (getWidgetDetails(widget) != null) getWidgetDetails(widget),
                   ],
                 ),
               ],
