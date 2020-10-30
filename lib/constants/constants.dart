@@ -103,6 +103,7 @@ class WidgetTypes {
   static const String TEXT_WIDGET = "TextWidget";
   static const String WORLD_CLOCK_WIDGET = "WorldClockWidget";
   static const String PERSON_DRAW_WIDGET = "PersonDrawWidget";
+  static const String JIRA_BUCKETS_WIDGET = "JiraBucketsWidget";
 }
 
 const standardBorderRadius = 10.0;
