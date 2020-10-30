@@ -1,4 +1,4 @@
-name: Dart CI
+name: Develop - run tests and build artifact
 
 on:
   push:
@@ -16,4 +16,10 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
       - run: flutter pub get
-#       - run: flutter test
+      #      - run: flutter test
+      - run: flutter build apk
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: app_${{github.run_number}}.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
