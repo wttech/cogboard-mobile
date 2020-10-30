@@ -106,3 +106,7 @@ class WidgetTypes {
 }
 
 const standardBorderRadius = 10.0;
+
+class SharedPreferencesVersions {
+  static const int URL_PREFERENCES = 1;
+}
