@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/board_model.dart';
 import 'package:cogboardmobileapp/models/config_model.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
+import 'package:cogboardmobileapp/models/urls_preferences_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:enum_to_string/enum_to_string.dart';
@@ -13,8 +15,9 @@ import 'package:http/http.dart' as http;
 class ConfigProvider with ChangeNotifier {
   Config _config;
   List<Board> _boards;
-  UrlPreferences _urlPreferences;
-  String _currentUrl = 'http://150.254.30.119/api/config';
+  UrlsPreferences _urlsPreferences;
+  UrlPreferences _currentUrlPreferences;
+  String _currentUrl = '150.254.30.119';
   int _snackBarsToRemove = 0;
   bool _webSocketConnectionErrorPresent = false;
   List<DashboardWidget> _lastNotificationUpdateWidgetsState;
@@ -24,40 +27,64 @@ class ConfigProvider with ChangeNotifier {
   Board _currentBoard;
 
   ConfigProvider() {
-    _urlPreferences = new UrlPreferences(favouriteWidgets: [], quarantineWidgets: []);
-    checkIfQuarantineExpirationDateHasExceeded();
+    fetchUrlsPreferences();
     new Timer.periodic(const Duration(minutes: 1), everyMinuteCheckTimer);
   }
 
+  Future<void> fetchUrlsPreferences() async {
+    if (await SharedPref.containsKey(UrlsPreferences.KEY)) {
+      _urlsPreferences = UrlsPreferences.fromJson(jsonDecode(await SharedPref.read(UrlsPreferences.KEY)));
+      if(_urlsPreferences.version == null || (_urlsPreferences.version != null && _urlsPreferences.version < SharedPreferencesVersions.URL_PREFERENCES)) {
+        await createUrlsPreferences();
+      }
+    } else {
+      await createUrlsPreferences();
+    }
+  }
+
+  Future createUrlsPreferences() async {
+    _urlsPreferences = new UrlsPreferences(
+        urls: new Map<String, UrlPreferences>(), version: SharedPreferencesVersions.URL_PREFERENCES);
+    await SharedPref.save(UrlsPreferences.KEY, jsonEncode(_urlsPreferences.toJson()));
+  }
+
   void everyMinuteCheckTimer(Timer timer) async {
-    await checkIfQuarantineExpirationDateHasExceeded();
+    if (_currentUrlPreferences != null) {
+      await checkIfQuarantineExpirationDateHasExceeded();
+    }
   }
 
   Future<void> checkIfQuarantineExpirationDateHasExceeded() async {
     DateTime currentTime = new DateTime.now();
     bool someWidgetsWereRemoved = false;
-    _urlPreferences.quarantineWidgets.removeWhere(
-            (widget) {
-              bool shouldRemoveWidget = widget.expirationDate != null ? widget.expirationDate.day < currentTime.day : false;
-              if(shouldRemoveWidget) {
-                someWidgetsWereRemoved = true;
-              }
-              return shouldRemoveWidget;
-            });
-    if(someWidgetsWereRemoved) {
-      await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+    _currentUrlPreferences.quarantineWidgets.removeWhere((widget) {
+      bool shouldRemoveWidget = widget.expirationDate != null ? widget.expirationDate.day < currentTime.day : false;
+      if (shouldRemoveWidget) {
+        someWidgetsWereRemoved = true;
+      }
+      return shouldRemoveWidget;
+    });
+    if (someWidgetsWereRemoved) {
+      await SharedPref.save(UrlsPreferences.KEY, jsonEncode(_urlsPreferences.toJson()));
       notifyListeners();
     }
   }
 
   Future<void> fetchConfig() async {
-    final response = await http.get(_currentUrl);
+    final response = await http.get('http://$_currentUrl/api/config');
     _config = Config.fromJson(json.decode(response.body) as Map<String, dynamic>);
     _boards = _config.boards.boardsById.entries.map((entry) => entry.value).toList();
     _lastNotificationUpdateUrl = _currentUrl;
     _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
-    if (await SharedPref.containsKey(_currentUrl)) {
-      _urlPreferences = UrlPreferences.fromJson(jsonDecode(await SharedPref.read(_currentUrl)));
+
+    if (_urlsPreferences.urls.containsKey(_currentUrl)) {
+      _currentUrlPreferences = _urlsPreferences.urls[_currentUrl];
+      await checkIfQuarantineExpirationDateHasExceeded();
+    } else {
+      _urlsPreferences.urls
+          .putIfAbsent(_currentUrl, () => new UrlPreferences(favouriteWidgets: [], quarantineWidgets: []));
+      _currentUrlPreferences = _urlsPreferences.urls[_currentUrl];
+      await SharedPref.save(UrlsPreferences.KEY, jsonEncode(_urlsPreferences.toJson()));
     }
     notifyListeners();
   }
@@ -71,11 +98,11 @@ class ConfigProvider with ChangeNotifier {
   Board get currentBoard => _currentBoard;
 
   List<DashboardWidget> get favouriteWidgets {
-    return _urlPreferences.favouriteWidgets;
+    return _currentUrlPreferences.favouriteWidgets;
   }
 
   List<DashboardWidget> get quarantineWidgets {
-    return _urlPreferences.quarantineWidgets;
+    return _currentUrlPreferences.quarantineWidgets;
   }
 
   bool isWidgetInQuarantine(DashboardWidget widget) {
@@ -137,32 +164,32 @@ class ConfigProvider with ChangeNotifier {
   }
 
   Future<void> addFavouriteWidget(DashboardWidget widget) async {
-    _urlPreferences.favouriteWidgets.add(widget);
-    await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+    _currentUrlPreferences.favouriteWidgets.add(widget);
+    await SharedPref.save(UrlsPreferences.KEY, jsonEncode(_urlsPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> addQuarantineWidget(DashboardWidget widget) async {
-    _urlPreferences.quarantineWidgets.add(widget);
-    await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+    _currentUrlPreferences.quarantineWidgets.add(widget);
+    await SharedPref.save(UrlsPreferences.KEY, jsonEncode(_urlsPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> removeFavouriteWidget(DashboardWidget widget) async {
-    _urlPreferences.favouriteWidgets.removeWhere((favouriteWidget) => favouriteWidget.id == widget.id);
-    await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+    _currentUrlPreferences.favouriteWidgets.removeWhere((favouriteWidget) => favouriteWidget.id == widget.id);
+    await SharedPref.save(UrlsPreferences.KEY, jsonEncode(_urlsPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> removeQuarantineWidget(DashboardWidget widget) async {
-    _urlPreferences.quarantineWidgets.removeWhere((quarantineWidget) => quarantineWidget.id == widget.id);
-    await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+    _currentUrlPreferences.quarantineWidgets.removeWhere((quarantineWidget) => quarantineWidget.id == widget.id);
+    await SharedPref.save(UrlsPreferences.KEY, jsonEncode(_urlsPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> removeQuarantineWidgets() async {
-    _urlPreferences.quarantineWidgets = [];
-    await SharedPref.save(_currentUrl, jsonEncode(_urlPreferences.toJson()));
+    _currentUrlPreferences.quarantineWidgets = [];
+    await SharedPref.save(UrlsPreferences.KEY, jsonEncode(_urlsPreferences.toJson()));
     notifyListeners();
   }
 
