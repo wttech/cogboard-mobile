@@ -1,7 +1,8 @@
+import 'dart:math';
+
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 class ZabbixWidget extends StatefulWidget {
   final DashboardWidget widget;
@@ -17,13 +18,18 @@ class ZabbixWidget extends StatefulWidget {
 class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderStateMixin {
   int previousValue;
   AnimationController _controller;
+  Tween<double> valueTween;
 
   @override
   void initState() {
     super.initState();
     previousValue = int.parse(widget.widget.content['lastvalue']);
+    this.valueTween = Tween(
+      begin: calculatePercentageValue(int.parse(getLastValue)) / 100,
+      end: calculatePercentageValue(int.parse(getLastValue)) / 100,
+    );
     this._controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
     this._controller.forward();
@@ -33,6 +39,21 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
   void dispose() {
     this._controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(ZabbixWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (previousValue != int.parse(getLastValue)) {
+      double begin = this.valueTween?.evaluate(this._controller) ?? calculatePercentageValue(previousValue) ?? 0;
+      this.valueTween = Tween<double>(
+        begin: begin,
+        end: calculatePercentageValue(int.parse(getLastValue)) / 100,
+      );
+      this._controller
+        ..value = 0
+        ..forward();
+    }
   }
 
   String get getTitle {
@@ -65,10 +86,9 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
     return ((100 * value) / (widget.widget.maxValue * pow(10, 9))).round();
   }
 
-  int calculatePercentageValue() {
-    if (getLastValue == null) return 0;
-    if (!checkMetricHasMaxValue()) return int.parse(getLastValue);
-    return convertToBytes(int.parse(getLastValue));
+  int calculatePercentageValue(int value) {
+    if (!checkMetricHasMaxValue()) return value;
+    return convertToBytes(value);
   }
 
   int convertToGigabytes() {
@@ -98,7 +118,7 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    updatePrevious();
+    if (previousValue != int.parse(getLastValue)) updatePrevious();
     return getProgressType == 'progress'
         ? Column(
             children: [
@@ -120,26 +140,32 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
                       ),
                       alignment: Alignment.bottomCenter,
                     ),
-                    Container(
-                      child: SizedBox(
-                        height: 250.0,
-                        width: 250.0,
-                        child: RotatedBox(
-                          quarterTurns: 3,
-                          child: CircularProgressIndicator(
-                            value: (0.5 * calculatePercentageValue()) / 100,
-                            strokeWidth: 25.0,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    AnimatedBuilder(
+                      animation: this._controller,
+                      builder: (BuildContext context, Widget child) {
+                        return Container(
+                          child: SizedBox(
+                            height: 250.0,
+                            width: 250.0,
+                            child: RotatedBox(
+                              quarterTurns: 3,
+                              child: CircularProgressIndicator(
+                                value: this.valueTween.evaluate(this._controller) * 0.5,
+                                strokeWidth: 25.0,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      alignment: Alignment.bottomCenter,
+                          alignment: Alignment.bottomCenter,
+                        );
+                      },
+                      child: Container(),
                     ),
                     Container(
                       child: Text(
                         convertToGigabytes() != 0
-                            ? '${convertToGigabytes()}GB/${calculatePercentageValue()}%'
-                            : '${calculatePercentageValue()}%',
+                            ? '${convertToGigabytes()}GB/${calculatePercentageValue(int.parse(getLastValue))}%'
+                            : '${calculatePercentageValue(int.parse(getLastValue))}%',
                         style: TextStyle(
                           fontSize: 20,
                         ),
