@@ -24,10 +24,22 @@ class DashboardWidget {
   bool disabled;
   Map<String, dynamic> content;
   DateTime expirationDate;
+  int maxValue;
+  String selectedZabbixMetric;
 
   static const WIDGET_STATUS_KEY = 'widgetStatus';
 
-  DashboardWidget({this.id, this.title, this.type, this.config, this.disabled, this.content, this.expirationDate});
+  DashboardWidget({
+    this.id,
+    this.title,
+    this.type,
+    this.config,
+    this.disabled,
+    this.content,
+    this.expirationDate,
+    this.maxValue,
+    this.selectedZabbixMetric,
+  });
 
   factory DashboardWidget.fromJson(Map<String, dynamic> json) => DashboardWidget(
       id: json['id'],
@@ -35,17 +47,23 @@ class DashboardWidget {
       type: json['type'],
       config: WidgetConfig.fromJson(json['config']),
       disabled: json['disabled'],
-      expirationDate: (json['expirationDate'] != "null" && json['expirationDate'] != null) ? DateTime.parse(json['expirationDate']): null,
+      expirationDate: (json['expirationDate'] != "null" && json['expirationDate'] != null)
+          ? DateTime.parse(json['expirationDate'])
+          : null,
+      maxValue: (json['maxValue']),
+      selectedZabbixMetric: json['selectedZabbixMetric'],
       content: (json['content']) as Map<String, dynamic>);
 
   factory DashboardWidget.deepCopy(DashboardWidget dashboardWidget) => new DashboardWidget(
-      id: dashboardWidget.id,
-      title: dashboardWidget.title,
-      type: dashboardWidget.type,
-      config: WidgetConfig.deepCopy(dashboardWidget.config),
-      disabled: dashboardWidget.disabled,
-      content: new Map<String, dynamic>.from(dashboardWidget.content),
-  );
+        id: dashboardWidget.id,
+        title: dashboardWidget.title,
+        type: dashboardWidget.type,
+        config: WidgetConfig.deepCopy(dashboardWidget.config),
+        disabled: dashboardWidget.disabled,
+        maxValue: dashboardWidget.maxValue,
+        selectedZabbixMetric: dashboardWidget.selectedZabbixMetric,
+        content: new Map<String, dynamic>.from(dashboardWidget.content),
+      );
 
   Map toJson() {
     return {
@@ -55,6 +73,8 @@ class DashboardWidget {
       "config": config.toJson(),
       "disabled": disabled,
       "expirationDate": expirationDate.toString(),
+      "maxValue": maxValue,
+      "selectedZabbixMetric": selectedZabbixMetric,
       "content": content,
     };
   }
