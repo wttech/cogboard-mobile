@@ -7,6 +7,7 @@ import 'package:cogboardmobileapp/widgets/widgets/bamboo_plan/bamboo_plan_widget
 import 'package:cogboardmobileapp/widgets/widgets/checkbox/checkbox_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/jenkins_job/jenkins_job_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/jira_buckets/jira_buckets_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/link_list/link_list_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/sonar_qube/sonar_qube_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/world_clock/world_clock_widget.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,8 @@ class WidgetDetails extends StatelessWidget {
         return WorldClockWidget(widget: widget);
       case WidgetTypes.JIRA_BUCKETS_WIDGET:
         return JiraBucketWidget(widget: widget);
+      case WidgetTypes.LINK_LIST_WIDGET:
+        return LinkListWidget(widget: widget);
       default:
         return Container(
           child: null,
@@ -54,6 +57,7 @@ class WidgetDetails extends StatelessWidget {
       case WidgetTypes.AEM_HEALTHCHECK_WIDGET:
       case WidgetTypes.AEM_BUNDLE_INFO_WIDGET:
       case WidgetTypes.JIRA_BUCKETS_WIDGET:
+      case WidgetTypes.LINK_LIST_WIDGET:
         return true;
       case WidgetTypes.CHECKBOX_WIDGET:
       case WidgetTypes.WORLD_CLOCK_WIDGET:
