@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/models/todo_list_item_model.dart';
 import 'package:cogboardmobileapp/models/widget_config_model.dart';
 
 enum WidgetStatus {
@@ -26,6 +27,7 @@ class DashboardWidget {
   DateTime expirationDate;
   int maxValue;
   String selectedZabbixMetric;
+  List toDoListItems;
 
   static const WIDGET_STATUS_KEY = 'widgetStatus';
 
@@ -39,6 +41,7 @@ class DashboardWidget {
     this.expirationDate,
     this.maxValue,
     this.selectedZabbixMetric,
+    this.toDoListItems,
   });
 
   factory DashboardWidget.fromJson(Map<String, dynamic> json) => DashboardWidget(
@@ -52,6 +55,7 @@ class DashboardWidget {
           : null,
       maxValue: (json['maxValue']),
       selectedZabbixMetric: json['selectedZabbixMetric'],
+      toDoListItems: json['toDoListItems'],
       content: (json['content']) as Map<String, dynamic>);
 
   factory DashboardWidget.deepCopy(DashboardWidget dashboardWidget) => new DashboardWidget(
@@ -62,6 +66,7 @@ class DashboardWidget {
         disabled: dashboardWidget.disabled,
         maxValue: dashboardWidget.maxValue,
         selectedZabbixMetric: dashboardWidget.selectedZabbixMetric,
+        toDoListItems: dashboardWidget.toDoListItems,
         content: new Map<String, dynamic>.from(dashboardWidget.content),
       );
 
@@ -75,6 +80,7 @@ class DashboardWidget {
       "expirationDate": expirationDate.toString(),
       "maxValue": maxValue,
       "selectedZabbixMetric": selectedZabbixMetric,
+      "toDoListItems": toDoListItems,
       "content": content,
     };
   }
