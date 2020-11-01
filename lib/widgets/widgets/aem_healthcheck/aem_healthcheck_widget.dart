@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/models/aem_healthcheck_item_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/widgets/widgets/aem_healthcheck/aem_healthcheck_item.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_container.dart';
@@ -11,12 +12,12 @@ class AemHealthcheckWidget extends StatelessWidget {
     @required this.widget,
   });
 
-  List get getHealthchecks {
+  List<AemHealthcheckItemModel> get getHealthchecks {
     Map healthchecks = widget.content["healthChecks"];
     return healthchecks.entries
-        .map((hc) => AemHealthcheckItem(
-              healthcheckName: hc.key,
-              healthcheckValue: hc.value["status"],
+        .map((hc) => AemHealthcheckItemModel(
+              name: hc.key,
+              value: hc.value["status"],
               url: hc.value["url"],
             ))
         .toList();
@@ -27,7 +28,13 @@ class AemHealthcheckWidget extends StatelessWidget {
     return DetailsContainer(
       children: [
         DetailsHeader(header: "Healthchecks"),
-        ...getHealthchecks,
+        ...getHealthchecks
+            .map((hc) => AemHealthcheckItem(
+                  healthcheckName: hc.name,
+                  healthcheckValue: hc.value,
+                  url: hc.url,
+                ))
+            .toList(),
       ],
     );
   }
