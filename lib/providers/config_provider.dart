@@ -34,7 +34,8 @@ class ConfigProvider with ChangeNotifier {
   Future<void> fetchUrlsPreferences() async {
     if (await SharedPref.containsKey(UrlsPreferences.KEY)) {
       _urlsPreferences = UrlsPreferences.fromJson(jsonDecode(await SharedPref.read(UrlsPreferences.KEY)));
-      if(_urlsPreferences.version == null || (_urlsPreferences.version != null && _urlsPreferences.version < SharedPreferencesVersions.URL_PREFERENCES)) {
+      if (_urlsPreferences.version == null ||
+          (_urlsPreferences.version != null && _urlsPreferences.version < SharedPreferencesVersions.URL_PREFERENCES)) {
         await createUrlsPreferences();
       }
     } else {
@@ -119,6 +120,10 @@ class ConfigProvider with ChangeNotifier {
 
   List<DashboardWidget> getAllWidgetsDeepCopy() {
     return new List<DashboardWidget>.from(getAllWidgets().map((widget) => DashboardWidget.deepCopy(widget)).toList());
+  }
+
+  DashboardWidget getWidgetById(String id) {
+    return _config.widgets.widgetsById[id];
   }
 
   List<DashboardWidget> getBoardWidgets(Board board) {

@@ -10,6 +10,7 @@ import 'package:cogboardmobileapp/widgets/widgets/jira_buckets/jira_buckets_widg
 import 'package:cogboardmobileapp/widgets/widgets/link_list/link_list_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/sonar_qube/sonar_qube_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/world_clock/world_clock_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/zabbix/zabbix_widget.dart';
 import 'package:flutter/material.dart';
 
 class WidgetDetails extends StatelessWidget {
@@ -39,6 +40,8 @@ class WidgetDetails extends StatelessWidget {
         return WorldClockWidget(widget: widget);
       case WidgetTypes.JIRA_BUCKETS_WIDGET:
         return JiraBucketWidget(widget: widget);
+      case WidgetTypes.ZABBIX_WIDGET:
+        return ZabbixWidget(widget: widget);
       case WidgetTypes.LINK_LIST_WIDGET:
         return LinkListWidget(widget: widget);
       default:
@@ -61,6 +64,7 @@ class WidgetDetails extends StatelessWidget {
         return true;
       case WidgetTypes.CHECKBOX_WIDGET:
       case WidgetTypes.WORLD_CLOCK_WIDGET:
+      case WidgetTypes.ZABBIX_WIDGET:
       default:
         return false;
     }

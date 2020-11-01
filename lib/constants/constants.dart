@@ -104,6 +104,7 @@ class WidgetTypes {
   static const String WORLD_CLOCK_WIDGET = "WorldClockWidget";
   static const String PERSON_DRAW_WIDGET = "PersonDrawWidget";
   static const String JIRA_BUCKETS_WIDGET = "JiraBucketsWidget";
+  static const String ZABBIX_WIDGET = "ZabbixWidget";
 }
 
 const standardBorderRadius = 10.0;
@@ -111,3 +112,29 @@ const standardBorderRadius = 10.0;
 class SharedPreferencesVersions {
   static const int URL_PREFERENCES = 1;
 }
+
+const ZabbixMetrics = {
+  'system.users.num': 'Active users',
+  'vm.memory.size[available]': 'Available memory',
+  'system.cpu.util[,idle]': 'CPU utilization',
+  'jmx[\\"java.lang:type=Memory\\",\\"HeapMemoryUsage.used\\"]': 'Mem heap size',
+  'proc.num[]': 'Number of processes',
+  'system.uptime': 'System uptime',
+  'vfs.fs.size[/,used]': 'Used disk space',
+  'system.swap.size[,used]': 'Used swap space'
+};
+
+const ZabbixMetricsWithProgress = [
+  'system.cpu.util[,idle]',
+  'vm.memory.size[available]',
+  'system.swap.size[,used]',
+  'jmx[\\"java.lang:type=Memory\\",\\"HeapMemoryUsage.used\\"]',
+  'vfs.fs.size[/,used]'
+];
+
+const ZabbixMetricsWithMaxValue = [
+  'vm.memory.size[available]',
+  'system.swap.size[,used]',
+  'jmx[\\"java.lang:type=Memory\\",\\"HeapMemoryUsage.used\\"]',
+  'vfs.fs.size[/,used]'
+];
