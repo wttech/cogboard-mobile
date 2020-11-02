@@ -55,6 +55,7 @@ flutter:
   assets:
     - assets/images/filter_icon.png
     - assets/images/cancel_icon.png
+    - assets/images/cogboard_icon.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

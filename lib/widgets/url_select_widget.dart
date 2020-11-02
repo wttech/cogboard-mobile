@@ -1,61 +1,20 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
-import 'package:cogboardmobileapp/models/connection_model.dart';
+import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
-import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-class UrlSelect extends StatefulWidget {
-  UrlSelect({Key key}) : super(key: key);
+class UrlSelect extends StatelessWidget {
+  final String newlyAddedConnection;
 
-  @override
-  _UrlSelectState createState() => _UrlSelectState();
-}
-
-class _UrlSelectState extends State<UrlSelect> {
-  SharedPref sharedPref = SharedPref();
-  int _connection;
-  List<Connection> _connections = List();
-
-  int getLastVisitedConnection(List<Connection> connections) {
-    if (connections == null) {
-      return null;
-    }
-    for (Connection c in connections) {
-      if (c.lastVisited) {
-        // TODO return lastVisited
-        return 0;
-      }
-    }
-    return 0;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loadConnections();
-  }
-
-  Future<void> loadConnections() async {
-    try {
-      final settingsProvider =
-          Provider.of<SettingsProvider>(context, listen: false);
-      await settingsProvider.fetchSettingsConfig();
-      int c = getLastVisitedConnection(settingsProvider.connections);
-
-      setState(() {
-        _connections = settingsProvider.connections;
-        _connection = c;
-      });
-    } catch (Exception) {}
-  }
+  UrlSelect({this.newlyAddedConnection});
 
   @override
   Widget build(BuildContext context) {
     final settingsProvider = Provider.of<SettingsProvider>(context);
-
-    if (_connections != null && _connections.length > 0) {
+    List<ConnectionPreferences> connections = settingsProvider.connections;
+    if (connections != null && connections.length > 0) {
       return Container(
         width: 150,
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
@@ -68,19 +27,16 @@ class _UrlSelectState extends State<UrlSelect> {
           ),
         ),
         child: new DropdownButton<int>(
-          value: _connection,
+          value: getDropdownButtonIndex(newlyAddedConnection, settingsProvider),
           underline: Container(),
           isExpanded: true,
-          items: _connections.map((Connection c) {
+          items: connections.map((ConnectionPreferences connection) {
             return new DropdownMenuItem(
-              child: new Text(c.name),
-              value: _connections.indexOf(c),
+              child: new Text(connection.connectionName),
+              value: connections.indexOf(connection),
             );
           }).toList(),
-          onChanged: (c) => setState(() {
-            _connection = c;
-            settingsProvider.setCurrentConnection(_connections[c]);
-          }),
+          onChanged: (currentConnection) => settingsProvider.setCurrentConnection(connections[currentConnection]),
         ),
       );
     } else {
@@ -95,5 +51,14 @@ class _UrlSelectState extends State<UrlSelect> {
         ),
       );
     }
+  }
+
+  int getDropdownButtonIndex(String newlyAddedConnection, SettingsProvider settingsProvider) {
+    if (settingsProvider.currentConnection != null) {
+            ConnectionPreferences currentConnection =
+          settingsProvider.connections.firstWhere((element) => element.connectionName == settingsProvider.currentConnection.connectionName);
+      return settingsProvider.connections.indexOf(currentConnection);
+    }
+    return null;
   }
 }

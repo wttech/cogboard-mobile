@@ -1,14 +1,11 @@
-import 'package:cogboardmobileapp/models/connection_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'add_connection_screen.dart';
+
 class SettingsProjectListScreen extends StatelessWidget {
-  final List<Connection> projects;
-
-  SettingsProjectListScreen(this.projects);
-
   @override
   Widget build(BuildContext context) {
     final settingsProvider = Provider.of<SettingsProvider>(context);
@@ -35,16 +32,24 @@ class SettingsProjectListScreen extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        AddConnectionScreen.routeName,
+                      );
+                    },
                   ),
                 )
               ],
             ),
           ),
           Column(
-            children: projects.map(
+            children: settingsProvider.connections.map(
               (project) {
                 return Row(
                   children: <Widget>[
@@ -65,7 +70,7 @@ class SettingsProjectListScreen extends StatelessWidget {
                             vertical: 4,
                           ),
                         ),
-                        onDismissed: (direction){
+                        onDismissed: (direction) {
                           settingsProvider.removeConnection(project);
                         },
                         direction: DismissDirection.endToStart,
@@ -74,13 +79,13 @@ class SettingsProjectListScreen extends StatelessWidget {
                           elevation: 20,
                           child: ListTile(
                             title: Text(
-                              project.name,
+                              project.connectionName,
                               style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
                             subtitle: Text(
-                              project.name,
+                              project.connectionName,
                               style: TextStyle(
                                 color: Colors.white,
                               ),

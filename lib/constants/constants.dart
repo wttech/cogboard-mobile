@@ -107,11 +107,15 @@ class WidgetTypes {
   static const String ZABBIX_WIDGET = "ZabbixWidget";
 }
 
-const standardBorderRadius = 10.0;
-
-class SharedPreferencesVersions {
-  static const int URL_PREFERENCES = 1;
+class WidgetSortTypes {
+  static const String NONE = "NONE";
+  static const String NAME_DESCENDING = "NAME_DESCENDING";
+  static const String NAME_ASCENDING = "NAME_ASCENDING";
+  static const String STATUS_DESCENDING = "STATUS_DESCENDING";
+  static const String STATUS_ASCENDING = "STATUS_ASCENDING";
 }
+
+const standardBorderRadius = 10.0;
 
 const ZabbixMetrics = {
   'system.users.num': 'Active users',

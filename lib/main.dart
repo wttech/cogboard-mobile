@@ -31,8 +31,12 @@ class CogboardApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: DashboardsProvider(),
         ),
-        ChangeNotifierProvider.value(
-          value: ConfigProvider(),
+//        ChangeNotifierProvider.value(
+//          value: ConfigProvider(),
+//        ),
+        ChangeNotifierProxyProvider<SettingsProvider, ConfigProvider>(
+          create: (_) => ConfigProvider(),
+          update: (_, settingsProvider, configProvider) => configProvider.withSettingsPreferences(settingsProvider.settingsPreferences),
         ),
         ChangeNotifierProvider.value(
           value: FilterProvider(),
