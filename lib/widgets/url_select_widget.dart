@@ -1,6 +1,7 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ class UrlSelect extends StatelessWidget {
     } else {
       return Container(
         child: Text(
-          'There are no Connections saved.',
+          AppLocalizations.of(context).getTranslation('urlSelect.noConnections'),
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
@@ -55,8 +56,8 @@ class UrlSelect extends StatelessWidget {
 
   int getDropdownButtonIndex(String newlyAddedConnection, SettingsProvider settingsProvider) {
     if (settingsProvider.currentConnection != null) {
-            ConnectionPreferences currentConnection =
-          settingsProvider.connections.firstWhere((element) => element.connectionName == settingsProvider.currentConnection.connectionName);
+      ConnectionPreferences currentConnection = settingsProvider.connections
+          .firstWhere((element) => element.connectionName == settingsProvider.currentConnection.connectionName);
       return settingsProvider.connections.indexOf(currentConnection);
     }
     return null;

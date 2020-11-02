@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_container.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_header.dart';
 import 'package:cogboardmobileapp/widgets/widgets/widget_details_item.dart';
@@ -29,9 +30,7 @@ class SonarQubeWidget extends StatelessWidget {
   List get getMetrics {
     Map metrics = widget.content["metrics"];
     return metrics.entries
-        .map((metric) => WidgetDetailsItem(
-            detail:
-                "${metric.key.toString().replaceFirst("_", " ")}: ${metric.value}"))
+        .map((metric) => WidgetDetailsItem(detail: "${metric.key.toString().replaceFirst("_", " ")}: ${metric.value}"))
         .toList();
   }
 
@@ -39,7 +38,7 @@ class SonarQubeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DetailsContainer(
       children: [
-        DetailsHeader(header: "Details"),
+        DetailsHeader(header: AppLocalizations.of(context).getTranslation('sonarQube.details')),
         if (getTimestamp != null) WidgetDetailsItem(detail: getTimestamp),
         if (getVersion != null) WidgetDetailsItem(detail: getVersion),
         ...getMetrics,

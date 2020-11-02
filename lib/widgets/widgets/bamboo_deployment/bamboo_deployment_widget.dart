@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_container.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_header.dart';
 import 'package:cogboardmobileapp/widgets/widgets/widget_details_item.dart';
@@ -23,9 +24,15 @@ class BambooDeploymentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DetailsContainer(
       children: [
-        DetailsHeader(header: "Details"),
-        WidgetDetailsItem(detail: "Deployment state: $getDeploymentState"),
-        WidgetDetailsItem(detail: "Lifecycle  state: $getLifeCycleState"),
+        DetailsHeader(
+          header: AppLocalizations.of(context).getTranslation('bambooDeployment.details'),
+        ),
+        WidgetDetailsItem(
+            detail: AppLocalizations.of(context).getTranslation('bambooDeployment.deploymentState') +
+                "$getDeploymentState"),
+        WidgetDetailsItem(
+            detail:
+                AppLocalizations.of(context).getTranslation('bambooDeployment.lifecycleState') + "$getLifeCycleState"),
       ],
     );
   }

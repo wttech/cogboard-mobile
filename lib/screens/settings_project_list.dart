@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ class SettingsProjectListScreen extends StatelessWidget {
                 Expanded(
                   child: Container(
                     child: Text(
-                      "Projects",
+                      AppLocalizations.of(context).getTranslation('settingsProjectList.projects'),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 19,

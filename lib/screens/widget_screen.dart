@@ -4,6 +4,7 @@ import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/providers/widget_provider.dart';
 import 'package:cogboardmobileapp/screens/widget_list_error_screen.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/widgets/screen_with_appbar_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/open_url_button.dart';
 import 'package:cogboardmobileapp/widgets/widgets/widget_details.dart';
@@ -89,8 +90,8 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
             if (snapshot.error != null) {
               debugPrint('ws error ${snapshot.error}');
               return ScreenWithAppBar(
-                appBarTitle: 'Widget details',
-                body: WidgetListErrorScreen("websocket connection error occurred!"),
+                appBarTitle: AppLocalizations.of(context).getTranslation('widgetScreen.errorTitle'),
+                body: WidgetListErrorScreen(AppLocalizations.of(context).getTranslation('widgetScreen.errorBody')),
               );
             } else {
               _controller = PageController(
@@ -136,9 +137,10 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
     );
   }
 
-  Future<void> onChangeWidgetStateClicked(DashboardWidget currentWidget, ConfigProvider configProvider, DashboardsProvider dashboardsProvider) async {
-    if(configProvider.isWidgetInQuarantine(currentWidget)) {
-      if(dashboardsProvider.currentDashboardType == DashboardType.Quarantine) {
+  Future<void> onChangeWidgetStateClicked(
+      DashboardWidget currentWidget, ConfigProvider configProvider, DashboardsProvider dashboardsProvider) async {
+    if (configProvider.isWidgetInQuarantine(currentWidget)) {
+      if (dashboardsProvider.currentDashboardType == DashboardType.Quarantine) {
         Navigator.of(context).pop();
       }
       configProvider.removeQuarantineWidget(currentWidget);
@@ -151,7 +153,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
       builder: (ctx) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.surface,
         content: Text(
-          'Do you want this widget to be removed form quarantine at expiration date',
+          AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.message'),
           textAlign: TextAlign.center,
         ),
         actions: [
@@ -159,7 +161,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
             textColor: Theme.of(context).colorScheme.primary,
             color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.all(0.0),
-            child: Text('NO'),
+            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.decline')),
             onPressed: () {
               shouldAddWidgetToQuarantine = true;
               shouldWidgetExpireFromQuarantine = false;
@@ -170,7 +172,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
             textColor: Theme.of(context).colorScheme.primary,
             color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.all(0.0),
-            child: Text('YES'),
+            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.confirm')),
             onPressed: () {
               shouldAddWidgetToQuarantine = true;
               shouldWidgetExpireFromQuarantine = true;
@@ -195,7 +197,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
       });
     }
     if (shouldAddWidgetToQuarantine) {
-      if(dashboardsProvider.currentDashboardType == DashboardType.Home) {
+      if (dashboardsProvider.currentDashboardType == DashboardType.Home) {
         Navigator.of(context).pop();
       }
       configProvider.addQuarantineWidget(currentWidget);

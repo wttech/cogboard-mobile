@@ -1,10 +1,10 @@
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SettingsHints extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final settingsProvider = Provider.of<SettingsProvider>(context);
@@ -17,7 +17,7 @@ class SettingsHints extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              "Hints",
+              AppLocalizations.of(context).getTranslation('settingsHints.hints'),
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 19,
@@ -27,7 +27,7 @@ class SettingsHints extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              "Show hints",
+              AppLocalizations.of(context).getTranslation('settingsHints.showHints'),
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 15,

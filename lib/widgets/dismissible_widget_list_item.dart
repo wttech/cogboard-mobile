@@ -1,6 +1,7 @@
 import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/widgets/widget_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +11,7 @@ class DismissibleWidgetListItem extends StatelessWidget {
   final int widgetIndex;
   final DashboardType dashboardType;
 
-  DismissibleWidgetListItem(
-      {@required this.widget,
-      @required this.widgetIndex,
-      @required this.dashboardType});
+  DismissibleWidgetListItem({@required this.widget, @required this.widgetIndex, @required this.dashboardType});
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +43,7 @@ class DismissibleWidgetListItem extends StatelessWidget {
     );
   }
 
-  void removeWidgetListItem(
-      BuildContext context, ConfigProvider configProvider) {
+  void removeWidgetListItem(BuildContext context, ConfigProvider configProvider) {
     if (dashboardType == DashboardType.Favorites) {
       configProvider.removeFavouriteWidget(widget);
     } else if (dashboardType == DashboardType.Quarantine) {
@@ -72,9 +69,8 @@ class DismissibleWidgetListItem extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(
-                  'Removed ' + widget.title,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                  AppLocalizations.of(context).getTranslation('dissmisibleWidgetList.removed') + widget.title,
+                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                 ),
               ),
               FlatButton(
@@ -89,7 +85,7 @@ class DismissibleWidgetListItem extends StatelessWidget {
                   }
                   configProvider.addSnackBarToRemove();
                 },
-                child: const Text('UNDO'),
+                child: Text(AppLocalizations.of(context).getTranslation('dissmisibleWidgetList.undo')),
               )
             ],
           ),

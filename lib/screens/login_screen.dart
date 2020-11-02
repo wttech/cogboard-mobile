@@ -2,6 +2,7 @@ import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:cogboardmobileapp/screens/add_connection_screen.dart';
 import 'package:cogboardmobileapp/screens/dashboards_screen.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/widgets/url_select_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class LoginScreen extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(15),
                                 child: Text(
-                                  'CONNECT',
+                                  AppLocalizations.of(context).getTranslation('loginScreen.connect'),
                                   style: TextStyle(
                                     color: Theme.of(context).colorScheme.onPrimary,
                                   ),

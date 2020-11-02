@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/screens/home_screen.dart';
@@ -78,8 +79,9 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
             if (dataSnapshot.error != null) {
               debugPrint('ws error ${dataSnapshot.error}');
               return ScreenWithAppBar(
-                appBarTitle: 'Board error',
-                body: WidgetListErrorScreen("api connection error occurred!"),
+                appBarTitle: AppLocalizations.of(context).getTranslation('dashboardsScreen.boardError.title'),
+                body: WidgetListErrorScreen(
+                    AppLocalizations.of(context).getTranslation('dashboardsScreen.boardError.body')),
               );
             } else {
               startWebSocketListening(context);
@@ -158,8 +160,11 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
 
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails, iOS: iosNotificationDetails);
-    await _flutterLocalNotificationsPlugin.show(0, 'Some widgets have changed their status:',
-        Provider.of<ConfigProvider>(context, listen: false).notificationPayload, notificationDetails);
+    await _flutterLocalNotificationsPlugin.show(
+        0,
+        AppLocalizations.of(context).getTranslation('dashboardsScreen.widgetChangedNotification'),
+        Provider.of<ConfigProvider>(context, listen: false).notificationPayload,
+        notificationDetails);
   }
 
   Future<dynamic> onSelectNotification(String payLoad) async {

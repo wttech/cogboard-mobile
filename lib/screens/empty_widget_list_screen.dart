@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class EmptyWidgetListScreen extends StatelessWidget {
@@ -5,7 +6,7 @@ class EmptyWidgetListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        'This list is empty.',
+        AppLocalizations.of(context).getTranslation('emptyWidgetList.body'),
         style: TextStyle(
           fontSize: 24,
           color: Colors.white,
