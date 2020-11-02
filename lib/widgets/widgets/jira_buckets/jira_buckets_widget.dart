@@ -1,5 +1,6 @@
 import 'package:cogboardmobileapp/models/jira_bucket_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_container.dart';
 import 'package:cogboardmobileapp/widgets/widgets/jira_buckets/jira_bucket_item.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class JiraBucketWidget extends StatelessWidget {
                   Expanded(
                     child: Container(
                       child: Text(
-                        'Bucket',
+                        AppLocalizations.of(context).getTranslation('jiraBuckets.bucket'),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -43,7 +44,7 @@ class JiraBucketWidget extends StatelessWidget {
                   Expanded(
                     child: Container(
                       child: Text(
-                        'Issues',
+                        AppLocalizations.of(context).getTranslation('jiraBuckets.issues'),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -71,7 +72,7 @@ class JiraBucketWidget extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'No buckets available',
+                  AppLocalizations.of(context).getTranslation('jiraBuckets.noBuckets'),
                   style: TextStyle(
                     fontSize: 24,
                   ),

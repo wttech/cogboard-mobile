@@ -1,5 +1,6 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class SettingsWidgets extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              "Widgets",
+              AppLocalizations.of(context).getTranslation('settingsSortBy.widgets'),
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onBackground,
                 fontSize: 19,
@@ -27,7 +28,7 @@ class SettingsWidgets extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(vertical: 12),
             child: Text(
-              "Sort by",
+              AppLocalizations.of(context).getTranslation('settingsSortBy.sortBy'),
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 15,
@@ -50,7 +51,7 @@ class SettingsWidgets extends StatelessWidget {
                   onPressed: () {
                     settingsProvider.setSortBy(WidgetSortTypes.NONE);
                   },
-                  child: Text('NONE'),
+                  child: Text(AppLocalizations.of(context).getTranslation('settingsSortBy.none')),
                 ),
               ),
               Padding(
@@ -81,7 +82,7 @@ class SettingsWidgets extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('NAME'),
+                      Text(AppLocalizations.of(context).getTranslation('settingsSortBy.name')),
                       settingsProvider.sortBy == WidgetSortTypes.NAME_ASCENDING
                           ? Icon(
                               Icons.arrow_upward,
@@ -125,7 +126,7 @@ class SettingsWidgets extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('STATUS'),
+                      Text(AppLocalizations.of(context).getTranslation('settingsSortBy.status')),
                       settingsProvider.sortBy == WidgetSortTypes.STATUS_ASCENDING
                           ? Icon(
                               Icons.arrow_upward,

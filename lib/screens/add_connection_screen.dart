@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -39,7 +40,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Connection'),
+        title: Text(AppLocalizations.of(context).getTranslation('addConnectionScreen.title')),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: Form(
@@ -56,16 +57,18 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Name',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).getTranslation('addConnectionScreen.name'),
                       ),
                       controller: nameController,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please provide a name.';
+                          return AppLocalizations.of(context).getTranslation('addConnectionScreen.name.emptyError');
                         }
-                        if(settingsProvider.connections.where((element) => element.connectionName == value).isNotEmpty) {
-                          return 'This connection name is occupied.';
+                        if (settingsProvider.connections
+                            .where((element) => element.connectionName == value)
+                            .isNotEmpty) {
+                          return AppLocalizations.of(context).getTranslation('addConnectionScreen.name.duplicateError');
                         }
                         return null;
                       },
@@ -74,19 +77,21 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                   Padding(
                     padding: EdgeInsets.all(20),
                     child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Url',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).getTranslation('addConnectionScreen.url'),
                       ),
                       controller: urlController,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please provide a url.';
+                          return AppLocalizations.of(context).getTranslation('addConnectionScreen.url.emptyError');
                         }
-                        if(settingsProvider.connections.where((element) => element.connectionUrl == value).isNotEmpty) {
-                          return 'This connection name is occupied.';
+                        if (settingsProvider.connections
+                            .where((element) => element.connectionUrl == value)
+                            .isNotEmpty) {
+                          return AppLocalizations.of(context).getTranslation('addConnectionScreen.url.duplicateError');
                         }
-                        if(!isUrlValid) {
-                          return 'Url is not valid.';
+                        if (!isUrlValid) {
+                          return AppLocalizations.of(context).getTranslation('addConnectionScreen.url.validationError');
                         }
                         return null;
                       },
@@ -104,13 +109,13 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Text(
-                        'ADD CONNECTION',
+                        AppLocalizations.of(context).getTranslation('addConnectionScreen.addConnection'),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -128,7 +133,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
         return;
       } else {
         Map<String, dynamic> data = json.decode(response.body) as Map<String, dynamic>;
-        if(!data.containsKey('boards') || !data.containsKey('widgets')) {
+        if (!data.containsKey('boards') || !data.containsKey('widgets')) {
           isUrlValid = false;
         }
         return;

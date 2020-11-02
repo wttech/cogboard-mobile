@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_container.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_header.dart';
 import 'package:cogboardmobileapp/widgets/widgets/widget_details_item.dart';
@@ -14,18 +15,14 @@ class JenkinsJobWidget extends StatelessWidget {
 
   String get getTimestamp {
     if (widget.content["timestamp"] != null) {
-      var date = DateTime.fromMicrosecondsSinceEpoch(
-              widget.content["timestamp"] * 1000)
-          .toLocal();
+      var date = DateTime.fromMicrosecondsSinceEpoch(widget.content["timestamp"] * 1000).toLocal();
       return DateFormat("y.M.d, H:mm:ss").format(date);
     }
     return null;
   }
 
   String get getDuration {
-    return widget.content["duration"] != null
-        ? "Duration: ${widget.content["duration"] / 1000} [s]"
-        : null;
+    return widget.content["duration"] != null ? "Duration: ${widget.content["duration"] / 1000} [s]" : null;
   }
 
   String get getBranch {
@@ -36,7 +33,7 @@ class JenkinsJobWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DetailsContainer(
       children: [
-        DetailsHeader(header: "Details"),
+        DetailsHeader(header: AppLocalizations.of(context).getTranslation('jenkinsJob.details')),
         if (getTimestamp != null) WidgetDetailsItem(detail: getTimestamp),
         if (getDuration != null) WidgetDetailsItem(detail: getDuration),
         if (getBranch != null) WidgetDetailsItem(detail: getBranch),

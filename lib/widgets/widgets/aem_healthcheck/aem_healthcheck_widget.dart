@@ -1,5 +1,6 @@
 import 'package:cogboardmobileapp/models/aem_healthcheck_item_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/widgets/widgets/aem_healthcheck/aem_healthcheck_item.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_container.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_header.dart';
@@ -27,7 +28,7 @@ class AemHealthcheckWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DetailsContainer(
       children: [
-        DetailsHeader(header: "Healthchecks"),
+        DetailsHeader(header: AppLocalizations.of(context).getTranslation('aemHealthcheck.healthchecks')),
         ...getHealthchecks
             .map((hc) => AemHealthcheckItem(
                   healthcheckName: hc.name,

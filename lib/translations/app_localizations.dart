@@ -1,0 +1,165 @@
+import 'package:flutter/material.dart';
+
+class AppLocalizations {
+  final Locale locale;
+
+  AppLocalizations(this.locale);
+
+  static AppLocalizations of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  }
+
+  static Map<String, Map<String, String>> _localizedValues = {
+    'loginScreen.connect': {
+      'en': 'CONNECT',
+    },
+    'addConnectionScreen.title': {
+      'en': 'New Connection',
+    },
+    'addConnectionScreen.name': {
+      'en': 'Name',
+    },
+    'addConnectionScreen.name.emptyError': {
+      'en': 'Please provide a name.',
+    },
+    'addConnectionScreen.name.duplicateError': {
+      'en': 'This connection name is occupied.',
+    },
+    'addConnectionScreen.url': {
+      'en': 'Url',
+    },
+    'addConnectionScreen.url.emptyError': {
+      'en': 'Please provide a url.',
+    },
+    'addConnectionScreen.url.duplicateError': {
+      'en': 'This connection name is occupied.',
+    },
+    'addConnectionScreen.url.validationError': {
+      'en': 'Url is not valid.',
+    },
+    'addConnectionScreen.addConnection': {
+      'en': 'ADD CONNECTION',
+    },
+    'urlSelect.noConnections': {
+      'en': 'There are no Connections saved',
+    },
+    'dashboardsScreen.boardError.title': {
+      'en': 'Board error',
+    },
+    'dashboardsScreen.boardError.body': {
+      'en': 'API connection error occurred!',
+    },
+    'dashboardsScreen.widgetChangedNotification': {
+      'en': 'Some widgets have changed their status:',
+    },
+    'emptyWidgetList.body': {
+      'en': 'This list is empty.',
+    },
+    'settingsHints.hints': {
+      'en': 'Hints',
+    },
+    'settingsHints.showHints': {
+      'en': 'Show hints',
+    },
+    'settingsProjectList.projects': {
+      'en': 'Projects',
+    },
+    'settingsScreen.title': {
+      'en': 'Settings',
+    },
+    'settingsSortBy.widgets': {
+      'en': 'Widgets',
+    },
+    'settingsSortBy.sortBy': {
+      'en': 'Sort by',
+    },
+    'settingsSortBy.none': {
+      'en': 'NONE',
+    },
+    'settingsSortBy.name': {
+      'en': 'NAME',
+    },
+    'settingsSortBy.status': {
+      'en': 'STATUS',
+    },
+    'widgetScreen.errorTitle': {
+      'en': 'Widget details',
+    },
+    'widgetScreen.errorBody': {
+      'en': 'Websocket connection error occured!',
+    },
+    'widgetScreen.alertDialog.message': {
+      'en': 'Do you want this widget to be removed form quarantine at expiration date',
+    },
+    'widgetScreen.alertDialog.confirm': {
+      'en': 'NO',
+    },
+    'widgetScreen.alertDialog.decline': {
+      'en': 'YES',
+    },
+    'widgetListScreen.errorTitle': {
+      'en': 'Dashboard',
+    },
+    'widgetListScreen.errorBody': {
+      'en': 'Websocket connection error occurred!',
+    },
+    'aemBundleInfo.excludedBundles': {
+      'en': 'Excluded bundles',
+    },
+    'aemBundleInfo.noExcludedBundles': {
+      'en': 'No excluded bundles',
+    },
+    'aemBundleInfo.inactiveBundles': {
+      'en': 'Inactive bundles',
+    },
+    'aemBundleInfo.noInactiveBundles': {
+      'en': 'No inactive bundles',
+    },
+    'aemHealthcheck.healthchecks': {
+      'en': 'Healthchecks',
+    },
+    'bambooDeployment.details': {
+      'en': 'Details',
+    },
+    'bambooDeployment.deploymentState': {
+      'en': 'Deployment state: ',
+    },
+    'bambooDeployment.lifecycleState': {
+      'en': 'Lifecycle state: ',
+    },
+    'bambooPlan.details': {
+      'en': 'Details',
+    },
+    'bambooPlan.state': {
+      'en': 'State: ',
+    },
+    'jenkinsJob.details': {
+      'en': 'Details',
+    },
+    'jiraBuckets.bucket': {
+      'en': 'Bucket',
+    },
+    'jiraBuckets.issues': {
+      'en': 'Issues',
+    },
+    'jiraBuckets.noBuckets': {
+      'en': 'No buckets available',
+    },
+    'sonarQube.details': {
+      'en': 'Details',
+    },
+    'worldClock.loading': {
+      'en': 'Loading...',
+    },
+    'dissmisibleWidgetList.removed': {
+      'en': 'Removed ',
+    },
+    'dissmisibleWidgetList.undo': {
+      'en': 'UNDO',
+    },
+  };
+
+  String getTranslation(String key) {
+    return _localizedValues[key][locale.languageCode];
+  }
+}
