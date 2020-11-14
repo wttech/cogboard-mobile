@@ -43,9 +43,6 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     notificationSetup();
-//    Future.delayed(const Duration(milliseconds: 0), () {
-//      new Timer.periodic(const Duration(minutes: 1), (timer) => checkForWidgetErrorUpdate(timer));
-//    });
   }
 
   @override
@@ -154,16 +151,6 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
       }
     }
   }
-
-//  void checkForWidgetErrorUpdate(Timer timer) async {
-//    if (_notification == AppLifecycleState.paused) {
-//      ConfigProvider configProvider = Provider.of<ConfigProvider>(context, listen: false);
-//      if (configProvider.shouldNotify()) {
-//        await showNotification();
-//        await configProvider.updateNotificationTimestamp();
-//      }
-//    }
-//  }
 
   Future<void> showNotification() async {
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
