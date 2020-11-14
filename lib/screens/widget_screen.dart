@@ -54,7 +54,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
   Widget build(BuildContext context) {
     final configProvider = Provider.of<ConfigProvider>(context);
     final dashboardProvider = Provider.of<DashboardsProvider>(context);
-    final channel = IOWebSocketChannel.connect('ws://150.254.30.119/ws');
+    final channel = IOWebSocketChannel.connect('ws://${configProvider.currentUrl}/ws');
 
     if (!currentWidgetFetched) {
       setState(() {

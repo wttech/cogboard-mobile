@@ -61,6 +61,15 @@ class AppLocalizations {
     'settingsHints.showHints': {
       'en': 'Show hints',
     },
+    'settingsNotifications.notifications': {
+      'en': 'Notifications',
+    },
+    'settingsNotifications.showNotifications': {
+      'en': 'Show notifications',
+    },
+    'settingsNotifications.notificationsFrequencyInput': {
+      'en': 'Show notifications',
+    },
     'settingsProjectList.projects': {
       'en': 'Projects',
     },
@@ -92,10 +101,10 @@ class AppLocalizations {
       'en': 'Do you want this widget to be removed form quarantine at expiration date',
     },
     'widgetScreen.alertDialog.confirm': {
-      'en': 'NO',
+      'en': 'YES',
     },
     'widgetScreen.alertDialog.decline': {
-      'en': 'YES',
+      'en': 'NO',
     },
     'widgetListScreen.errorTitle': {
       'en': 'Dashboard',

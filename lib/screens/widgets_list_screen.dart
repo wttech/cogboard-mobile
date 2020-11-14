@@ -51,11 +51,13 @@ class WidgetsListScreen extends StatelessWidget {
                                 widget: widgetsList[index],
                                 widgetIndex: index,
                                 dashboardType: dashboardType,
+                                lastWidget: index == widgetsList.length - 1,
                               )
                             : DismissibleWidgetListItem(
                                 widget: widgetsList[index],
                                 widgetIndex: index,
                                 dashboardType: dashboardType,
+                                lastWidget: index == widgetsList.length - 1,
                               );
                       }),
                 ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
@@ -42,9 +43,9 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     notificationSetup();
-    Future.delayed(const Duration(milliseconds: 0), () {
-      new Timer.periodic(const Duration(minutes: 1), (timer) => checkForWidgetErrorUpdate(timer));
-    });
+//    Future.delayed(const Duration(milliseconds: 0), () {
+//      new Timer.periodic(const Duration(minutes: 1), (timer) => checkForWidgetErrorUpdate(timer));
+//    });
   }
 
   @override
@@ -77,7 +78,7 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
             return ScreenWithAppBar(body: WidgetListLoadingScreen());
           } else {
             if (dataSnapshot.error != null) {
-              debugPrint('ws error ${dataSnapshot.error}');
+              debugPrint('api error ${dataSnapshot.error}');
               return ScreenWithAppBar(
                 appBarTitle: AppLocalizations.of(context).getTranslation('dashboardsScreen.boardError.title'),
                 body: WidgetListErrorScreen(
@@ -101,18 +102,25 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       bottomNavigationBar: DashboardsScreenBottomNavigationBar(),
-      floatingActionButton: Filters(),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(
+            right: MediaQuery.of(context).size.width / 6 - kFloatingActionButtonMargin - FILTER_ICON_SIZE),
+        child: Filters(),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
 
   void startWebSocketListening(BuildContext context) {
-    final channel = IOWebSocketChannel.connect('ws://150.254.30.119/ws');
+    ConfigProvider configProvider = Provider.of<ConfigProvider>(context, listen: false);
+    final channel = IOWebSocketChannel.connect('ws://${configProvider.currentUrl}/ws');
     channel.stream.listen(
       (dynamic message) {
         Map<String, dynamic> decodedData = Map<String, dynamic>.from(jsonDecode(message));
         if (decodedData['eventType'] == 'widget-update') {
           Future.delayed(const Duration(milliseconds: 0), () {
-            Provider.of<ConfigProvider>(context, listen: false).updateWidget(decodedData);
+            configProvider.updateWidget(decodedData);
+            checkForNotifications();
           });
         }
       },
@@ -137,13 +145,25 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
         onSelectNotification: onSelectNotification);
   }
 
-  void checkForWidgetErrorUpdate(Timer timer) async {
+  void checkForNotifications() async {
+    ConfigProvider configProvider = Provider.of<ConfigProvider>(context, listen: false);
     if (_notification == AppLifecycleState.paused) {
-      if (Provider.of<ConfigProvider>(context, listen: false).shouldNotify()) {
+      if (configProvider.shouldNotify()) {
         await showNotification();
+        await configProvider.updateNotificationTimestamp();
       }
     }
   }
+
+//  void checkForWidgetErrorUpdate(Timer timer) async {
+//    if (_notification == AppLifecycleState.paused) {
+//      ConfigProvider configProvider = Provider.of<ConfigProvider>(context, listen: false);
+//      if (configProvider.shouldNotify()) {
+//        await showNotification();
+//        await configProvider.updateNotificationTimestamp();
+//      }
+//    }
+//  }
 
   Future<void> showNotification() async {
     AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(

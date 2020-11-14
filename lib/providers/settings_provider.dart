@@ -15,6 +15,10 @@ class SettingsProvider with ChangeNotifier {
 
   get showHints => _settingsPreferences.showHints;
 
+  get showNotifications => _settingsPreferences.showNotifications;
+
+  get notificationsFrequency => _settingsPreferences.notificationFrequencyInMinutes;
+
   get sortBy => _settingsPreferences.sortBy;
 
   Future<void> fetchSettingsPreferences() async {
@@ -32,7 +36,12 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> createSettingsPreferences() async {
     _settingsPreferences = new SettingsPreferences(
-        connections: [], version: SettingsPreferences.VERSION, showHints: true, sortBy: WidgetSortTypes.NONE);
+        connections: [],
+        version: SettingsPreferences.VERSION,
+        showHints: true,
+        sortBy: WidgetSortTypes.NONE,
+        showNotifications: true,
+        notificationFrequencyInMinutes: 1);
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
   }
 
@@ -54,6 +63,12 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setShowNotifications(bool showNotifications) async {
+    _settingsPreferences.showNotifications = showNotifications;
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+    notifyListeners();
+  }
+
   Future<void> setSortBy(String sortBy) async {
     _settingsPreferences.sortBy = sortBy;
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
@@ -62,6 +77,12 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> setCurrentConnection(ConnectionPreferences currentConnection) async {
     _settingsPreferences.currentConnection = currentConnection;
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+    notifyListeners();
+  }
+
+  Future<void> setNotificationsFrequency(int notificationFrequency) async {
+    _settingsPreferences.notificationFrequencyInMinutes = notificationFrequency;
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
     notifyListeners();
   }
