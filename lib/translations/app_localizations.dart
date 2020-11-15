@@ -52,6 +52,15 @@ class AppLocalizations {
     'dashboardsScreen.widgetChangedNotification': {
       'en': 'Some widgets have changed their status:',
     },
+    'dashboardsScreen.hintDialogTextRefreshFetchConfig': {
+      'en': 'Swipe up to fetch config again',
+    },
+    'dashboardsScreen.hintDialogTextSwipeBoards': {
+      'en': 'Swipe left and right to switch between boards',
+    },
+    'dashboardsScreen.hintDialogConfirm': {
+      'en': 'Ok',
+    },
     'emptyWidgetList.body': {
       'en': 'This list is empty.',
     },
@@ -94,6 +103,12 @@ class AppLocalizations {
     'widgetScreen.errorTitle': {
       'en': 'Widget details',
     },
+    'widgetScreen.hintDialogText': {
+      'en': 'Swipe left and right to switch between widget details',
+    },
+    'widgetScreen.hintDialogConfirm': {
+      'en': 'Ok',
+    },
     'widgetScreen.errorBody': {
       'en': 'Websocket connection error occured!',
     },
@@ -114,6 +129,12 @@ class AppLocalizations {
     },
     'widgetListScreen.errorBody': {
       'en': 'Websocket connection error occurred!',
+    },
+    'widgetListScreen.hintDialogText': {
+      'en': 'Swipe left to remove widget from list',
+    },
+    'widgetListScreen.hintDialogConfirm': {
+      'en': 'Ok',
     },
     'aemBundleInfo.excludedBundles': {
       'en': 'Excluded bundles',

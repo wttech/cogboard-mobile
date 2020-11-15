@@ -67,6 +67,9 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(const Duration(milliseconds: 0), () {
+      showHintDialogs();
+    });
     return Scaffold(
       body: FutureBuilder(
         future: Provider.of<ConfigProvider>(context, listen: false).fetchConfig(),
@@ -108,6 +111,46 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
         child: Filters(),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+    );
+  }
+
+  Future<void> showHintDialogs() async {
+    ConfigProvider configProvider = Provider.of<ConfigProvider>(context, listen: false);
+    if (configProvider.hints[Hints.REFRESH_FETCHING_CONFIG]) {
+      await showHintDialog(
+          AppLocalizations.of(context).getTranslation('dashboardsScreen.hintDialogTextRefreshFetchConfig'),
+          Hints.REFRESH_FETCHING_CONFIG);
+    }
+    if (configProvider.hints[Hints.SWIPE_BOARDS]) {
+      await showHintDialog(AppLocalizations.of(context).getTranslation('dashboardsScreen.hintDialogTextSwipeBoards'),
+          Hints.SWIPE_BOARDS);
+    }
+  }
+
+  Future<void> showHintDialog(String dialogText, String hint) async {
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        content: Text(
+          dialogText,
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          FlatButton(
+            textColor: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.surface,
+            padding: const EdgeInsets.all(0.0),
+            child: Text(
+              AppLocalizations.of(context).getTranslation('dashboardsScreen.hintDialogConfirm'),
+            ),
+            onPressed: () {
+              Provider.of<ConfigProvider>(context, listen: false).setHintSeen(hint);
+              Navigator.of(ctx).pop(false);
+            },
+          ),
+        ],
+      ),
     );
   }
 
