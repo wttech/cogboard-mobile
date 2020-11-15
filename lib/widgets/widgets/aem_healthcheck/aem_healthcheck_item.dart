@@ -1,6 +1,7 @@
+import 'package:cogboardmobileapp/utils/url_launcher.dart';
 import 'package:flutter/material.dart';
 
-class AemHealthcheckItem extends StatelessWidget {
+class AemHealthcheckItem extends StatelessWidget with UrlLauncher {
   final String healthcheckName;
   final String healthcheckValue;
   final String url;
@@ -11,7 +12,8 @@ class AemHealthcheckItem extends StatelessWidget {
     @required this.url,
   });
 
-  void openUrl() {
+  void openUrl(BuildContext context) {
+    launchUrl(url, context);
   }
 
   @override
@@ -34,7 +36,7 @@ class AemHealthcheckItem extends StatelessWidget {
         ),
         margin: const EdgeInsets.fromLTRB(5.0, 0, 0, 0),
       ),
-      onTap: openUrl,
+      onTap: () => openUrl(context),
     );
   }
 }

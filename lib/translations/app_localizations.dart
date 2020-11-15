@@ -172,6 +172,9 @@ class AppLocalizations {
     'serviceCheck.response': {
       'en': 'Response',
     },
+    'urlLauncher.toast': {
+      'en': 'URL error occurred',
+    },
   };
 
   String getTranslation(String key) {

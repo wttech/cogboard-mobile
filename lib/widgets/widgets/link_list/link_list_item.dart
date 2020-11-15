@@ -1,6 +1,7 @@
+import 'package:cogboardmobileapp/utils/url_launcher.dart';
 import 'package:flutter/material.dart';
 
-class LinkListItem extends StatelessWidget {
+class LinkListItem extends StatelessWidget with UrlLauncher {
   final String name;
   final String url;
 
@@ -9,7 +10,8 @@ class LinkListItem extends StatelessWidget {
     @required this.url,
   });
 
-  void openUrl() {
+  void openUrl(BuildContext context) {
+    launchUrl(url, context);
   }
 
   @override
@@ -32,7 +34,7 @@ class LinkListItem extends StatelessWidget {
         ),
         margin: const EdgeInsets.fromLTRB(5.0, 10, 0, 0),
       ),
-      onTap: openUrl,
+      onTap: () => openUrl(context),
     );
   }
 }

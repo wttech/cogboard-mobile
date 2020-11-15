@@ -1,15 +1,16 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/utils/url_launcher.dart';
 import 'package:flutter/material.dart';
 
-class OpenUrlButton extends StatelessWidget {
+class OpenUrlButton extends StatelessWidget with UrlLauncher {
   final DashboardWidget widget;
 
   OpenUrlButton({
     @required this.widget,
   });
 
-  String get getWidgetUrl {
+  String get widgetUrl {
     return widget.content['url'];
   }
 
@@ -22,7 +23,9 @@ class OpenUrlButton extends StatelessWidget {
   String get statusCodeMessage =>
       errorStatus ? '$expectedStatusCode expected, got $statusCode' : widget.content['statusCode'].toString();
 
-  void openDetailsUrl() {}
+  void openDetailsUrl(BuildContext context) {
+    launchUrl(widgetUrl, context);
+  }
 
   String get getUrlDisplayName {
     switch (widget.type) {
@@ -54,7 +57,7 @@ class OpenUrlButton extends StatelessWidget {
                 padding: const EdgeInsets.all(30.0),
                 child: Container(
                   child: OutlineButton(
-                    onPressed: openDetailsUrl,
+                    onPressed: () => openDetailsUrl(context),
                     child: Text(
                       getUrlDisplayName,
                       style: TextStyle(
