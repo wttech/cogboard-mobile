@@ -9,6 +9,7 @@ import 'package:cogboardmobileapp/widgets/widgets/iframe_embed/iframe_embed_widg
 import 'package:cogboardmobileapp/widgets/widgets/jenkins_job/jenkins_job_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/jira_buckets/jira_buckets_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/link_list/link_list_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/random_picker/random_picker.dart';
 import 'package:cogboardmobileapp/widgets/widgets/service_check/service_check_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/sonar_qube/sonar_qube_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/text/text_widget.dart';
@@ -56,6 +57,8 @@ class WidgetDetails extends StatelessWidget {
         return ServiceCheckWidget(widget: widget);
       case WidgetTypes.IFRAME_EMBED_WIDGET:
         return IframeEmbedWidget(widget: widget);
+      case WidgetTypes.RANDOM_PICKER_WIDGET:
+        return RandomPicker(widget: widget);
       default:
         return Container(
           child: null,
@@ -81,6 +84,7 @@ class WidgetDetails extends StatelessWidget {
       case WidgetTypes.TEXT_WIDGET:
       case WidgetTypes.SERVICE_CHECK_WIDGET:
       case WidgetTypes.IFRAME_EMBED_WIDGET:
+      case WidgetTypes.RANDOM_PICKER_WIDGET:
       default:
         return false;
     }
