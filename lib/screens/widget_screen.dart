@@ -58,7 +58,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
     final channel = IOWebSocketChannel.connect('ws://${configProvider.currentUrl}/ws');
 
     Future.delayed(const Duration(milliseconds: 0), () {
-      if (configProvider.hints[Hints.SWIPE_WIDGET_DETAILS]) {
+      if (configProvider.showHints && configProvider.hints[Hints.SWIPE_WIDGET_DETAILS]) {
         Provider.of<ConfigProvider>(context, listen: false).setHintSeen(Hints.SWIPE_WIDGET_DETAILS);
         showHintDialog(context);
       }

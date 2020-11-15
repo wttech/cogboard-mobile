@@ -116,14 +116,16 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
 
   Future<void> showHintDialogs() async {
     ConfigProvider configProvider = Provider.of<ConfigProvider>(context, listen: false);
-    if (configProvider.hints[Hints.REFRESH_FETCHING_CONFIG]) {
-      await showHintDialog(
-          AppLocalizations.of(context).getTranslation('dashboardsScreen.hintDialogTextRefreshFetchConfig'),
-          Hints.REFRESH_FETCHING_CONFIG);
-    }
-    if (configProvider.hints[Hints.SWIPE_BOARDS]) {
-      await showHintDialog(AppLocalizations.of(context).getTranslation('dashboardsScreen.hintDialogTextSwipeBoards'),
-          Hints.SWIPE_BOARDS);
+    if(configProvider.showHints) {
+      if (configProvider.hints[Hints.REFRESH_FETCHING_CONFIG]) {
+        await showHintDialog(
+            AppLocalizations.of(context).getTranslation('dashboardsScreen.hintDialogTextRefreshFetchConfig'),
+            Hints.REFRESH_FETCHING_CONFIG);
+      }
+      if (configProvider.hints[Hints.SWIPE_BOARDS]) {
+        await showHintDialog(AppLocalizations.of(context).getTranslation('dashboardsScreen.hintDialogTextSwipeBoards'),
+            Hints.SWIPE_BOARDS);
+      }
     }
   }
 
