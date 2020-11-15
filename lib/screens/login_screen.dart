@@ -67,7 +67,7 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(standardBorderRadius),
+                                borderRadius: new BorderRadius.circular(STANDARD_BORDER_RADIOUS),
                               ),
                               color: Theme.of(context).colorScheme.primary,
                             ),
@@ -92,7 +92,7 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(standardBorderRadius),
+                                borderRadius: new BorderRadius.circular(STANDARD_BORDER_RADIOUS),
                               ),
                             ),
                           ],

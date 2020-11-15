@@ -28,6 +28,8 @@ const StatusCodes = {
   "FAIL": "FAILED"
 };
 
+const double WIDGET_ICON_SIZE = 30.0;
+
 const StatusIcons = {
   "ERROR": Icon(
     Icons.error_outline,
@@ -115,7 +117,7 @@ class WidgetSortTypes {
   static const String STATUS_ASCENDING = "STATUS_ASCENDING";
 }
 
-const standardBorderRadius = 10.0;
+const STANDARD_BORDER_RADIOUS = 10.0;
 
 const ZabbixMetrics = {
   'system.users.num': 'Active users',
@@ -142,3 +144,5 @@ const ZabbixMetricsWithMaxValue = [
   'jmx[\\"java.lang:type=Memory\\",\\"HeapMemoryUsage.used\\"]',
   'vfs.fs.size[/,used]'
 ];
+
+const double FILTER_ICON_SIZE = 22;

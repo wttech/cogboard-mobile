@@ -21,19 +21,19 @@ class Input extends StatelessWidget {
             borderSide: BorderSide(
               color: Theme.of(context).colorScheme.onBackground.withAlpha(150),
             ),
-            borderRadius: BorderRadius.circular(standardBorderRadius),
+            borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: Theme.of(context).colorScheme.primary,
             ),
-            borderRadius: BorderRadius.circular(standardBorderRadius),
+            borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
           ),
           errorBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: Theme.of(context).colorScheme.error,
             ),
-            borderRadius: BorderRadius.circular(standardBorderRadius),
+            borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
           ),
         ),
         style: TextStyle(

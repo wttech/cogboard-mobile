@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/screens/settings_hints.dart';
+import 'package:cogboardmobileapp/screens/settings_notifications.dart';
 import 'package:cogboardmobileapp/screens/settings_project_list.dart';
 import 'package:cogboardmobileapp/screens/settings_sort_by.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
@@ -31,6 +32,12 @@ class SettingsScreen extends StatelessWidget {
                 endIndent: 30,
               ),
               SettingsHints(),
+              Divider(
+                color: Colors.grey,
+                indent: 30,
+                endIndent: 30,
+              ),
+              SettingsNotifications(),
             ],
           ),
         ),

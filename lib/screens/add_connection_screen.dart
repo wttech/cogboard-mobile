@@ -104,7 +104,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                     color: Theme.of(context).colorScheme.primary,
                     onPressed: () => onAddConnectionPressed(context),
                     shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(standardBorderRadius),
+                      borderRadius: new BorderRadius.circular(STANDARD_BORDER_RADIOUS),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),

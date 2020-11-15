@@ -10,8 +10,9 @@ class DismissibleWidgetListItem extends StatelessWidget {
   final DashboardWidget widget;
   final int widgetIndex;
   final DashboardType dashboardType;
+  final bool lastWidget;
 
-  DismissibleWidgetListItem({@required this.widget, @required this.widgetIndex, @required this.dashboardType});
+  DismissibleWidgetListItem({@required this.widget, @required this.widgetIndex, @required this.dashboardType , @required this.lastWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +40,7 @@ class DismissibleWidgetListItem extends StatelessWidget {
         widget: widget,
         widgetIndex: widgetIndex,
         dashboardType: dashboardType,
+        lastWidget: lastWidget,
       ),
     );
   }

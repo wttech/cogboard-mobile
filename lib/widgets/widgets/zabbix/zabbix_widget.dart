@@ -110,7 +110,6 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
   }
 
   void updatePrevious() {
-    print('${previousValue.toString()} -> ${widget.widget.content['lastvalue'].toString()}');
     setState(() {
       previousValue = int.parse(widget.widget.content['lastvalue']);
     });
