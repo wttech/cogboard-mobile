@@ -117,7 +117,7 @@ class WidgetSortTypes {
   static const String STATUS_ASCENDING = "STATUS_ASCENDING";
 }
 
-const standardBorderRadius = 10.0;
+const STANDARD_BORDER_RADIOUS = 10.0;
 
 const ZabbixMetrics = {
   'system.users.num': 'Active users',

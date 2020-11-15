@@ -109,6 +109,9 @@ class AppLocalizations {
     'widgetListScreen.errorTitle': {
       'en': 'Dashboard',
     },
+    'widgetListErrorScreen.retry': {
+      'en': 'retry connecting again',
+    },
     'widgetListScreen.errorBody': {
       'en': 'Websocket connection error occurred!',
     },

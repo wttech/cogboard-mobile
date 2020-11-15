@@ -79,7 +79,10 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
               return ScreenWithAppBar(
                 appBarTitle: AppLocalizations.of(context).getTranslation('dashboardsScreen.boardError.title'),
                 body: WidgetListErrorScreen(
-                    AppLocalizations.of(context).getTranslation('dashboardsScreen.boardError.body')),
+                    message: AppLocalizations.of(context).getTranslation('dashboardsScreen.boardError.body'),
+                    refresh: () {
+                      setState(() {});
+                    }),
               );
             } else {
               startWebSocketListening(context);

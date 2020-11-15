@@ -91,7 +91,12 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
               debugPrint('ws error ${snapshot.error}');
               return ScreenWithAppBar(
                 appBarTitle: AppLocalizations.of(context).getTranslation('widgetScreen.errorTitle'),
-                body: WidgetListErrorScreen(AppLocalizations.of(context).getTranslation('widgetScreen.errorBody')),
+                body: WidgetListErrorScreen(
+                  message: AppLocalizations.of(context).getTranslation('widgetScreen.errorBody'),
+                  refresh: () {
+                    setState(() {});
+                  },
+                ),
               );
             } else {
               _controller = PageController(

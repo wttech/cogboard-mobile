@@ -24,7 +24,7 @@ class WidgetListItem extends StatelessWidget {
       elevation: 5,
       margin: getCardMargin(),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(standardBorderRadius),
+        borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
