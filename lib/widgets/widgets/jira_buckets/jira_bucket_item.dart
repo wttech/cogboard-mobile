@@ -1,14 +1,17 @@
 import 'package:cogboardmobileapp/models/jira_bucket_model.dart';
+import 'package:cogboardmobileapp/utils/url_launcher.dart';
 import 'package:flutter/material.dart';
 
-class JiraBucketItem extends StatelessWidget {
+class JiraBucketItem extends StatelessWidget with UrlLauncher {
   final JiraBucketModel bucket;
 
   JiraBucketItem({
     this.bucket,
   });
 
-  void handleBucketPressed() {}
+  void handleBucketPressed(BuildContext context) {
+    launchUrl(bucket.url, context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class JiraBucketItem extends StatelessWidget {
                   ),
                   margin: const EdgeInsets.fromLTRB(30.0, 10.0, 0, 10.0),
                 ),
-                onTap: handleBucketPressed,
+                onTap: () => handleBucketPressed(context),
               ),
             ),
             Expanded(

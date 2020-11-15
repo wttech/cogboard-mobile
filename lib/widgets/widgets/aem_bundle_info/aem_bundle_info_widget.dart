@@ -1,41 +1,59 @@
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
+import 'package:cogboardmobileapp/utils/url_launcher.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_container.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_header.dart';
 import 'package:cogboardmobileapp/widgets/widgets/widget_details_item.dart';
 import 'package:flutter/material.dart';
 
-class AemBundleInfoWidget extends StatelessWidget {
+class AemBundleInfoWidget extends StatelessWidget with UrlLauncher {
   final DashboardWidget widget;
 
   AemBundleInfoWidget({
     @required this.widget,
   });
 
-  List get getBundleStatus {
+  void openUrl(BuildContext context) {
+    launchUrl(widget.content['url'], context);
+  }
+
+  List getBundleStatus(BuildContext context) {
     Map status = widget.content["bundleStatus"];
     return status.entries
-        .map((item) => WidgetDetailsItem(
-              detail: "${item.key.toString().toUpperCase()}: ${item.value}",
+        .map((item) => GestureDetector(
+              onTap: () => openUrl(context),
+              child: WidgetDetailsItem(
+                detail: "${item.key.toString().toUpperCase()}: ${item.value}",
+              ),
             ))
         .toList();
   }
 
-  List get getExcludedBundles {
+  List getExcludedBundles(BuildContext context) {
     List bundles = widget.content["excludedBundles"];
     return bundles
-        .map((bundle) => WidgetDetailsItem(
+        .map(
+          (bundle) => GestureDetector(
+            onTap: () => openUrl(context),
+            child: WidgetDetailsItem(
               detail: "$bundle",
-            ))
+            ),
+          ),
+        )
         .toList();
   }
 
-  List get getInactiveBundles {
+  List getInactiveBundles(BuildContext context) {
     List bundles = widget.content["inactiveBundles"];
     return bundles
-        .map((bundle) => WidgetDetailsItem(
+        .map(
+          (bundle) => GestureDetector(
+            onTap: () => openUrl(context),
+            child: WidgetDetailsItem(
               detail: "$bundle",
-            ))
+            ),
+          ),
+        )
         .toList();
   }
 
@@ -46,7 +64,7 @@ class AemBundleInfoWidget extends StatelessWidget {
         Container(
           child: Column(
             children: [
-              ...getBundleStatus,
+              ...getBundleStatus(context),
             ],
           ),
           margin: const EdgeInsets.fromLTRB(0, 30.0, 0, 0),
@@ -57,13 +75,13 @@ class AemBundleInfoWidget extends StatelessWidget {
           ),
           margin: const EdgeInsets.fromLTRB(30.0, 0, 30.0, 0),
         ),
-        getExcludedBundles.length != 0
+        getExcludedBundles(context).length != 0
             ? Column(
                 children: [
                   DetailsHeader(
                     header: AppLocalizations.of(context).getTranslation('aemBundleInfo.exludedBundles'),
                   ),
-                  ...getExcludedBundles,
+                  ...getExcludedBundles(context),
                 ],
               )
             : DetailsHeader(header: AppLocalizations.of(context).getTranslation('aemBundleInfo.noExcludedBundles')),
@@ -73,13 +91,13 @@ class AemBundleInfoWidget extends StatelessWidget {
           ),
           margin: const EdgeInsets.fromLTRB(30.0, 0, 30.0, 0),
         ),
-        getInactiveBundles.length != 0
+        getInactiveBundles(context).length != 0
             ? Column(
                 children: [
                   DetailsHeader(
                     header: AppLocalizations.of(context).getTranslation('aemBundleInfo.inactiveBundles'),
                   ),
-                  ...getInactiveBundles,
+                  ...getInactiveBundles(context),
                 ],
               )
             : DetailsHeader(header: AppLocalizations.of(context).getTranslation('aemBundleInfo.noInactiveBundles')),
