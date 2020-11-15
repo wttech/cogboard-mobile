@@ -175,6 +175,9 @@ class AppLocalizations {
     'urlLauncher.toast': {
       'en': 'URL error occurred',
     },
+    'iframeEmbed.blankUrl': {
+      'en': 'URL is blank',
+    },
   };
 
   String getTranslation(String key) {
