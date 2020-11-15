@@ -10,40 +10,38 @@ class OpenUrlButton extends StatelessWidget {
   });
 
   String get getWidgetUrl {
-    return widget.content["url"];
+    return widget.content['url'];
   }
 
-  void openDetailsUrl() {
-  }
+  dynamic get statusCode => widget.content['statusCode'];
+
+  dynamic get expectedStatusCode => widget.content['expectedStatusCode'];
+
+  bool get errorStatus => expectedStatusCode != statusCode;
+
+  String get statusCodeMessage =>
+      errorStatus ? '$expectedStatusCode expected, got $statusCode' : widget.content['statusCode'].toString();
+
+  void openDetailsUrl() {}
 
   String get getUrlDisplayName {
     switch (widget.type) {
       case WidgetTypes.BAMBOO_PLAN_WIDGET:
-        return widget.content["number"] != null
-            ? "#${widget.content["number"]}"
-            : null;
-        break;
+        return widget.content['number'] != null ? '#${widget.content['number']}' : null;
       case WidgetTypes.BAMBOO_DEPLOYMENT_WIDGET:
-        return widget.content["releaseName"] != null
-            ? "${widget.content["releaseName"]}"
-            : null;
-        break;
+        return widget.content['releaseName'] != null ? '${widget.content['releaseName']}' : null;
       case WidgetTypes.JENKINS_JOB_WIDGET:
-        return widget.content["displayName"] != null
-            ? "${widget.content["displayName"]}"
-            : null;
-        break;
+        return widget.content['displayName'] != null ? '${widget.content['displayName']}' : null;
+      case WidgetTypes.SERVICE_CHECK_WIDGET:
+        return statusCodeMessage;
       case WidgetTypes.SONAR_QUBE_WIDGET:
-        return "OPEN DASHBOARD";
-        break;
+        return 'OPEN DASHBOARD';
       case WidgetTypes.AEM_HEALTHCHECK_WIDGET:
-        return "OPEN REPORT";
-        break;
+        return 'OPEN REPORT';
       case WidgetTypes.AEM_BUNDLE_INFO_WIDGET:
-        return "VIEW BUNDLES";
+        return 'VIEW BUNDLES';
       default:
         return null;
-        break;
     }
   }
 
