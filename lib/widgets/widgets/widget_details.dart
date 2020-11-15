@@ -5,6 +5,7 @@ import 'package:cogboardmobileapp/widgets/widgets/aem_healthcheck/aem_healthchec
 import 'package:cogboardmobileapp/widgets/widgets/bamboo_deployment/bamboo_deployment_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/bamboo_plan/bamboo_plan_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/checkbox/checkbox_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/iframe_embed/iframe_embed_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/jenkins_job/jenkins_job_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/jira_buckets/jira_buckets_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/link_list/link_list_widget.dart';
@@ -53,6 +54,8 @@ class WidgetDetails extends StatelessWidget {
         return TextWidget(widget: widget);
       case WidgetTypes.SERVICE_CHECK_WIDGET:
         return ServiceCheckWidget(widget: widget);
+      case WidgetTypes.IFRAME_EMBED_WIDGET:
+        return IframeEmbedWidget(widget: widget);
       default:
         return Container(
           child: null,
@@ -77,6 +80,7 @@ class WidgetDetails extends StatelessWidget {
       case WidgetTypes.ZABBIX_WIDGET:
       case WidgetTypes.TEXT_WIDGET:
       case WidgetTypes.SERVICE_CHECK_WIDGET:
+      case WidgetTypes.IFRAME_EMBED_WIDGET:
       default:
         return false;
     }

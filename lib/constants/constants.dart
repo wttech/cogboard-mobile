@@ -107,6 +107,7 @@ class WidgetTypes {
   static const String PERSON_DRAW_WIDGET = "PersonDrawWidget";
   static const String JIRA_BUCKETS_WIDGET = "JiraBucketsWidget";
   static const String ZABBIX_WIDGET = "ZabbixWidget";
+  static const String IFRAME_EMBED_WIDGET = "IframeEmbedWidget";
 }
 
 class WidgetSortTypes {
