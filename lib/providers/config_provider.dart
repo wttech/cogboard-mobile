@@ -7,6 +7,7 @@ import 'package:cogboardmobileapp/models/config_model.dart';
 import 'package:cogboardmobileapp/models/settings_preferences_model.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/models/widget_status_change_model.dart';
 import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,8 @@ class ConfigProvider with ChangeNotifier {
   int _snackBarsToRemove = 0;
   bool _webSocketConnectionErrorPresent = false;
   List<DashboardWidget> _lastNotificationUpdateWidgetsState;
-  String _lastNotificationUpdateUrl;
   String _notificationPayload;
-  List<DashboardWidget> _widgetsInNotificationPayload = [];
+  List<WidgetStatusChange> _widgetsInNotificationPayload = [];
   Board _currentBoard;
 
   ConfigProvider() {
@@ -49,7 +49,12 @@ class ConfigProvider with ChangeNotifier {
 
   Future createSettingsPreferences() async {
     _settingsPreferences = new SettingsPreferences(
-        connections: [], version: SettingsPreferences.VERSION, showHints: true, sortBy: WidgetSortTypes.NONE);
+        connections: [],
+        version: SettingsPreferences.VERSION,
+        showHints: true,
+        sortBy: WidgetSortTypes.NONE,
+        showNotifications: true,
+        notificationFrequencyInMinutes: 1);
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
   }
 
@@ -79,7 +84,6 @@ class ConfigProvider with ChangeNotifier {
     final response = await http.get('http://$currentUrl/api/config');
     _config = Config.fromJson(json.decode(response.body) as Map<String, dynamic>);
     _boards = _config.boards.boardsById.entries.map((entry) => entry.value).toList();
-    _lastNotificationUpdateUrl = currentUrl;
     _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
     await checkIfQuarantineExpirationDateHasExceeded();
     notifyListeners();
@@ -97,12 +101,18 @@ class ConfigProvider with ChangeNotifier {
 
   Board get currentBoard => _currentBoard;
 
+  int get notificationFrequency => _settingsPreferences.notificationFrequencyInMinutes;
+
+  DateTime get lastNotificationTimestamp => _settingsPreferences.lastNotificationTimestamp;
+
+  get showNotifications => _settingsPreferences.showNotifications;
+
   List<DashboardWidget> get favouriteWidgets {
-    return currentConnectionPreferences.favouriteWidgets;
+    return getSortedWidgetsList(currentConnectionPreferences.favouriteWidgets);
   }
 
   List<DashboardWidget> get quarantineWidgets {
-    return currentConnectionPreferences.quarantineWidgets;
+    return getSortedWidgetsList(currentConnectionPreferences.quarantineWidgets);
   }
 
   bool isWidgetInQuarantine(DashboardWidget widget) {
@@ -121,19 +131,92 @@ class ConfigProvider with ChangeNotifier {
     return new List<DashboardWidget>.from(getAllWidgets().map((widget) => DashboardWidget.deepCopy(widget)).toList());
   }
 
+  String getWidgetName(DashboardWidget widget) {
+    return (widget.title != null && widget.title.isNotEmpty) ? widget.title : widget.type;
+  }
+
   List<DashboardWidget> getBoardWidgets(Board board) {
-    return [
+    List<DashboardWidget> boardWidgets = [
       ..._config.widgets.widgetsById.entries
           .map((entry) => entry.value)
           .where((widget) =>
               board.widgets.contains(widget.id) &&
-              quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1)
+              quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1 &&
+              widget.type != "WhiteSpaceWidget")
           .toList()
     ];
+    return getSortedWidgetsList(boardWidgets);
   }
 
-  String getWidgetName(DashboardWidget widget) {
-    return (widget.title != null && widget.title.isNotEmpty) ? widget.title : widget.type;
+  List<DashboardWidget> getSortedWidgetsList(List<DashboardWidget> boardWidgets) {
+    switch (_settingsPreferences.sortBy) {
+      case WidgetSortTypes.NONE:
+        return boardWidgets;
+      case WidgetSortTypes.NAME_ASCENDING:
+        boardWidgets.sort((a, b) => getWidgetName(a).compareTo(getWidgetName(b)));
+        break;
+      case WidgetSortTypes.NAME_DESCENDING:
+        boardWidgets.sort((a, b) => getWidgetName(a).compareTo(getWidgetName(b)));
+        boardWidgets = boardWidgets.reversed.toList();
+        break;
+      case WidgetSortTypes.STATUS_ASCENDING:
+        boardWidgets.sort((a, b) => sortWidgetsByStatus(a, b));
+        break;
+      case WidgetSortTypes.STATUS_DESCENDING:
+        boardWidgets.sort((a, b) => sortWidgetsByStatus(a, b));
+        boardWidgets = boardWidgets.reversed.toList();
+        break;
+    }
+    return boardWidgets;
+  }
+
+  int sortWidgetsByStatus(DashboardWidget a, DashboardWidget b) {
+    int firstWidgetStatusSortValue = widgetStatusSortValue(a);
+    int secondWidgetStatusSortValue = widgetStatusSortValue(b);
+    if (firstWidgetStatusSortValue == secondWidgetStatusSortValue) {
+      return getWidgetName(a).compareTo(getWidgetName(b));
+    } else {
+      return firstWidgetStatusSortValue > secondWidgetStatusSortValue ? 1 : -1;
+    }
+  }
+
+  int widgetStatusSortValue(DashboardWidget widget) {
+    if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      WidgetStatus widgetStatus =
+          EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+      switch (widgetStatus) {
+        case WidgetStatus.OK:
+          return 1;
+        case WidgetStatus.UNSTABLE:
+          return 5;
+        case WidgetStatus.FAIL:
+          return 6;
+        case WidgetStatus.UNKNOWN:
+          return 4;
+        case WidgetStatus.IN_PROGRESS:
+          return 2;
+        case WidgetStatus.ERROR_CONFIGURATION:
+          return 6;
+        case WidgetStatus.ERROR:
+          return 6;
+        case WidgetStatus.ERROR_CONNECTION:
+          return 6;
+        case WidgetStatus.TRANSPARENT:
+          return 2;
+        case WidgetStatus.CHECKBOX_OK:
+          return 1;
+        case WidgetStatus.CHECKBOX_FAIL:
+          return 6;
+        case WidgetStatus.CHECKBOX_UNKNOWN:
+          return 4;
+        case WidgetStatus.NONE:
+          return 3;
+        default:
+          return 3;
+      }
+    } else {
+      return 3;
+    }
   }
 
   void updateWidget(Map<String, dynamic> widgetData) {
@@ -175,6 +258,11 @@ class ConfigProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateNotificationTimestamp() async {
+    _settingsPreferences.lastNotificationTimestamp = new DateTime.now();
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+  }
+
   Future<void> removeFavouriteWidget(DashboardWidget widget) async {
     currentConnectionPreferences.favouriteWidgets.removeWhere((favouriteWidget) => favouriteWidget.id == widget.id);
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
@@ -207,49 +295,55 @@ class ConfigProvider with ChangeNotifier {
   }
 
   bool shouldNotify() {
-    if (currentUrl != _lastNotificationUpdateUrl) {
-      _lastNotificationUpdateUrl = currentUrl;
-      _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
+    if (!(showNotifications && (lastNotificationTimestamp == null || enoughTimeHavePassed()))) {
       return false;
-    } else {
-      bool shouldNotify = false;
-      getAllWidgets().forEach((widget) {
-        if (quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1) {
-          DashboardWidget notificationStateWidget =
-              _lastNotificationUpdateWidgetsState.firstWhere((element) => element.id == widget.id);
-          if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-            WidgetStatus widgetStatus =
-                EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
-            if (isErrorWidgetStatus(widgetStatus)) {
-              if (notificationStateWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-                WidgetStatus notificationStateWidgetStatus = EnumToString.fromString(
-                    WidgetStatus.values, notificationStateWidget.content[DashboardWidget.WIDGET_STATUS_KEY]);
-                if (widgetStatus != notificationStateWidgetStatus) {
-                  updateWidgetsInNotificationPayload(widget);
-                  shouldNotify = true;
-                }
-              } else {
+    }
+    bool shouldNotify = false;
+    getAllWidgets().forEach((widget) {
+      if (quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1) {
+        DashboardWidget notificationStateWidget =
+            _lastNotificationUpdateWidgetsState.firstWhere((element) => element.id == widget.id);
+        if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+          WidgetStatus widgetStatus =
+              EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+          WidgetStatus notificationWidgetStatus = EnumToString.fromString(
+              WidgetStatus.values, notificationStateWidget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+          if (isErrorWidgetStatus(widgetStatus) ||
+              (!isErrorWidgetStatus(widgetStatus) && isErrorWidgetStatus(notificationWidgetStatus))) {
+            if (notificationStateWidget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+              WidgetStatus notificationStateWidgetStatus = EnumToString.fromString(
+                  WidgetStatus.values, notificationStateWidget.content[DashboardWidget.WIDGET_STATUS_KEY]);
+              if (widgetStatus != notificationStateWidgetStatus) {
+                updateWidgetsInNotificationPayload(notificationStateWidget, widget);
                 shouldNotify = true;
               }
+            } else {
+              shouldNotify = true;
             }
           }
         }
-      });
-      if (shouldNotify) {
-        setNotificationPayload();
       }
-      _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
-      return shouldNotify;
+    });
+    if (shouldNotify) {
+      setNotificationPayload();
     }
+    _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
+    return shouldNotify;
   }
 
-  void updateWidgetsInNotificationPayload(DashboardWidget widget) {
-    DashboardWidget notificationWidgetToUpdate =
-        _widgetsInNotificationPayload.firstWhere((element) => element.id == widget.id, orElse: () => null);
-    if (notificationWidgetToUpdate == null) {
-      _widgetsInNotificationPayload.add(DashboardWidget.deepCopy(widget));
+  bool enoughTimeHavePassed() =>
+      new DateTime.now().isAfter(lastNotificationTimestamp.add(new Duration(minutes: notificationFrequency)));
+
+  void updateWidgetsInNotificationPayload(DashboardWidget from, DashboardWidget to) {
+    WidgetStatusChange widgetStatusChange = new WidgetStatusChange(
+      from: DashboardWidget.deepCopy(from),
+      to: DashboardWidget.deepCopy(to),
+    );
+    int index = _widgetsInNotificationPayload.indexWhere((widgetStatusChange) => widgetStatusChange.from.id == from.id);
+    if (index == -1) {
+      _widgetsInNotificationPayload.add(widgetStatusChange);
     } else {
-      notificationWidgetToUpdate.content = new Map<String, dynamic>.from(widget.content);
+      _widgetsInNotificationPayload[index] = widgetStatusChange;
     }
   }
 
@@ -263,10 +357,14 @@ class ConfigProvider with ChangeNotifier {
 
   void setNotificationPayload() {
     _notificationPayload = '';
-    _widgetsInNotificationPayload.forEach((widget) {
-      if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-        _notificationPayload +=
-            '${getWidgetName(widget)} has changed status to ${widget.content[DashboardWidget.WIDGET_STATUS_KEY]}\n';
+    _widgetsInNotificationPayload.forEach((widgetChange) {
+      if (widgetChange.from.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+        _notificationPayload += '${getWidgetName(widgetChange.from)} has changed '
+            'from ${widgetChange.from.content[DashboardWidget.WIDGET_STATUS_KEY]} '
+            'to ${widgetChange.to.content[DashboardWidget.WIDGET_STATUS_KEY]}\n';
+      } else {
+        _notificationPayload += '${getWidgetName(widgetChange.from)} has changed '
+            'to ${widgetChange.to.content[DashboardWidget.WIDGET_STATUS_KEY]}\n';
       }
     });
   }

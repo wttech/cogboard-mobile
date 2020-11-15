@@ -43,7 +43,7 @@ class SettingsWidgets extends StatelessWidget {
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.background,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(standardBorderRadius), side: BorderSide(color: Colors.grey)),
+                      borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS), side: BorderSide(color: Colors.grey)),
                   textColor: settingsProvider.sortBy == WidgetSortTypes.NONE
                       ? Theme.of(context).colorScheme.onPrimary
                       : Theme.of(context).colorScheme.onSurface,
@@ -64,7 +64,7 @@ class SettingsWidgets extends StatelessWidget {
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.background,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(standardBorderRadius), side: BorderSide(color: Colors.grey)),
+                      borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS), side: BorderSide(color: Colors.grey)),
                   textColor: (settingsProvider.sortBy == WidgetSortTypes.NAME_ASCENDING ||
                           settingsProvider.sortBy == WidgetSortTypes.NAME_DESCENDING)
                       ? Theme.of(context).colorScheme.onPrimary
@@ -106,7 +106,7 @@ class SettingsWidgets extends StatelessWidget {
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.background,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(standardBorderRadius),
+                    borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
                     side: BorderSide(color: Colors.grey),
                   ),
                   textColor: (settingsProvider.sortBy == WidgetSortTypes.STATUS_ASCENDING ||

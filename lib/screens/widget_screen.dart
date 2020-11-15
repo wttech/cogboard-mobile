@@ -54,7 +54,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
   Widget build(BuildContext context) {
     final configProvider = Provider.of<ConfigProvider>(context);
     final dashboardProvider = Provider.of<DashboardsProvider>(context);
-    final channel = IOWebSocketChannel.connect('ws://150.254.30.119/ws');
+    final channel = IOWebSocketChannel.connect('ws://${configProvider.currentUrl}/ws');
 
     if (!currentWidgetFetched) {
       setState(() {
@@ -91,7 +91,12 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
               debugPrint('ws error ${snapshot.error}');
               return ScreenWithAppBar(
                 appBarTitle: AppLocalizations.of(context).getTranslation('widgetScreen.errorTitle'),
-                body: WidgetListErrorScreen(AppLocalizations.of(context).getTranslation('widgetScreen.errorBody')),
+                body: WidgetListErrorScreen(
+                  message: AppLocalizations.of(context).getTranslation('widgetScreen.errorBody'),
+                  refresh: () {
+                    setState(() {});
+                  },
+                ),
               );
             } else {
               _controller = PageController(

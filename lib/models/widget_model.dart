@@ -1,4 +1,3 @@
-import 'package:cogboardmobileapp/models/todo_list_item_model.dart';
 import 'package:cogboardmobileapp/models/widget_config_model.dart';
 
 enum WidgetStatus {

@@ -36,7 +36,10 @@ class WidgetsListScreen extends StatelessWidget {
       child: configProvider.webSocketConnectionErrorPresent
           ? ScreenWithAppBar(
               appBarTitle: AppLocalizations.of(context).getTranslation('widgetListScreen.errorTitle'),
-              body: WidgetListErrorScreen(AppLocalizations.of(context).getTranslation('widgetListScreen.errorBody')),
+              body: WidgetListErrorScreen(
+                message: AppLocalizations.of(context).getTranslation('widgetListScreen.errorBody'),
+                refresh: configProvider.fetchConfig,
+              ),
             )
           : widgetsList.length == 0
               ? EmptyWidgetListScreen()
@@ -51,11 +54,13 @@ class WidgetsListScreen extends StatelessWidget {
                                 widget: widgetsList[index],
                                 widgetIndex: index,
                                 dashboardType: dashboardType,
+                                lastWidget: index == widgetsList.length - 1,
                               )
                             : DismissibleWidgetListItem(
                                 widget: widgetsList[index],
                                 widgetIndex: index,
                                 dashboardType: dashboardType,
+                                lastWidget: index == widgetsList.length - 1,
                               );
                       }),
                 ),

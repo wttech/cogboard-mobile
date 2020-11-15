@@ -24,7 +24,7 @@ class UrlSelect extends StatelessWidget {
             color: Theme.of(context).colorScheme.primary,
           ),
           borderRadius: BorderRadius.all(
-            Radius.circular(standardBorderRadius),
+            Radius.circular(STANDARD_BORDER_RADIOUS),
           ),
         ),
         child: new DropdownButton<int>(
