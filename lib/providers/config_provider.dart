@@ -108,6 +108,8 @@ class ConfigProvider with ChangeNotifier {
 
   get showNotifications => _settingsPreferences.showNotifications;
 
+  get showHints => _settingsPreferences.showHints;
+
   Map<String, bool> get hints {
     return _settingsPreferences.hints;
   }

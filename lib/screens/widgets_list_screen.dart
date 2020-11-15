@@ -31,6 +31,7 @@ class WidgetsListScreen extends StatelessWidget {
         configProvider.markSnackBarAsRemoved();
       }
       if (widgetsList.length > 0 &&
+          configProvider.showHints &&
           configProvider.hints[Hints.SWIPE_TO_DELETE] &&
           (dashboardType == DashboardType.Favorites || dashboardType == DashboardType.Quarantine)) {
         Provider.of<ConfigProvider>(context, listen: false).setHintSeen(Hints.SWIPE_TO_DELETE);
