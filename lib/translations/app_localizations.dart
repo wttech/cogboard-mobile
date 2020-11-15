@@ -157,6 +157,9 @@ class AppLocalizations {
     'dissmisibleWidgetList.undo': {
       'en': 'UNDO',
     },
+    'serviceCheck.response': {
+      'en': 'Response',
+    },
   };
 
   String getTranslation(String key) {

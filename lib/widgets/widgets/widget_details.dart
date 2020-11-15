@@ -8,6 +8,7 @@ import 'package:cogboardmobileapp/widgets/widgets/checkbox/checkbox_widget.dart'
 import 'package:cogboardmobileapp/widgets/widgets/jenkins_job/jenkins_job_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/jira_buckets/jira_buckets_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/link_list/link_list_widget.dart';
+import 'package:cogboardmobileapp/widgets/widgets/service_check/service_check_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/sonar_qube/sonar_qube_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/text/text_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/todo_list/todo_list_widget.dart';
@@ -50,6 +51,8 @@ class WidgetDetails extends StatelessWidget {
         return TodoListWidget(widget: widget);
       case WidgetTypes.TEXT_WIDGET:
         return TextWidget(widget: widget);
+      case WidgetTypes.SERVICE_CHECK_WIDGET:
+        return ServiceCheckWidget(widget: widget);
       default:
         return Container(
           child: null,
@@ -73,6 +76,7 @@ class WidgetDetails extends StatelessWidget {
       case WidgetTypes.WORLD_CLOCK_WIDGET:
       case WidgetTypes.ZABBIX_WIDGET:
       case WidgetTypes.TEXT_WIDGET:
+      case WidgetTypes.SERVICE_CHECK_WIDGET:
       default:
         return false;
     }
