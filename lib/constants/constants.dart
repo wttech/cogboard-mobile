@@ -119,6 +119,13 @@ class WidgetSortTypes {
   static const String STATUS_ASCENDING = "STATUS_ASCENDING";
 }
 
+class Hints {
+  static const String REFRESH_FETCHING_CONFIG = "REFRESH_FETCHING_CONFIG";
+  static const String SWIPE_BOARDS = "SWIPE_BOARDS";
+  static const String SWIPE_WIDGET_DETAILS = "SWIPE_WIDGET_DETAILS";
+  static const String SWIPE_TO_DELETE = "SWIPE_TO_DELETE";
+}
+
 const STANDARD_BORDER_RADIOUS = 10.0;
 
 const ZabbixMetrics = {

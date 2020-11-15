@@ -41,6 +41,7 @@ class SettingsProvider with ChangeNotifier {
         showHints: true,
         sortBy: WidgetSortTypes.NONE,
         showNotifications: true,
+        hints: SettingsPreferences.createHints(),
         notificationFrequencyInMinutes: 1);
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
   }
