@@ -5,7 +5,7 @@ import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 
 class SettingsPreferences {
   static const String KEY = 'SettingsPreferences';
-  static const int VERSION = 3;
+  static const int VERSION = 4;
 
   List<ConnectionPreferences> connections = [];
   ConnectionPreferences currentConnection;
@@ -57,6 +57,10 @@ class SettingsPreferences {
       'currentConnection': currentConnection != null ? currentConnection.toJson() : null,
       'hints': hints
     };
+  }
+
+  static int readVersion(Map<String, dynamic> json) {
+    return  json['version'];
   }
 
   static Map<String, bool> createHints() {
