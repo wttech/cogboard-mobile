@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/board_model.dart';
 import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
@@ -28,6 +29,13 @@ class WidgetsListScreen extends StatelessWidget {
       while (configProvider.snackBarsToRemove > 0) {
         Scaffold.of(context).removeCurrentSnackBar();
         configProvider.markSnackBarAsRemoved();
+      }
+      if (widgetsList.length > 0 &&
+          configProvider.showHints &&
+          configProvider.hints[Hints.SWIPE_TO_DELETE] &&
+          (dashboardType == DashboardType.Favorites || dashboardType == DashboardType.Quarantine)) {
+        Provider.of<ConfigProvider>(context, listen: false).setHintSeen(Hints.SWIPE_TO_DELETE);
+        showHintDialog(context);
       }
     });
 
@@ -64,6 +72,33 @@ class WidgetsListScreen extends StatelessWidget {
                               );
                       }),
                 ),
+    );
+  }
+
+  Future<void> showHintDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        content: Text(
+          AppLocalizations.of(context).getTranslation('widgetListScreen.hintDialogText'),
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          FlatButton(
+            textColor: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.surface,
+            padding: const EdgeInsets.all(0.0),
+            child: Text(
+              AppLocalizations.of(context).getTranslation('widgetListScreen.hintDialogConfirm'),
+            ),
+            onPressed: () {
+              Provider.of<ConfigProvider>(context, listen: false).setHintSeen(Hints.SWIPE_TO_DELETE);
+              Navigator.of(ctx).pop(false);
+            },
+          ),
+        ],
+      ),
     );
   }
 

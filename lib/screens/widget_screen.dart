@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
@@ -55,6 +56,13 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
     final configProvider = Provider.of<ConfigProvider>(context);
     final dashboardProvider = Provider.of<DashboardsProvider>(context);
     final channel = IOWebSocketChannel.connect('ws://${configProvider.currentUrl}/ws');
+
+    Future.delayed(const Duration(milliseconds: 0), () {
+      if (configProvider.showHints && configProvider.hints[Hints.SWIPE_WIDGET_DETAILS]) {
+        Provider.of<ConfigProvider>(context, listen: false).setHintSeen(Hints.SWIPE_WIDGET_DETAILS);
+        showHintDialog(context);
+      }
+    });
 
     if (!currentWidgetFetched) {
       setState(() {
@@ -139,6 +147,31 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
         ),
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
+    );
+  }
+
+  Future<void> showHintDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        content: Text(
+          AppLocalizations.of(context).getTranslation('widgetScreen.hintDialogText'),
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          FlatButton(
+            textColor: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.surface,
+            padding: const EdgeInsets.all(0.0),
+            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.hintDialogConfirm')),
+            onPressed: () {
+              Provider.of<ConfigProvider>(context, listen: false).setHintSeen(Hints.SWIPE_WIDGET_DETAILS);
+              Navigator.of(ctx).pop(false);
+            },
+          ),
+        ],
+      ),
     );
   }
 

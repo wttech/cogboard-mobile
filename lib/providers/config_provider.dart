@@ -54,6 +54,7 @@ class ConfigProvider with ChangeNotifier {
         showHints: true,
         sortBy: WidgetSortTypes.NONE,
         showNotifications: true,
+        hints: SettingsPreferences.createHints(),
         notificationFrequencyInMinutes: 1);
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
   }
@@ -106,6 +107,12 @@ class ConfigProvider with ChangeNotifier {
   DateTime get lastNotificationTimestamp => _settingsPreferences.lastNotificationTimestamp;
 
   get showNotifications => _settingsPreferences.showNotifications;
+
+  get showHints => _settingsPreferences.showHints;
+
+  Map<String, bool> get hints {
+    return _settingsPreferences.hints;
+  }
 
   List<DashboardWidget> get favouriteWidgets {
     return getSortedWidgetsList(currentConnectionPreferences.favouriteWidgets);
@@ -279,6 +286,11 @@ class ConfigProvider with ChangeNotifier {
     currentConnectionPreferences.quarantineWidgets = [];
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
     notifyListeners();
+  }
+
+  Future<void> setHintSeen(String hint) async {
+    _settingsPreferences.hints[hint] = false;
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
   }
 
   void addSnackBarToRemove() {
