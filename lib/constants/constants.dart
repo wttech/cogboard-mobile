@@ -126,6 +126,11 @@ class Hints {
   static const String SWIPE_TO_DELETE = "SWIPE_TO_DELETE";
 }
 
+class BoardTypes {
+  static const String WIDGET_BOARD = 'WidgetBoard';
+  static const String IFRAME_BOARD = 'IframeBoard';
+}
+
 const STANDARD_BORDER_RADIOUS = 10.0;
 
 const ZabbixMetrics = {
