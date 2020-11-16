@@ -119,6 +119,11 @@ class WidgetSortTypes {
   static const String STATUS_ASCENDING = "STATUS_ASCENDING";
 }
 
+class BoardTypes {
+  static const String WIDGET_BOARD = 'WidgetBoard';
+  static const String IFRAME_BOARD = 'IframeBoard';
+}
+
 const STANDARD_BORDER_RADIOUS = 10.0;
 
 const ZabbixMetrics = {
