@@ -19,7 +19,10 @@ class IframeEmbedWidget extends StatelessWidget {
     return iframeUrl != ''
         ? Container(
             child: WebView(
-              initialUrl: iframeUrl,
+              initialUrl: Uri.dataFromString(
+                      '<html><body><iframe src="$iframeUrl" width="100%" height="100%"></iframe></body></html>',
+                      mimeType: 'text/html')
+                  .toString(),
               javascriptMode: JavascriptMode.unrestricted,
             ),
           )
