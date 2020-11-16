@@ -23,10 +23,13 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> fetchSettingsPreferences() async {
     if (await SharedPref.containsKey(SettingsPreferences.KEY)) {
-      _settingsPreferences = SettingsPreferences.fromJson(jsonDecode(await SharedPref.read(SettingsPreferences.KEY)));
-      if (_settingsPreferences.version == null ||
-          (_settingsPreferences.version != null && _settingsPreferences.version < SettingsPreferences.VERSION)) {
+      Map<String, dynamic> settingsPreferencesJson = jsonDecode(await SharedPref.read(SettingsPreferences.KEY));
+      int settingsPreferencesVersion = SettingsPreferences.readVersion(settingsPreferencesJson);
+      if (settingsPreferencesVersion == null ||
+          (settingsPreferencesVersion != null && settingsPreferencesVersion < SettingsPreferences.VERSION)) {
         await createSettingsPreferences();
+      } else {
+        _settingsPreferences = SettingsPreferences.fromJson(settingsPreferencesJson);
       }
     } else {
       await createSettingsPreferences();
