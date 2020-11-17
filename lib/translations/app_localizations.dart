@@ -199,6 +199,9 @@ class AppLocalizations {
     'iframeEmbed.blankUrl': {
       'en': 'URL is blank',
     },
+    'widget.notUpdated': {
+      'en': 'Not updated yet',
+    },
   };
 
   String getTranslation(String key) {
