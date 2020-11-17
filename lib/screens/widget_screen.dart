@@ -33,9 +33,9 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
     super.dispose();
   }
 
-  String getWidgetTitle(DashboardWidget widget) {
-    return widget.title;
-  }
+  String getWidgetTitle(DashboardWidget widget) => widget.title;
+
+  String getWidgetType(DashboardWidget widget) => widget.type;
 
   String getWidgetStatus(DashboardWidget widget) {
     return widget.content[DashboardWidget.WIDGET_STATUS_KEY] != null
@@ -126,7 +126,9 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
                   return Column(
                     children: [
                       WidgetStatusHeader(
-                        widgetTitle: getWidgetTitle(widget),
+                        widgetTitle: getWidgetTitle(widget) != "" && getWidgetTitle(widget) != null
+                            ? getWidgetTitle(widget)
+                            : getWidgetType(widget),
                         status: getWidgetStatus(widget),
                         lastUpdated: getLastUpdated(widget),
                       ),
