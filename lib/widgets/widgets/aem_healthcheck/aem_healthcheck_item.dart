@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/utils/url_launcher.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class AemHealthcheckItem extends StatelessWidget with UrlLauncher {
           children: [
             Container(
               child: Text(
-                "$healthcheckName: $healthcheckValue",
+                "${AEM_HEALTH_CHECKS[healthcheckName]}: $healthcheckValue",
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
