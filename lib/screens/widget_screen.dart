@@ -25,6 +25,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
   PageController _controller;
   int pageNumber = 0;
   DashboardWidget currentWidget;
+  List<DashboardWidget> initialWidgetsOrder;
   bool currentWidgetFetched = false;
 
   @override
@@ -54,7 +55,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
   @override
   Widget build(BuildContext context) {
     final configProvider = Provider.of<ConfigProvider>(context);
-    final dashboardProvider = Provider.of<DashboardsProvider>(context);
+    final dashboardsProvider = Provider.of<DashboardsProvider>(context);
     final channel = IOWebSocketChannel.connect('ws://${configProvider.currentUrl}/ws');
 
     Future.delayed(const Duration(milliseconds: 0), () {
@@ -68,6 +69,19 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
       setState(() {
         currentWidgetFetched = true;
         currentWidget = ModalRoute.of(context).settings.arguments;
+        initialWidgetsOrder = configProvider.getBoardWidgets(configProvider.currentBoard);
+        switch (dashboardsProvider.currentDashboardType) {
+          case DashboardType.Home:
+            initialWidgetsOrder = getWidgetsDeepCopy(configProvider.getBoardWidgets(configProvider.currentBoard));
+            break;
+          case DashboardType.Favorites:
+            initialWidgetsOrder = getWidgetsDeepCopy(configProvider.favouriteWidgets);
+            break;
+          case DashboardType.Quarantine:
+            initialWidgetsOrder = getWidgetsDeepCopy(configProvider.quarantineWidgets);
+            break;
+          default:
+        }
       });
     }
 
@@ -77,7 +91,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
           IconButton(
             icon: Icon(Icons.block),
             color: getQuarantineIconColor(currentWidget, configProvider, context),
-            onPressed: () => onChangeWidgetStateClicked(currentWidget, configProvider, dashboardProvider),
+            onPressed: () => onChangeWidgetStateClicked(currentWidget, configProvider, dashboardsProvider),
           ),
           IconButton(
             icon: Icon(Icons.star),
@@ -108,21 +122,21 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
               );
             } else {
               _controller = PageController(
-                initialPage: getInitialPage(configProvider, dashboardProvider),
+                initialPage: getInitialPage(configProvider, dashboardsProvider),
               );
-              pageNumber = getInitialPage(configProvider, dashboardProvider);
+              pageNumber = getInitialPage(configProvider, dashboardsProvider);
               return PageView.builder(
                 controller: _controller,
                 scrollDirection: Axis.horizontal,
-                itemCount: getWidgetLength(configProvider, dashboardProvider),
+                itemCount: getWidgetLength(configProvider, dashboardsProvider),
                 onPageChanged: (widgetIndex) {
                   setState(() {
-                    setCurrentWidget(configProvider, dashboardProvider, widgetIndex);
+                    setCurrentWidget(configProvider, dashboardsProvider, widgetIndex);
                     pageNumber = widgetIndex;
                   });
                 },
                 itemBuilder: (context, widgetIndex) {
-                  DashboardWidget widget = getNextWidget(configProvider, dashboardProvider, widgetIndex);
+                  DashboardWidget widget = getNextWidget(configProvider, dashboardsProvider, widgetIndex);
                   return Column(
                     children: [
                       WidgetStatusHeader(
@@ -148,6 +162,10 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
+  }
+
+  List<DashboardWidget> getWidgetsDeepCopy(List<DashboardWidget> listToCopy) {
+    return new List<DashboardWidget>.from(listToCopy.map((widget) => DashboardWidget.deepCopy(widget)).toList());
   }
 
   Future<void> showHintDialog(BuildContext context) async {
@@ -260,13 +278,20 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
   void setCurrentWidget(ConfigProvider configProvider, DashboardsProvider dashboardsProvider, int widgetIndex) {
     switch (dashboardsProvider.currentDashboardType) {
       case DashboardType.Home:
-        currentWidget = configProvider.getBoardWidgets(configProvider.currentBoard)[widgetIndex];
+        int currentWidgetIndex = configProvider
+            .getBoardWidgets(configProvider.currentBoard)
+            .indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
+        currentWidget = configProvider.getBoardWidgets(configProvider.currentBoard)[currentWidgetIndex];
         break;
       case DashboardType.Favorites:
-        currentWidget = configProvider.favouriteWidgets[widgetIndex];
+        int currentWidgetIndex =
+            configProvider.favouriteWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
+        currentWidget = configProvider.favouriteWidgets[currentWidgetIndex];
         break;
       case DashboardType.Quarantine:
-        currentWidget = configProvider.quarantineWidgets[widgetIndex];
+        int currentWidgetIndex =
+            configProvider.quarantineWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
+        currentWidget = configProvider.quarantineWidgets[currentWidgetIndex];
         break;
       default:
     }
@@ -275,11 +300,18 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
   DashboardWidget getNextWidget(ConfigProvider configProvider, DashboardsProvider dashboardsProvider, int widgetIndex) {
     switch (dashboardsProvider.currentDashboardType) {
       case DashboardType.Home:
-        return configProvider.getBoardWidgets(configProvider.currentBoard)[widgetIndex];
+        int currentWidgetIndex = configProvider
+            .getBoardWidgets(configProvider.currentBoard)
+            .indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
+        return configProvider.getBoardWidgets(configProvider.currentBoard)[currentWidgetIndex];
       case DashboardType.Favorites:
-        return configProvider.favouriteWidgets[widgetIndex];
+        int currentWidgetIndex =
+        configProvider.favouriteWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
+        return configProvider.favouriteWidgets[currentWidgetIndex];
       case DashboardType.Quarantine:
-        return configProvider.quarantineWidgets[widgetIndex];
+        int currentWidgetIndex =
+        configProvider.quarantineWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
+        return configProvider.quarantineWidgets[currentWidgetIndex];
       default:
         return null;
     }
