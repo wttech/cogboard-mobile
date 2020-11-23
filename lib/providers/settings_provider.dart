@@ -102,4 +102,9 @@ class SettingsProvider with ChangeNotifier {
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
     notifyListeners();
   }
+
+  Future<void> replaceConnection(ConnectionPreferences newConnection, int idx) async {
+    _connections[idx] = newConnection;
+    notifyListeners();
+  }
 }
