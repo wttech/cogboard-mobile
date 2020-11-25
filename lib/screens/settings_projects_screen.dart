@@ -2,6 +2,7 @@ import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:cogboardmobileapp/screens/add_connection_screen.dart';
 import 'package:cogboardmobileapp/screens/login_screen.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +17,9 @@ class SettingsProjectsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: Text('Projects'),
+        title: Text(
+          AppLocalizations.of(context).getTranslation('settingsProjectsScreen.title'),
+        ),
         actions: [
           FlatButton(
             onPressed: () => Navigator.of(context).pushNamed(AddConnectionScreen.routeName),
@@ -64,13 +67,15 @@ class SettingsProjectsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        content: Text('Are you sure?'),
+        content: Text(
+          AppLocalizations.of(context).getTranslation('settingsProjectsScreen.alert.title'),
+        ),
         backgroundColor: Theme.of(context).colorScheme.surface,
         actions: [
           FlatButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
-              'NO',
+              AppLocalizations.of(context).getTranslation('settingsProjectsScreen.alert.decline'),
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
               ),
@@ -86,7 +91,7 @@ class SettingsProjectsScreen extends StatelessWidget {
               }
             },
             child: Text(
-              'YES',
+              AppLocalizations.of(context).getTranslation('settingsProjectsScreen.alert.confirm'),
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
               ),

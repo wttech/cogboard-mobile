@@ -49,13 +49,16 @@ class ConfigProvider with ChangeNotifier {
 
   Future createSettingsPreferences() async {
     _settingsPreferences = new SettingsPreferences(
-        connections: [],
-        version: SettingsPreferences.VERSION,
-        showHints: true,
-        sortBy: WidgetSortTypes.NONE,
-        showNotifications: true,
-        hints: SettingsPreferences.createHints(),
-        notificationFrequencyInMinutes: 1);
+      connections: [],
+      version: SettingsPreferences.VERSION,
+      showHints: true,
+      sortBy: WidgetSortTypes.NONE,
+      showNotifications: true,
+      hints: SettingsPreferences.createHints(),
+      notificationFrequencyInMinutes: 1,
+      sortByKey: WidgetSortByKeys.NONE,
+      sortByOrder: WidgetSortByOrder.DESC,
+    );
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
   }
 

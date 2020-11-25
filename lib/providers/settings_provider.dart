@@ -21,6 +21,10 @@ class SettingsProvider with ChangeNotifier {
 
   get sortBy => _settingsPreferences.sortBy;
 
+  get sortByKey => _settingsPreferences.sortByKey;
+
+  get sortByOrder => _settingsPreferences.sortByOrder;
+
   Future<void> fetchSettingsPreferences() async {
     if (await SharedPref.containsKey(SettingsPreferences.KEY)) {
       Map<String, dynamic> settingsPreferencesJson = jsonDecode(await SharedPref.read(SettingsPreferences.KEY));
@@ -39,13 +43,16 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> createSettingsPreferences() async {
     _settingsPreferences = new SettingsPreferences(
-        connections: [],
-        version: SettingsPreferences.VERSION,
-        showHints: true,
-        sortBy: WidgetSortTypes.NONE,
-        showNotifications: true,
-        hints: SettingsPreferences.createHints(),
-        notificationFrequencyInMinutes: 1);
+      connections: [],
+      version: SettingsPreferences.VERSION,
+      showHints: true,
+      sortBy: WidgetSortTypes.NONE,
+      showNotifications: true,
+      hints: SettingsPreferences.createHints(),
+      notificationFrequencyInMinutes: 1,
+      sortByKey: WidgetSortByKeys.NONE,
+      sortByOrder: WidgetSortByOrder.DESC,
+    );
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
   }
 
@@ -105,6 +112,24 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> replaceConnection(ConnectionPreferences newConnection, int idx) async {
     _connections[idx] = newConnection;
+    notifyListeners();
+  }
+
+  Future<void> setSortByOrder(String order) async {
+    _settingsPreferences.sortByOrder = order;
+    if (_settingsPreferences.sortByKey != WidgetSortByKeys.NONE) {
+      setSortBy(_settingsPreferences.sortByKey + order);
+    }
+    notifyListeners();
+  }
+
+  Future<void> setSortByKey(String key) async {
+    _settingsPreferences.sortByKey = key;
+    if (key == WidgetSortByKeys.NONE) {
+      setSortBy(WidgetSortByKeys.NONE);
+    } else {
+      setSortBy(key + _settingsPreferences.sortByOrder);
+    }
     notifyListeners();
   }
 }

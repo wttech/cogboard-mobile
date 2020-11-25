@@ -45,12 +45,15 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
       urlController.text = widget.connection.connectionUrl;
       nameController.text = widget.connection.connectionName;
     }
-
     return Scaffold(
       appBar: AppBar(
         title: widget.editMode
-            ? Text('Edit Connection')
-            : Text(AppLocalizations.of(context).getTranslation('addConnectionScreen.title')),
+            ? Text(
+                AppLocalizations.of(context).getTranslation('addConnectionScreen.title.edit'),
+              )
+            : Text(
+                AppLocalizations.of(context).getTranslation('addConnectionScreen.title'),
+              ),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: Form(
@@ -69,6 +72,22 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                     child: TextFormField(
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context).getTranslation('addConnectionScreen.name'),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                       ),
                       controller: nameController,
                       validator: (value) {
@@ -89,6 +108,18 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                     child: TextFormField(
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context).getTranslation('addConnectionScreen.url'),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                       ),
                       controller: urlController,
                       validator: (value) {
@@ -124,7 +155,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                       padding: const EdgeInsets.all(12.0),
                       child: Text(
                         widget.editMode
-                            ? 'SAVE'
+                            ? AppLocalizations.of(context).getTranslation('addConnectionScreen.save')
                             : AppLocalizations.of(context).getTranslation('addConnectionScreen.addConnection'),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onPrimary,
