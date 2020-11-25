@@ -1,5 +1,6 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/providers/widget_provider.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +16,8 @@ class WidgetStatusHeader extends StatelessWidget {
     this.lastUpdated,
   });
 
-  String convertTimestamp() {
-    if (lastUpdated == 0) return null;
+  String convertTimestamp(BuildContext context) {
+    if (lastUpdated == 0) return AppLocalizations.of(context).getTranslation('widget.notUpdated');
     var date = DateTime.fromMicrosecondsSinceEpoch(lastUpdated * 1000).toLocal();
     return DateFormat('d.M.y H:mm:ss').format(date);
   }
@@ -95,10 +96,10 @@ class WidgetStatusHeader extends StatelessWidget {
           Container(
             child: Row(
               children: [
-                if (convertTimestamp() != null)
+                if (convertTimestamp(context) != null)
                   Container(
                     child: Text(
-                      convertTimestamp(),
+                      convertTimestamp(context),
                       style: TextStyle(
                         fontSize: 9,
                         color: Colors.white,

@@ -199,6 +199,9 @@ class AppLocalizations {
     'iframeEmbed.blankUrl': {
       'en': 'URL is blank',
     },
+    'widget.notUpdated': {
+      'en': 'Not updated yet',
+    },
     'settingsScreen.projects': {
       'en': 'Projects',
     },
