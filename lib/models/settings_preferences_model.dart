@@ -5,7 +5,7 @@ import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 
 class SettingsPreferences {
   static const String KEY = 'SettingsPreferences';
-  static const int VERSION = 4;
+  static const int VERSION = 5;
 
   List<ConnectionPreferences> connections = [];
   ConnectionPreferences currentConnection;
@@ -16,17 +16,22 @@ class SettingsPreferences {
   int notificationFrequencyInMinutes;
   Map<String, bool> hints;
   int version;
+  String sortByKey;
+  String sortByOrder;
 
-  SettingsPreferences(
-      {this.connections,
-      this.version,
-      this.currentConnection,
-      this.showHints,
-      this.sortBy,
-      this.lastNotificationTimestamp,
-      this.showNotifications,
-      this.hints,
-      this.notificationFrequencyInMinutes});
+  SettingsPreferences({
+    this.connections,
+    this.version,
+    this.currentConnection,
+    this.showHints,
+    this.sortBy,
+    this.lastNotificationTimestamp,
+    this.showNotifications,
+    this.hints,
+    this.notificationFrequencyInMinutes,
+    this.sortByKey,
+    this.sortByOrder,
+  });
 
   factory SettingsPreferences.fromJson(Map<String, dynamic> json) => SettingsPreferences(
         connections:
@@ -43,6 +48,8 @@ class SettingsPreferences {
         currentConnection:
             json['currentConnection'] != null ? ConnectionPreferences.fromJson(json['currentConnection']) : null,
         hints: ((json['hints']) as Map<String, dynamic>).map((key, value) => MapEntry(key.toString(), value)),
+        sortByKey: json['sortByKey'],
+        sortByOrder: json['sortByOrder'],
       );
 
   Map<String, dynamic> toJson() {
@@ -55,12 +62,14 @@ class SettingsPreferences {
       'notificationFrequencyInMinutes': notificationFrequencyInMinutes,
       'sortBy': sortBy,
       'currentConnection': currentConnection != null ? currentConnection.toJson() : null,
-      'hints': hints
+      'hints': hints,
+      'sortByKey': sortByKey,
+      'sortByOrder': sortByOrder,
     };
   }
 
   static int readVersion(Map<String, dynamic> json) {
-    return  json['version'];
+    return json['version'];
   }
 
   static Map<String, bool> createHints() {

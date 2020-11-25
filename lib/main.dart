@@ -1,11 +1,12 @@
 import 'package:cogboardmobileapp/providers/filter_provider.dart';
 import 'package:cogboardmobileapp/screens/add_connection_screen.dart';
+import 'package:cogboardmobileapp/screens/settings_general_screen.dart';
+import 'package:cogboardmobileapp/screens/settings_projects_screen.dart';
 import 'package:cogboardmobileapp/translations/app_localizations_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'providers/config_provider.dart';
 import 'providers/dashboards_provider.dart';
 import 'providers/settings_provider.dart';
@@ -67,7 +68,11 @@ class CogboardApp extends StatelessWidget {
           DashboardsScreen.routeName: (ctx) => DashboardsScreen(),
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
           DashboardItemScreen.routeName: (ctx) => DashboardItemScreen(),
-          AddConnectionScreen.routeName: (ctx) => AddConnectionScreen(),
+          AddConnectionScreen.routeName: (ctx) => AddConnectionScreen(
+                editMode: false,
+              ),
+          SettingsProjectsScreen.routeName: (ctx) => SettingsProjectsScreen(),
+          SettingsGeneralScreen.routeName: (ctx) => SettingsGeneralScreen(),
         },
         localizationsDelegates: [
           const AppLocalizationsDelegate(),

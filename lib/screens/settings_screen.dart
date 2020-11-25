@@ -1,7 +1,5 @@
-import 'package:cogboardmobileapp/screens/settings_hints.dart';
-import 'package:cogboardmobileapp/screens/settings_notifications.dart';
-import 'package:cogboardmobileapp/screens/settings_project_list.dart';
-import 'package:cogboardmobileapp/screens/settings_sort_by.dart';
+import 'package:cogboardmobileapp/screens/settings_general_screen.dart';
+import 'package:cogboardmobileapp/screens/settings_projects_screen.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,34 +13,27 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).getTranslation('settingsScreen.title')),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              SettingsProjectListScreen(),
-              Divider(
-                color: Colors.grey,
-                indent: 30,
-                endIndent: 30,
-              ),
-              SettingsWidgets(),
-              Divider(
-                color: Colors.grey,
-                indent: 30,
-                endIndent: 30,
-              ),
-              SettingsHints(),
-              Divider(
-                color: Colors.grey,
-                indent: 30,
-                endIndent: 30,
-              ),
-              SettingsNotifications(),
-            ],
-          ),
-        ),
-      ),
       backgroundColor: Theme.of(context).colorScheme.background,
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            title: Text(
+              AppLocalizations.of(context).getTranslation('settingsScreen.projects'),
+            ),
+            onTap: () => Navigator.of(context).pushNamed(SettingsProjectsScreen.routeName),
+          ),
+          ListTile(
+            title: Text(
+              AppLocalizations.of(context).getTranslation('settingsScreen.general'),
+            ),
+            onTap: () => Navigator.of(context).pushNamed(SettingsGeneralScreen.routeName),
+          ),
+          Divider(
+            color: Theme.of(context).colorScheme.surface,
+            thickness: 5,
+          ),
+        ],
+      ),
     );
   }
 }

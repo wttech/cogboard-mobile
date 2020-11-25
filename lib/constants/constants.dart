@@ -119,6 +119,17 @@ class WidgetSortTypes {
   static const String STATUS_ASCENDING = "STATUS_ASCENDING";
 }
 
+class WidgetSortByKeys {
+  static const String NONE = 'NONE';
+  static const String NAME = 'NAME';
+  static const String STATUS = 'STATUS';
+}
+
+class WidgetSortByOrder {
+  static const String ASC = '_ASCENDING';
+  static const String DESC = '_DESCENDING';
+}
+
 class Hints {
   static const String REFRESH_FETCHING_CONFIG = "REFRESH_FETCHING_CONFIG";
   static const String SWIPE_BOARDS = "SWIPE_BOARDS";

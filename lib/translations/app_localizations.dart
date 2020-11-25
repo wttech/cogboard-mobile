@@ -202,6 +202,69 @@ class AppLocalizations {
     'widget.notUpdated': {
       'en': 'Not updated yet',
     },
+    'settingsScreen.projects': {
+      'en': 'Projects',
+    },
+    'settingsScreen.general': {
+      'en': 'General',
+    },
+    'settingsProjectsScreen.title': {
+      'en': 'Projects',
+    },
+    'settingsProjectsScreen.alert.title': {
+      'en': 'Are you sure?',
+    },
+    'settingsProjectsScreen.alert.confirm': {
+      'en': 'YES',
+    },
+    'settingsProjectsScreen.alert.decline': {
+      'en': 'NO',
+    },
+    'settingsGeneralScreen.title': {
+      'en': 'General',
+    },
+    'settingsGeneralScreen.widgetSorting': {
+      'en': 'Widgets Sorting',
+    },
+    'settingsGeneralScreen.notifications': {
+      'en': 'Notifications',
+    },
+    'settingsGeneralScreen.notificationFrequency': {
+      'en': 'Notification Frequency',
+    },
+    'settingsGeneralScreen.hints': {
+      'en': 'Hints',
+    },
+    'settingsGeneralScreen.alert.confirm': {
+      'en': 'OK',
+    },
+    'settingsSortByWidget.sortBy': {
+      'en': 'Sort By',
+    },
+    'settingsSortByWidget.none': {
+      'en': 'None',
+    },
+    'settingsSortByWidget.name': {
+      'en': 'Name',
+    },
+    'settingsSortByWidget.status': {
+      'en': 'Status',
+    },
+    'settingsSortByWidget.order': {
+      'en': 'Order',
+    },
+    'settingsSortByWidget.asc': {
+      'en': 'Ascending',
+    },
+    'settingsSortByWidget.desc': {
+      'en': 'Descending',
+    },
+    'addConnectionScreen.title.edit': {
+      'en': 'Edit Connection',
+    },
+    'addConnectionScreen.save': {
+      'en': 'SAVE',
+    },
   };
 
   String getTranslation(String key) {

@@ -12,7 +12,10 @@ import 'package:provider/provider.dart';
 class AddConnectionScreen extends StatefulWidget {
   static const routeName = '/add-connection';
 
-  const AddConnectionScreen({Key key}) : super(key: key);
+  final bool editMode;
+  final ConnectionPreferences connection;
+
+  const AddConnectionScreen({Key key, @required this.editMode, this.connection}) : super(key: key);
 
   @override
   _AddConnectionScreenState createState() => _AddConnectionScreenState();
@@ -38,9 +41,19 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
       listen: false,
     );
 
+    if (widget.editMode) {
+      urlController.text = widget.connection.connectionUrl;
+      nameController.text = widget.connection.connectionName;
+    }
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).getTranslation('addConnectionScreen.title')),
+        title: widget.editMode
+            ? Text(
+                AppLocalizations.of(context).getTranslation('addConnectionScreen.title.edit'),
+              )
+            : Text(
+                AppLocalizations.of(context).getTranslation('addConnectionScreen.title'),
+              ),
         backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: Form(
@@ -59,6 +72,22 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                     child: TextFormField(
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context).getTranslation('addConnectionScreen.name'),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                       ),
                       controller: nameController,
                       validator: (value) {
@@ -79,14 +108,29 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                     child: TextFormField(
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context).getTranslation('addConnectionScreen.url'),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                       ),
                       controller: urlController,
                       validator: (value) {
                         if (value.isEmpty) {
                           return AppLocalizations.of(context).getTranslation('addConnectionScreen.url.emptyError');
                         }
+
                         if (settingsProvider.connections
-                            .where((element) => element.connectionUrl == value)
+                            .where((element) =>
+                                element.connectionUrl == value &&
+                                element.connectionName != widget.connection.connectionName)
                             .isNotEmpty) {
                           return AppLocalizations.of(context).getTranslation('addConnectionScreen.url.duplicateError');
                         }
@@ -102,14 +146,17 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                   ),
                   FlatButton(
                     color: Theme.of(context).colorScheme.primary,
-                    onPressed: () => onAddConnectionPressed(context),
+                    onPressed: () =>
+                        widget.editMode ? onSaveConnectionPressed(context) : onAddConnectionPressed(context),
                     shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(STANDARD_BORDER_RADIOUS),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Text(
-                        AppLocalizations.of(context).getTranslation('addConnectionScreen.addConnection'),
+                        widget.editMode
+                            ? AppLocalizations.of(context).getTranslation('addConnectionScreen.save')
+                            : AppLocalizations.of(context).getTranslation('addConnectionScreen.addConnection'),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
@@ -144,13 +191,42 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
     }
   }
 
-  Future<void> onAddConnectionPressed(BuildContext context) async {
+  Future<void> onSaveConnectionPressed(BuildContext context) async {
     bool isValid = _form.currentState.validate();
     if (!isValid) {
       return;
     }
+
     await checkUrlValidity();
     isValid = _form.currentState.validate();
+    if (!isValid) {
+      isUrlValid = true;
+      return;
+    }
+
+    final settingsProvider = Provider.of<SettingsProvider>(
+      context,
+      listen: false,
+    );
+    int connectionIdx = settingsProvider.connections.indexOf(widget.connection);
+    ConnectionPreferences connection = new ConnectionPreferences(
+      connectionUrl: urlController.text,
+      connectionName: nameController.text,
+      quarantineWidgets: widget.connection.quarantineWidgets,
+      favouriteWidgets: widget.connection.favouriteWidgets,
+    );
+    await settingsProvider.replaceConnection(connection, connectionIdx);
+    Navigator.of(context).pop();
+  }
+
+  Future<void> onAddConnectionPressed(BuildContext context) async {
+    // bool isValid = _form.currentState.validate();
+    bool isValid = true;
+    if (!isValid) {
+      return;
+    }
+    // await checkUrlValidity();
+    // isValid = _form.currentState.validate();
     if (!isValid) {
       isUrlValid = true;
       return;
