@@ -104,6 +104,9 @@ class WidgetsListScreen extends StatelessWidget {
 
   List<DashboardWidget> getWidgetsList(
       ConfigProvider configProvider, DashboardType dashboardType, FilterProvider filterProvider) {
+    if(configProvider.currentConnection == null) {
+      return [];
+    }
     switch (dashboardType) {
       case DashboardType.Home:
         return filterProvider.getFilteredWidgetList(configProvider.getBoardWidgets(board));

@@ -70,9 +70,10 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
     Future.delayed(const Duration(milliseconds: 0), () {
       showHintDialogs();
     });
-    return Scaffold(
+    ConfigProvider configProvider =  Provider.of<ConfigProvider>(context, listen: false);
+    return configProvider.currentConnection == null ? Container() : Scaffold(
       body: FutureBuilder(
-        future: Provider.of<ConfigProvider>(context, listen: false).fetchConfig(),
+        future: configProvider.fetchConfig(),
         builder: (ctx, dataSnapshot) {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             return ScreenWithAppBar(body: WidgetListLoadingScreen());

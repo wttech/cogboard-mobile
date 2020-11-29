@@ -105,13 +105,26 @@ class SettingsProvider with ChangeNotifier {
   }
 
   Future<void> removeConnection(ConnectionPreferences connection) async {
+
+    if(connection.connectionName == currentConnection.connectionName) {
+      settingsPreferences.currentConnection = null;
+    }
     _connections.remove(connection);
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> replaceConnection(ConnectionPreferences newConnection, int idx) async {
+    Map<String, dynamic> settingsPreferencesJson = jsonDecode(await SharedPref.read(SettingsPreferences.KEY));
+    _settingsPreferences = SettingsPreferences.fromJson(settingsPreferencesJson);
+    ConnectionPreferences currentConnectionInConnections = connections
+        .firstWhere((element) => element.connectionName == currentConnection.connectionName);
+    int currentConnectionIndex = connections.indexOf(currentConnectionInConnections);
+    if(currentConnectionIndex == idx) {
+      settingsPreferences.currentConnection = newConnection;
+    }
     _connections[idx] = newConnection;
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
     notifyListeners();
   }
 

@@ -94,6 +94,11 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                         if (value.isEmpty) {
                           return AppLocalizations.of(context).getTranslation('addConnectionScreen.name.emptyError');
                         }
+                        if(widget.editMode) {
+                          if(value == widget.connection.connectionName) {
+                            return null;
+                          }
+                        }
                         if (settingsProvider.connections
                             .where((element) => element.connectionName == value)
                             .isNotEmpty) {
@@ -126,13 +131,25 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                         if (value.isEmpty) {
                           return AppLocalizations.of(context).getTranslation('addConnectionScreen.url.emptyError');
                         }
-
-                        if (settingsProvider.connections
-                            .where((element) =>
-                                element.connectionUrl == value &&
-                                element.connectionName != widget.connection.connectionName)
-                            .isNotEmpty) {
-                          return AppLocalizations.of(context).getTranslation('addConnectionScreen.url.duplicateError');
+                        if (widget.editMode) {
+                          if(value == widget.connection.connectionName) {
+                            return null;
+                          }
+                          if (settingsProvider.connections
+                              .where((element) =>
+                                  element.connectionUrl == value &&
+                                  element.connectionName != widget.connection.connectionName)
+                              .isNotEmpty) {
+                            return AppLocalizations.of(context)
+                                .getTranslation('addConnectionScreen.url.duplicateError');
+                          }
+                        } else {
+                          if (settingsProvider.connections
+                              .where((element) => element.connectionUrl == value)
+                              .isNotEmpty) {
+                            return AppLocalizations.of(context)
+                                .getTranslation('addConnectionScreen.url.duplicateError');
+                          }
                         }
                         if (!isUrlValid) {
                           return AppLocalizations.of(context).getTranslation('addConnectionScreen.url.validationError');
@@ -174,7 +191,11 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
 
   Future<void> checkUrlValidity() async {
     try {
-      final response = await http.get('http://${urlController.text}/api/config');
+      final response =
+          await http.get('http://${urlController.text}/api/config').timeout(Duration(seconds: 1), onTimeout: () {
+        isUrlValid = false;
+        return;
+      });
       if (response.statusCode != 200) {
         isUrlValid = false;
         return;
@@ -204,29 +225,30 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
       return;
     }
 
-    final settingsProvider = Provider.of<SettingsProvider>(
-      context,
-      listen: false,
-    );
-    int connectionIdx = settingsProvider.connections.indexOf(widget.connection);
-    ConnectionPreferences connection = new ConnectionPreferences(
-      connectionUrl: urlController.text,
-      connectionName: nameController.text,
-      quarantineWidgets: widget.connection.quarantineWidgets,
-      favouriteWidgets: widget.connection.favouriteWidgets,
-    );
-    await settingsProvider.replaceConnection(connection, connectionIdx);
+    if(urlController.text != widget.connection.connectionUrl || nameController.text != widget.connection.connectionName) {
+      final settingsProvider = Provider.of<SettingsProvider>(
+        context,
+        listen: false,
+      );
+      int connectionIdx = settingsProvider.connections.indexOf(widget.connection);
+      ConnectionPreferences connection = new ConnectionPreferences(
+        connectionUrl: urlController.text,
+        connectionName: nameController.text,
+        quarantineWidgets: widget.connection.quarantineWidgets,
+        favouriteWidgets: widget.connection.favouriteWidgets,
+      );
+      await settingsProvider.replaceConnection(connection, connectionIdx);
+    }
     Navigator.of(context).pop();
   }
 
   Future<void> onAddConnectionPressed(BuildContext context) async {
-    // bool isValid = _form.currentState.validate();
-    bool isValid = true;
+    bool isValid = _form.currentState.validate();
     if (!isValid) {
       return;
     }
-    // await checkUrlValidity();
-    // isValid = _form.currentState.validate();
+    await checkUrlValidity();
+    isValid = _form.currentState.validate();
     if (!isValid) {
       isUrlValid = true;
       return;
