@@ -1,7 +1,9 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/widgets/settings_sort_by_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class SettingsGeneralScreen extends StatefulWidget {
@@ -13,21 +15,19 @@ class SettingsGeneralScreen extends StatefulWidget {
 }
 
 class _SettingsGeneralScreenState extends State<SettingsGeneralScreen> {
-  final urlController = TextEditingController();
-  final nameController = TextEditingController();
+  final notificationFrequencyController = TextEditingController();
   bool isUrlValid = true;
 
   @override
   void dispose() {
-    urlController.dispose();
-    nameController.dispose();
+    notificationFrequencyController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final settingsProvider = Provider.of<SettingsProvider>(context);
-    urlController.text = settingsProvider.notificationsFrequency.toString();
+    notificationFrequencyController.text = settingsProvider.notificationsFrequency.toString();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -94,7 +94,7 @@ class _SettingsGeneralScreenState extends State<SettingsGeneralScreen> {
               Container(
                 alignment: Alignment.center,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Text(
                     AppLocalizations.of(context).getTranslation('settingsGeneralScreen.notificationFrequency'),
                     textAlign: TextAlign.center,
@@ -104,6 +104,31 @@ class _SettingsGeneralScreenState extends State<SettingsGeneralScreen> {
                   ),
                 ),
                 height: 70,
+              ),
+              SizedBox(
+                width: 100,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                  child: TextField(
+                    textAlign: TextAlign.end,
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (input) {
+                      if (input.isEmpty) {
+                        settingsProvider.setNotificationsFrequency(1);
+                      }
+                      int frequency = int.parse(input);
+                      if (frequency > 9999) {
+                        settingsProvider.setNotificationsFrequency(9999);
+                      } else {
+                        settingsProvider.setNotificationsFrequency(frequency);
+                      }
+                    },
+                    controller: notificationFrequencyController,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ], // Only
+                  ),
+                ),
               ),
             ],
           ),

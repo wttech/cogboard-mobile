@@ -63,7 +63,7 @@ class ConfigProvider with ChangeNotifier {
   }
 
   void everyMinuteCheckTimer(Timer timer) async {
-    if (currentConnectionPreferences != null) {
+    if (currentConnection != null) {
       await checkIfQuarantineExpirationDateHasExceeded();
     }
   }
@@ -71,7 +71,7 @@ class ConfigProvider with ChangeNotifier {
   Future<void> checkIfQuarantineExpirationDateHasExceeded() async {
     DateTime currentTime = new DateTime.now();
     bool someWidgetsWereRemoved = false;
-    currentConnectionPreferences.quarantineWidgets.removeWhere((widget) {
+    currentConnection.quarantineWidgets.removeWhere((widget) {
       bool shouldRemoveWidget = widget.expirationDate != null ? widget.expirationDate.day < currentTime.day : false;
       if (shouldRemoveWidget) {
         someWidgetsWereRemoved = true;
@@ -95,7 +95,7 @@ class ConfigProvider with ChangeNotifier {
 
   String get currentUrl => _settingsPreferences.currentConnection.connectionUrl;
 
-  ConnectionPreferences get currentConnectionPreferences => _settingsPreferences.currentConnection;
+  ConnectionPreferences get currentConnection => _settingsPreferences.currentConnection;
 
   int get snackBarsToRemove => _snackBarsToRemove;
 
@@ -118,11 +118,11 @@ class ConfigProvider with ChangeNotifier {
   }
 
   List<DashboardWidget> get favouriteWidgets {
-    return getSortedWidgetsList(currentConnectionPreferences.favouriteWidgets);
+    return getSortedWidgetsList(currentConnection.favouriteWidgets);
   }
 
   List<DashboardWidget> get quarantineWidgets {
-    return getSortedWidgetsList(currentConnectionPreferences.quarantineWidgets);
+    return getSortedWidgetsList(currentConnection.quarantineWidgets);
   }
 
   bool isWidgetInQuarantine(DashboardWidget widget) {
@@ -257,13 +257,13 @@ class ConfigProvider with ChangeNotifier {
   }
 
   Future<void> addFavouriteWidget(DashboardWidget widget) async {
-    currentConnectionPreferences.favouriteWidgets.add(widget);
+    currentConnection.favouriteWidgets.add(widget);
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> addQuarantineWidget(DashboardWidget widget) async {
-    currentConnectionPreferences.quarantineWidgets.add(widget);
+    currentConnection.quarantineWidgets.add(widget);
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
     notifyListeners();
   }
@@ -274,19 +274,19 @@ class ConfigProvider with ChangeNotifier {
   }
 
   Future<void> removeFavouriteWidget(DashboardWidget widget) async {
-    currentConnectionPreferences.favouriteWidgets.removeWhere((favouriteWidget) => favouriteWidget.id == widget.id);
+    currentConnection.favouriteWidgets.removeWhere((favouriteWidget) => favouriteWidget.id == widget.id);
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> removeQuarantineWidget(DashboardWidget widget) async {
-    currentConnectionPreferences.quarantineWidgets.removeWhere((quarantineWidget) => quarantineWidget.id == widget.id);
+    currentConnection.quarantineWidgets.removeWhere((quarantineWidget) => quarantineWidget.id == widget.id);
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
     notifyListeners();
   }
 
   Future<void> removeQuarantineWidgets() async {
-    currentConnectionPreferences.quarantineWidgets = [];
+    currentConnection.quarantineWidgets = [];
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
     notifyListeners();
   }
