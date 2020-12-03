@@ -1,5 +1,5 @@
 class WidgetConfig {
-  int columns;
+  dynamic columns;
   dynamic rows;
   bool goNewLine;
 
