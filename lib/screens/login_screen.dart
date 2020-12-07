@@ -54,9 +54,10 @@ class LoginScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             FlatButton(
-                              onPressed: () => settingsProvider.currentConnection != null
-                                  ? Navigator.of(context).pushReplacementNamed(DashboardsScreen.routeName)
+                              onPressed: settingsProvider.currentConnection != null
+                                  ? () => Navigator.of(context).pushReplacementNamed(DashboardsScreen.routeName)
                                   : null,
+                              disabledColor: Color(0xFF505050),
                               child: Padding(
                                 padding: const EdgeInsets.all(15),
                                 child: Text(
