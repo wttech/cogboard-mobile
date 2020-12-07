@@ -111,6 +111,17 @@ class WidgetTypes {
   static const String RANDOM_PICKER_WIDGET = "RandomPickerWidget";
 }
 
+class WidgetStatusCodes {
+  static const String ERROR = "ERROR";
+  static const String ERROR_CONNECTION = "ERROR_CONNECTION";
+  static const String ERROR_CONFIGURATION = "ERROR_CONFIGURATION";
+  static const String IN_PROGRESS = "IN_PROGRESS";
+  static const String OK = "OK";
+  static const String UNKNOWN = "UNKNOWN";
+  static const String UNSTABLE = "UNSTABLE";
+  static const String FAIL = "FAIL";
+}
+
 class WidgetSortTypes {
   static const String NONE = "NONE";
   static const String NAME_DESCENDING = "NAME_DESCENDING";

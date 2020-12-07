@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:cogboardmobileapp/widgets/widgets/details_container.dart';
@@ -12,6 +13,10 @@ class JenkinsJobWidget extends StatelessWidget {
   JenkinsJobWidget({
     @required this.widget,
   });
+
+  bool get isInProgress {
+    return widget.content['widgetStatus'] == WidgetStatusCodes.IN_PROGRESS;
+  }
 
   String get getTimestamp {
     if (widget.content["timestamp"] != null) {
@@ -31,13 +36,33 @@ class JenkinsJobWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DetailsContainer(
-      children: [
-        DetailsHeader(header: AppLocalizations.of(context).getTranslation('jenkinsJob.details')),
-        if (getTimestamp != null) WidgetDetailsItem(detail: getTimestamp),
-        if (getDuration != null) WidgetDetailsItem(detail: getDuration),
-        if (getBranch != null) WidgetDetailsItem(detail: getBranch),
-      ],
-    );
+    return isInProgress
+        ? DetailsContainer(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.transparent,
+                        strokeWidth: 5.0,
+                      ),
+                      height: 75,
+                      width: 75,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
+        : DetailsContainer(
+            children: [
+              DetailsHeader(header: AppLocalizations.of(context).getTranslation('jenkinsJob.details')),
+              if (getTimestamp != null) WidgetDetailsItem(detail: getTimestamp),
+              if (getDuration != null) WidgetDetailsItem(detail: getDuration),
+              if (getBranch != null) WidgetDetailsItem(detail: getBranch),
+            ],
+          );
   }
 }
