@@ -11,10 +11,6 @@ import 'package:provider/provider.dart';
 class LoginScreen extends StatelessWidget {
   static const routeName = '/login';
 
-  bool isConnection(SettingsProvider settingsProvider){
-    return settingsProvider.currentConnection != null;
-  }
-
   @override
   Widget build(BuildContext context) {
     String newlyAddedConnection = ModalRoute.of(context).settings.arguments;
@@ -58,7 +54,7 @@ class LoginScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             FlatButton(
-                              onPressed: isConnection(settingsProvider)
+                              onPressed: settingsProvider.currentConnection != null
                                   ? () => Navigator.of(context).pushReplacementNamed(DashboardsScreen.routeName)
                                   : null,
                               disabledColor: Color(0xFF505050),
