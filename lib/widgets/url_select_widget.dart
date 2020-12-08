@@ -17,23 +17,32 @@ class UrlSelect extends StatelessWidget {
     List<ConnectionPreferences> connections = settingsProvider.connections;
     if (connections != null && connections.length > 0) {
       return Container(
-        width: 150,
+        width: 250,
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Theme.of(context).colorScheme.primary,
+            color: Colors.black54,
           ),
           borderRadius: BorderRadius.all(
             Radius.circular(STANDARD_BORDER_RADIOUS),
           ),
         ),
         child: new DropdownButton<int>(
+          dropdownColor: Colors.white,
           value: getDropdownButtonIndex(newlyAddedConnection, settingsProvider),
+          icon: Icon(Icons.arrow_downward),
+          iconSize: 20,
+          iconEnabledColor: Colors.cyan,
           underline: Container(),
           isExpanded: true,
           items: connections.map((ConnectionPreferences connection) {
             return new DropdownMenuItem(
-              child: new Text(connection.connectionName),
+              child: new Text(
+                connection.connectionName,
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
               value: connections.indexOf(connection),
             );
           }).toList(),
@@ -46,7 +55,7 @@ class UrlSelect extends StatelessWidget {
           AppLocalizations.of(context).getTranslation('urlSelect.noConnections'),
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 18,
           ),
         ),

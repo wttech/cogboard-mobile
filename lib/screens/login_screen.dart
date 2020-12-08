@@ -30,7 +30,9 @@ class LoginScreen extends StatelessWidget {
                     color: Colors.white,
                     width: double.infinity,
                     child: FittedBox(
-                      child: Image.asset('assets/images/cogboard_icon.png'),
+                      child: Image.asset(
+                        'assets/images/cogboard_icon.png',
+                      ),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -38,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    color: Theme.of(context).colorScheme.background,
+                    color: Colors.white,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -57,17 +59,20 @@ class LoginScreen extends StatelessWidget {
                               onPressed: settingsProvider.currentConnection != null
                                   ? () => Navigator.of(context).pushReplacementNamed(DashboardsScreen.routeName)
                                   : null,
-                              disabledColor: Color(0xFF505050),
+                              disabledColor: Colors.grey,
                               child: Padding(
                                 padding: const EdgeInsets.all(15),
                                 child: Text(
                                   AppLocalizations.of(context).getTranslation('loginScreen.connect'),
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onPrimary,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ),
                               shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: Colors.black12,
+                                ),
                                 borderRadius: new BorderRadius.circular(STANDARD_BORDER_RADIOUS),
                               ),
                               color: Theme.of(context).colorScheme.primary,
@@ -93,6 +98,9 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                               shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: Colors.black12,
+                                ),
                                 borderRadius: new BorderRadius.circular(STANDARD_BORDER_RADIOUS),
                               ),
                             ),
