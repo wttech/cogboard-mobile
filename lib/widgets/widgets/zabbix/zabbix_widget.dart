@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/models/zabbix_history_item.dart';
 import 'package:flutter/material.dart';
 
 class ZabbixWidget extends StatefulWidget {
@@ -56,6 +57,23 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
     }
   }
 
+  List get getHistory {
+    Map historyMap = widget.widget.content['history'];
+    return historyMap.entries
+        .map((e) => ZabbixHistoryItem(
+              timestamp: e.key,
+              value: e.value,
+            ))
+        .toList();
+  }
+
+  bool get displayUpArrow {
+    List historyData = getHistory;
+    int current = int.parse(historyData[historyData.length - 1].value);
+    int prev = int.parse(historyData[historyData.length - 2].value);
+    return current > prev;
+  }
+
   String get getTitle {
     return ZabbixMetrics[widget.widget.selectedZabbixMetric];
   }
@@ -68,6 +86,10 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
     return checkMetricHasProgress() && (!checkMetricHasMaxValue() || widget.widget.maxValue > 0)
         ? 'progress'
         : 'maxValue';
+  }
+
+  bool get isSystemUptime {
+    return widget.widget.content['name'] == "System uptime";
   }
 
   String get getLastValue {
@@ -115,8 +137,32 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
     });
   }
 
+  final Widget arrowUp = Icon(
+    Icons.arrow_upward,
+    size: 28,
+    color: Colors.green,
+  );
+
+  final Widget arrowDown = Icon(
+    Icons.arrow_downward,
+    size: 28,
+    color: Colors.red,
+  );
+
+  Widget noProgressContent() {
+    return Container(
+      child: Text(
+        getNoProgressContent,
+        style: TextStyle(
+          fontSize: 32,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(getHistory);
     if (previousValue != int.parse(getLastValue)) updatePrevious();
     return getProgressType == 'progress'
         ? Column(
@@ -192,15 +238,18 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
           )
         : Column(
             children: [
-              Container(
-                child: Text(
-                  getNoProgressContent,
-                  style: TextStyle(
-                    fontSize: 32,
-                  ),
-                ),
-                margin: const EdgeInsets.fromLTRB(0, 0, 0, 30.0),
-              ),
+              isSystemUptime
+                  ? noProgressContent()
+                  : Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 30.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          noProgressContent(),
+                          displayUpArrow ? arrowUp : arrowDown,
+                        ],
+                      ),
+                    ),
               Container(
                 child: Text(
                   getTitle,
