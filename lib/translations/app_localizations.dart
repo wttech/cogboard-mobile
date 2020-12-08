@@ -181,6 +181,9 @@ class AppLocalizations {
     'sonarQube.details': {
       'en': 'Details',
     },
+    'widgetStatus.errorConfiguration': {
+      'en': 'Configuration Error',
+    },
     'worldClock.loading': {
       'en': 'Loading...',
     },
