@@ -70,7 +70,6 @@ class WidgetDetails extends StatelessWidget {
     switch (widget.type) {
       case WidgetTypes.BAMBOO_PLAN_WIDGET:
       case WidgetTypes.BAMBOO_DEPLOYMENT_WIDGET:
-      case WidgetTypes.SONAR_QUBE_WIDGET:
       case WidgetTypes.AEM_HEALTHCHECK_WIDGET:
       case WidgetTypes.AEM_BUNDLE_INFO_WIDGET:
       case WidgetTypes.JIRA_BUCKETS_WIDGET:
@@ -78,7 +77,10 @@ class WidgetDetails extends StatelessWidget {
       case WidgetTypes.TODO_LIST_WIDGET:
         return true;
       case WidgetTypes.JENKINS_JOB_WIDGET:
-        return widget.content['widgetStatus'] != WidgetStatusCodes.IN_PROGRESS;
+        return widget.content['widgetStatus'] != WidgetStatusCodes.IN_PROGRESS &&
+            widget.content['widgetStatus'] != WidgetStatusCodes.ERROR_CONFIGURATION;
+      case WidgetTypes.SONAR_QUBE_WIDGET:
+        return widget.content['widgetStatus'] != WidgetStatusCodes.ERROR_CONFIGURATION;
       case WidgetTypes.CHECKBOX_WIDGET:
       case WidgetTypes.WORLD_CLOCK_WIDGET:
       case WidgetTypes.ZABBIX_WIDGET:
