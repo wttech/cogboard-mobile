@@ -305,14 +305,16 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
         int currentWidgetIndex = configProvider
             .getBoardWidgets(configProvider.currentBoard)
             .indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
-        return configProvider.getBoardWidgets(configProvider.currentBoard)[currentWidgetIndex];
+        return currentWidgetIndex >= 0
+            ? configProvider.getBoardWidgets(configProvider.currentBoard)[currentWidgetIndex]
+            : configProvider.getBoardWidgets(configProvider.currentBoard)[0];
       case DashboardType.Favorites:
         int currentWidgetIndex =
-        configProvider.favouriteWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
+            configProvider.favouriteWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
         return configProvider.favouriteWidgets[currentWidgetIndex];
       case DashboardType.Quarantine:
         int currentWidgetIndex =
-        configProvider.quarantineWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
+            configProvider.quarantineWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
         return configProvider.quarantineWidgets[currentWidgetIndex];
       default:
         return null;
