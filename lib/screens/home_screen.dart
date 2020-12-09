@@ -37,14 +37,24 @@ class _HomeWidgetScreenState extends State<HomeWidgetScreen> {
   @override
   Widget build(BuildContext context) {
     final configProvider = Provider.of<ConfigProvider>(context, listen: false);
-    configProvider.setCurrentBoard(configProvider.boards[pageNumber]);
+    if(configProvider.currentBoard == null) {
+      configProvider.setCurrentBoard(configProvider.boards[pageNumber]);
+    } else {
+      int currentBoardIndex = configProvider.boards.indexWhere((element) => element.id == configProvider.currentBoard.id);
+      setState(() {
+        pageNumber = currentBoardIndex >= 0 ? currentBoardIndex: 0;
+      });
+    }
+    _controller = PageController(
+      initialPage: pageNumber,
+    );
     boardTitle = configProvider.boards[pageNumber].title;
     return ScreenWithAppBar(
       appBarTitle: boardTitle,
       body: PageView(
         controller: _controller,
         onPageChanged: (boardIndex) {
-          configProvider.setCurrentBoard(configProvider.boards[pageNumber]);
+          configProvider.setCurrentBoard(configProvider.boards[boardIndex]);
           setState(() {
             pageNumber = boardIndex;
           });
