@@ -66,7 +66,7 @@ class _SettingsGeneralScreenState extends State<SettingsGeneralScreen> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                   child: Text(
-                    AppLocalizations.of(context).getTranslation('settingsGeneralScreen.notifications'),
+                    AppLocalizations.of(context).getTranslation('settingsGeneralScreen.hints'),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -139,7 +139,7 @@ class _SettingsGeneralScreenState extends State<SettingsGeneralScreen> {
                 alignment: Alignment.center,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: Text(AppLocalizations.of(context).getTranslation('settingsGeneralScreen.hints'),
+                  child: Text(AppLocalizations.of(context).getTranslation('settingsGeneralScreen.notifications'),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
