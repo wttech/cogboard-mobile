@@ -30,6 +30,9 @@ class WidgetsListScreen extends StatelessWidget {
         Scaffold.of(context).removeCurrentSnackBar();
         configProvider.markSnackBarAsRemoved();
       }
+    });
+
+    Future.delayed(const Duration(milliseconds: 200), () {
       if (widgetsList.length > 0 &&
           configProvider.showHints &&
           configProvider.hints[Hints.SWIPE_TO_DELETE] &&
@@ -58,21 +61,40 @@ class WidgetsListScreen extends StatelessWidget {
                       itemCount: widgetsList.length,
                       itemBuilder: (ctx, index) {
                         return dashboardType == DashboardType.Home
-                            ? WidgetListItem(
-                                widget: widgetsList[index],
-                                widgetIndex: index,
-                                dashboardType: dashboardType,
-                                lastWidget: index == widgetsList.length - 1,
-                              )
-                            : DismissibleWidgetListItem(
-                                widget: widgetsList[index],
-                                widgetIndex: index,
-                                dashboardType: dashboardType,
-                                lastWidget: index == widgetsList.length - 1,
-                              );
+                            ? Padding(
+                              padding: getCardMargin(index, index == widgetsList.length - 1),
+                              child: WidgetListItem(
+                                  widget: widgetsList[index],
+                                  widgetIndex: index,
+                                  dashboardType: dashboardType,
+                                  lastWidget: index == widgetsList.length - 1,
+                                ),
+                            )
+                            : Padding(
+                              padding: getCardMargin(index, index == widgetsList.length - 1),
+                              child: DismissibleWidgetListItem(
+                                  widget: widgetsList[index],
+                                  widgetIndex: index,
+                                  dashboardType: dashboardType,
+                                  lastWidget: index == widgetsList.length - 1,
+                                ),
+                            );
                       }),
                 ),
     );
+  }
+
+  EdgeInsets getCardMargin(int widgetIndex, bool lastWidget) {
+    if(widgetIndex == 0) {
+      return EdgeInsets.fromLTRB(16, 0, 16, 8);
+    } else if(lastWidget) {
+      return EdgeInsets.fromLTRB(16, 8, 16, 86);
+    } else {
+      return EdgeInsets.symmetric(
+        vertical: 8,
+        horizontal: 16,
+      );
+    }
   }
 
   Future<void> showHintDialog(BuildContext context) async {
