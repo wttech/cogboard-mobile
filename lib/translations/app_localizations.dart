@@ -202,6 +202,9 @@ class AppLocalizations {
     'iframeEmbed.blankUrl': {
       'en': 'URL is blank',
     },
+    'zabbix.history': {
+      'en': 'HISTORICAL DATA',
+    },
     'widget.notUpdated': {
       'en': 'Not updated yet',
     },

@@ -3,7 +3,11 @@ import 'dart:math';
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/models/zabbix_history_item.dart';
+import 'package:cogboardmobileapp/models/zabbix_chart_item_model.dart';
+import 'package:cogboardmobileapp/widgets/widgets/zabbix/zabbix_chart.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ZabbixWidget extends StatefulWidget {
   final DashboardWidget widget;
@@ -82,6 +86,14 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
     return widget.widget.maxValue;
   }
 
+  int get rangeLowerBound {
+    return widget.widget.range[0];
+  }
+
+  int get rangeUpperBound {
+    return widget.widget.range[1];
+  }
+
   String get getProgressType {
     return checkMetricHasProgress() && (!checkMetricHasMaxValue() || widget.widget.maxValue > 0)
         ? 'progress'
@@ -131,6 +143,57 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
         : int.parse(getLastValue).toString();
   }
 
+  charts.Color getColorWhenRangeApplicable(int value) {
+    var val = calculatePercentageValue(value);
+    if (val < rangeLowerBound)
+      return charts.Color.fromHex(
+        code: '#019430',
+      );
+    else if (val >= rangeLowerBound && val < rangeUpperBound)
+      return charts.Color.fromHex(
+        code: '#ff9924',
+      );
+    else
+      return charts.Color.fromHex(
+        code: '#e1322f',
+      );
+  }
+
+  charts.Color getColorForValue(int value) {
+    return checkMetricHasProgress() || convertToGigabytes() != 0
+        ? getColorWhenRangeApplicable(value)
+        : charts.MaterialPalette.white;
+  }
+
+  List<charts.Series<ZabbixChartItemModel, String>> get getChartData {
+    List<ZabbixHistoryItem> historyData = getHistory.reversed.toList();
+    var format = DateFormat('d.M HH:mm:ss');
+    List chartData = historyData
+        .take(6)
+        .map((item) => ZabbixChartItemModel(
+              date: format.format(DateTime.fromMicrosecondsSinceEpoch(int.parse(item.timestamp) * 1000)),
+              value: convertToGigabytes() != 0 ? (int.parse(item.value) / pow(10, 9)).round() : int.parse(item.value),
+              color: getColorForValue(int.parse(item.value)),
+            ))
+        .toList();
+    return [
+      charts.Series<ZabbixChartItemModel, String>(
+        id: 'Zabbix',
+        domainFn: (ZabbixChartItemModel model, _) => model.date,
+        measureFn: (ZabbixChartItemModel model, _) => model.value,
+        colorFn: (ZabbixChartItemModel model, _) => model.color,
+        data: chartData,
+      ),
+      charts.Series<ZabbixChartItemModel, String>(
+        id: 'Zabbix',
+        domainFn: (ZabbixChartItemModel model, _) => model.date,
+        measureFn: (ZabbixChartItemModel model, _) => model.value,
+        colorFn: (ZabbixChartItemModel model, _) => charts.MaterialPalette.transparent,
+        data: chartData,
+      )
+    ];
+  }
+
   void updatePrevious() {
     setState(() {
       previousValue = int.parse(widget.widget.content['lastvalue']);
@@ -162,7 +225,6 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    print(getHistory);
     if (previousValue != int.parse(getLastValue)) updatePrevious();
     return getProgressType == 'progress'
         ? Column(
@@ -229,6 +291,18 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
                       alignment: Alignment.bottomCenter,
                       margin: const EdgeInsets.fromLTRB(0, 150.0, 0, 0),
                     ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(20, 180, 20, 0),
+                      child: SizedBox(
+                        height: 200,
+                        width: double.infinity,
+                        child: Container(
+                          child: ZabbixChart(
+                            seriesList: getChartData,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 margin: const EdgeInsets.fromLTRB(0, 50.0, 0, 0),
@@ -238,27 +312,49 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
           )
         : Column(
             children: [
-              isSystemUptime
-                  ? noProgressContent()
-                  : Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 30.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          noProgressContent(),
-                          displayUpArrow ? arrowUp : arrowDown,
-                        ],
+              Expanded(
+                child: Container(
+                  child: Column(
+                    children: [
+                      isSystemUptime
+                          ? noProgressContent()
+                          : Container(
+                              margin: const EdgeInsets.fromLTRB(0, 60.0, 0, 30.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  noProgressContent(),
+                                  displayUpArrow ? arrowUp : arrowDown,
+                                ],
+                              ),
+                            ),
+                      Container(
+                        child: Text(
+                          getTitle,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
-              Container(
-                child: Text(
-                  getTitle,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
                   ),
                 ),
               ),
+              if (!isSystemUptime)
+                Container(
+                  margin: const EdgeInsets.fromLTRB(10, 20, 10, 30),
+                  child: SizedBox(
+                    height: 200,
+                    width: double.infinity,
+                    child: Container(
+                      child: ZabbixChart(
+                        seriesList: getChartData,
+                      ),
+                    ),
+                  ),
+                ),
             ],
             mainAxisAlignment: MainAxisAlignment.center,
           );
