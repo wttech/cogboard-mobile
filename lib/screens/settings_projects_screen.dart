@@ -1,6 +1,7 @@
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:cogboardmobileapp/screens/add_connection_screen.dart';
+import 'package:cogboardmobileapp/screens/dashboards_screen.dart';
 import 'package:cogboardmobileapp/screens/login_screen.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -32,13 +33,40 @@ class SettingsProjectsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView(
-        children: settingsProvider.connections
-            .map(
-              (connection) => ListTile(
-                title: Text(connection.connectionName),
-                subtitle: Text(connection.connectionUrl),
-                trailing: IconButton(
+      body: ListView.separated(
+        itemCount: settingsProvider.connections.length,
+        itemBuilder: (context, idx) {
+          ConnectionPreferences connection = settingsProvider.connections[idx];
+          return ListTile(
+            title: settingsProvider.currentConnection.connectionName == connection.connectionName
+                ? Text(
+                    connection.connectionName,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  )
+                : Text(connection.connectionName),
+            subtitle: Text(connection.connectionUrl),
+            trailing: Wrap(
+              spacing: 12,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddConnectionScreen(
+                        editMode: true,
+                        connection: connection,
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
                   icon: Icon(
                     Icons.delete,
                     color: Colors.white,
@@ -46,18 +74,19 @@ class SettingsProjectsScreen extends StatelessWidget {
                   ),
                   onPressed: () => onDeletePressed(context, connection),
                 ),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddConnectionScreen(
-                      editMode: true,
-                      connection: connection,
-                    ),
-                  ),
-                ),
-              ),
-            )
-            .toList(),
+              ],
+            ),
+            onTap: () {
+              settingsProvider.setCurrentConnection(connection);
+              Navigator.of(context).pushReplacementNamed(DashboardsScreen.routeName);
+            },
+          );
+        },
+        separatorBuilder: (context, index) {
+          return Divider(
+            thickness: 2,
+          );
+        },
       ),
     );
   }
