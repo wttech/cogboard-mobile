@@ -205,6 +205,9 @@ class AppLocalizations {
     'zabbix.history': {
       'en': 'HISTORICAL DATA',
     },
+    'zabbix.date': {
+      'en': 'Date',
+    },
     'widget.notUpdated': {
       'en': 'Not updated yet',
     },

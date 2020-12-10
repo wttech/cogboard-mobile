@@ -143,6 +143,15 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
         : int.parse(getLastValue).toString();
   }
 
+  String get xAxisUnit {
+    if (checkMetricHasMaxValue()) {
+      return '[GB]';
+    } else if (!checkMetricHasProgress()) {
+      return 'No.';
+    }
+    return '[%]';
+  }
+
   charts.Color getColorWhenRangeApplicable(int value) {
     var val = calculatePercentageValue(value);
     if (val < rangeLowerBound)
@@ -167,7 +176,15 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
 
   List<charts.Series<ZabbixChartItemModel, String>> get getChartData {
     List<ZabbixHistoryItem> historyData = getHistory.reversed.toList();
-    var format = DateFormat('d.M HH:mm:ss');
+    String firstDate = DateFormat('yMd').format(
+        DateTime.fromMicrosecondsSinceEpoch(int.parse(historyData.take(1).map((item) => item.timestamp).first) * 1000));
+    var format = historyData
+            .take(6)
+            .map((item) =>
+                DateFormat('yMd').format(DateTime.fromMicrosecondsSinceEpoch(int.parse(item.timestamp) * 1000)))
+            .every((date) => date == firstDate)
+        ? DateFormat('HH:mm:ss')
+        : DateFormat('d.M HH:mm:ss');
     List chartData = historyData
         .take(6)
         .map((item) => ZabbixChartItemModel(
@@ -292,13 +309,14 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
                       margin: const EdgeInsets.fromLTRB(0, 150.0, 0, 0),
                     ),
                     Container(
-                      margin: const EdgeInsets.fromLTRB(20, 180, 20, 0),
+                      margin: const EdgeInsets.fromLTRB(0, 205, 10, 0),
                       child: SizedBox(
                         height: 200,
                         width: double.infinity,
                         child: Container(
                           child: ZabbixChart(
                             seriesList: getChartData,
+                            xAxisUnit: xAxisUnit,
                           ),
                         ),
                       ),
@@ -344,13 +362,14 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
               ),
               if (!isSystemUptime)
                 Container(
-                  margin: const EdgeInsets.fromLTRB(10, 20, 10, 30),
+                  margin: const EdgeInsets.fromLTRB(0, 20, 10, 10),
                   child: SizedBox(
                     height: 200,
                     width: double.infinity,
                     child: Container(
                       child: ZabbixChart(
                         seriesList: getChartData,
+                        xAxisUnit: xAxisUnit,
                       ),
                     ),
                   ),
