@@ -16,8 +16,9 @@ import 'package:provider/provider.dart';
 class WidgetsListScreen extends StatelessWidget {
   final DashboardType dashboardType;
   final Board board;
+  final Function refresh;
 
-  WidgetsListScreen({@required this.dashboardType, this.board});
+  WidgetsListScreen({@required this.dashboardType, this.board, this.refresh});
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +46,10 @@ class WidgetsListScreen extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: configProvider.fetchConfig,
       child: configProvider.webSocketConnectionErrorPresent
-          ? ScreenWithAppBar(
-              appBarTitle: AppLocalizations.of(context).getTranslation('widgetListScreen.errorTitle'),
-              body: WidgetListErrorScreen(
+          ? Center(
+              child: WidgetListErrorScreen(
                 message: AppLocalizations.of(context).getTranslation('widgetListScreen.errorBody'),
-                refresh: configProvider.fetchConfig,
+                refresh: refresh,
               ),
             )
           : widgetsList.length == 0
@@ -62,32 +62,32 @@ class WidgetsListScreen extends StatelessWidget {
                       itemBuilder: (ctx, index) {
                         return dashboardType == DashboardType.Home
                             ? Padding(
-                              padding: getCardMargin(index, index == widgetsList.length - 1),
-                              child: WidgetListItem(
+                                padding: getCardMargin(index, index == widgetsList.length - 1),
+                                child: WidgetListItem(
                                   widget: widgetsList[index],
                                   widgetIndex: index,
                                   dashboardType: dashboardType,
                                   lastWidget: index == widgetsList.length - 1,
                                 ),
-                            )
+                              )
                             : Padding(
-                              padding: getCardMargin(index, index == widgetsList.length - 1),
-                              child: DismissibleWidgetListItem(
+                                padding: getCardMargin(index, index == widgetsList.length - 1),
+                                child: DismissibleWidgetListItem(
                                   widget: widgetsList[index],
                                   widgetIndex: index,
                                   dashboardType: dashboardType,
                                   lastWidget: index == widgetsList.length - 1,
                                 ),
-                            );
+                              );
                       }),
                 ),
     );
   }
 
   EdgeInsets getCardMargin(int widgetIndex, bool lastWidget) {
-    if(widgetIndex == 0) {
+    if (widgetIndex == 0) {
       return EdgeInsets.fromLTRB(16, 0, 16, 8);
-    } else if(lastWidget) {
+    } else if (lastWidget) {
       return EdgeInsets.fromLTRB(16, 8, 16, 86);
     } else {
       return EdgeInsets.symmetric(
@@ -126,7 +126,7 @@ class WidgetsListScreen extends StatelessWidget {
 
   List<DashboardWidget> getWidgetsList(
       ConfigProvider configProvider, DashboardType dashboardType, FilterProvider filterProvider) {
-    if(configProvider.currentConnection == null) {
+    if (configProvider.currentConnection == null) {
       return [];
     }
     switch (dashboardType) {
