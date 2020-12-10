@@ -113,13 +113,16 @@ class AppLocalizations {
       'en': 'Ok',
     },
     'widgetScreen.alertDialog.message': {
-      'en': 'Do you want this widget to be removed form quarantine at expiration date',
+      'en': 'How do you want to add a widget to quarantine(With or without expiration date)?',
     },
-    'widgetScreen.alertDialog.confirm': {
-      'en': 'YES',
+    'widgetScreen.alertDialog.cancel': {
+      'en': 'CANCEL',
     },
-    'widgetScreen.alertDialog.decline': {
-      'en': 'NO',
+    'widgetScreen.alertDialog.withExpirationDate': {
+      'en': 'WITH',
+    },
+    'widgetScreen.alertDialog.withoutExpirationDate': {
+      'en': 'WITHOUT',
     },
     'widgetListScreen.errorTitle': {
       'en': 'Dashboard',

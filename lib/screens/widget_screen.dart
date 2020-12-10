@@ -203,7 +203,17 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
             textColor: Theme.of(context).colorScheme.primary,
             color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.all(0.0),
-            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.decline')),
+            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.cancel')),
+            onPressed: () {
+              shouldWidgetExpireFromQuarantine = false;
+              Navigator.of(ctx).pop(true);
+            },
+          ),
+          FlatButton(
+            textColor: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.surface,
+            padding: const EdgeInsets.all(0.0),
+            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.withoutExpirationDate')),
             onPressed: () {
               shouldAddWidgetToQuarantine = true;
               shouldWidgetExpireFromQuarantine = false;
@@ -214,7 +224,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
             textColor: Theme.of(context).colorScheme.primary,
             color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.all(0.0),
-            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.confirm')),
+            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.withExpirationDate')),
             onPressed: () {
               shouldAddWidgetToQuarantine = true;
               shouldWidgetExpireFromQuarantine = true;
