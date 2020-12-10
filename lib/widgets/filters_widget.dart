@@ -20,11 +20,10 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _filterToggleAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
-          ..addListener(() {
-            setState(() {});
-          });
+    _filterToggleAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+      ..addListener(() {
+        setState(() {});
+      });
     _translateButton = Tween<double>(
       begin: _fabHeight,
       end: -14.0,
@@ -72,9 +71,7 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
       child: FloatingActionButton(
         heroTag: 'error',
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
-        backgroundColor: filterProvider.isErrorFilterPresent
-            ? Theme.of(context).colorScheme.secondary
-            : Colors.grey,
+        backgroundColor: filterProvider.isErrorFilterPresent ? Theme.of(context).colorScheme.secondary : Colors.grey,
         child: Icon(
           Icons.error,
           size: FILTER_ICON_SIZE,
@@ -89,9 +86,7 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
       child: FloatingActionButton(
         heroTag: 'warning',
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
-        backgroundColor: filterProvider.isWarningFilterPresent
-            ? Theme.of(context).colorScheme.secondary
-            : Colors.grey,
+        backgroundColor: filterProvider.isWarningFilterPresent ? Theme.of(context).colorScheme.secondary : Colors.grey,
         child: Icon(
           Icons.warning,
           size: FILTER_ICON_SIZE,
@@ -112,24 +107,17 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
     }
 
     return Container(
-      padding:  EdgeInsets.only(right: 0),
+      padding: EdgeInsets.only(right: 0),
       child: FloatingActionButton(
         heroTag: 'filter',
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: animateFilterToggle,
-        child: !this.isOpened
-            ? Image.asset(
-                'assets/images/filter_icon.png',
-                width: 22,
-                height: 22,
-              )
-            : Image.asset(
-                'assets/images/cancel_icon.png',
-                width: 18,
-                height: 18,
-                color: Theme.of(context).colorScheme.onSecondary,
-              ),
+        child: Image.asset(
+          'assets/images/filter_icon.png',
+          width: 22,
+          height: 22,
+        ),
       ),
     );
   }
@@ -145,8 +133,7 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
             _translateButton.value * 2.0,
             0.0,
           ),
-          child: Consumer<FilterProvider>(
-              builder: (ctx, filterProvider, child) => error(filterProvider, context)),
+          child: Consumer<FilterProvider>(builder: (ctx, filterProvider, child) => error(filterProvider, context)),
         ),
         Transform(
           transform: Matrix4.translationValues(
@@ -154,11 +141,9 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
             _translateButton.value,
             0.0,
           ),
-          child: Consumer<FilterProvider>(
-              builder: (ctx, filterProvider, child) => warning(filterProvider, context)),
+          child: Consumer<FilterProvider>(builder: (ctx, filterProvider, child) => warning(filterProvider, context)),
         ),
-        Consumer<FilterProvider>(
-            builder: (ctx, filterProvider, child) => filter(filterProvider)),
+        Consumer<FilterProvider>(builder: (ctx, filterProvider, child) => filter(filterProvider)),
       ],
     );
   }
