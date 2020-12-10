@@ -83,8 +83,19 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
               return ScreenWithAppBar(
                 appBarTitle: AppLocalizations.of(context).getTranslation('dashboardsScreen.boardError.title'),
                 body: WidgetListErrorScreen(
-                    message: AppLocalizations.of(context).getTranslation('dashboardsScreen.boardError.body'),
+                    message: AppLocalizations.of(context).getTranslation('dashboardsScreen.boardError.apiError.body'),
                     refresh: () {
+                      setState(() {});
+                    }),
+              );
+            } else if(configProvider.webSocketConnectionErrorPresent) {
+              debugPrint('websocket error');
+              return ScreenWithAppBar(
+                appBarTitle: AppLocalizations.of(context).getTranslation('dashboardsScreen.boardError.title'),
+                body: WidgetListErrorScreen(
+                    message: AppLocalizations.of(context).getTranslation('dashboardsScreen.boardError.websocketError.body'),
+                    refresh: () {
+                      startWebSocketListening(context);
                       setState(() {});
                     }),
               );
@@ -93,11 +104,19 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
               return Consumer<DashboardsProvider>(builder: (ctx, dashboardsProvider, child) {
                 final dashboardTabs = dashboardsProvider.dashboardTabs;
                 return dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType == DashboardType.Home
-                    ? HomeWidgetScreen()
+                    ? HomeWidgetScreen(refresh: () {
+                  startWebSocketListening(context);
+                  setState(() {});
+                },)
                     : ScreenWithAppBar(
                         appBarTitle: dashboardTabs[dashboardsProvider.dashboardTabIndex].title,
                         body: WidgetsListScreen(
-                            dashboardType: dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType),
+                            dashboardType: dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType,
+                          refresh: () {
+                            startWebSocketListening(context);
+                            setState(() {});
+                          },
+                        ),
                       );
               });
             }
@@ -160,6 +179,10 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
   void startWebSocketListening(BuildContext context) {
     ConfigProvider configProvider = Provider.of<ConfigProvider>(context, listen: false);
     final channel = IOWebSocketChannel.connect('ws://${configProvider.currentUrl}/ws');
+    if(configProvider.webSocketConnectionErrorPresent) {
+      configProvider.setWebSocketConnectionErrorPresent(false);
+    }
+    debugPrint('connected to ws channel');
     channel.stream.listen(
       (dynamic message) {
         Map<String, dynamic> decodedData = Map<String, dynamic>.from(jsonDecode(message));
@@ -171,11 +194,14 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
         }
       },
       onDone: () {
+        Future.delayed(const Duration(milliseconds: 0), () {
+          Provider.of<ConfigProvider>(context, listen: false).setWebSocketConnectionErrorPresent(true);
+        });
         debugPrint('ws channel closed');
       },
       onError: (error) {
         Future.delayed(const Duration(milliseconds: 0), () {
-          Provider.of<ConfigProvider>(context, listen: false).setWebSocketConnectionErrorPresent();
+          Provider.of<ConfigProvider>(context, listen: false).setWebSocketConnectionErrorPresent(true);
         });
         debugPrint('ws error $error');
       },

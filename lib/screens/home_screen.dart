@@ -9,6 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class HomeWidgetScreen extends StatefulWidget {
+  final Function refresh;
+  HomeWidgetScreen({this.refresh});
+
   @override
   _HomeWidgetScreenState createState() => _HomeWidgetScreenState();
 }
@@ -65,6 +68,7 @@ class _HomeWidgetScreenState extends State<HomeWidgetScreen> {
                   ? WidgetsListScreen(
                       dashboardType: DashboardType.Home,
                       board: board,
+                      refresh: widget.refresh,
                     )
                   : Container(
                       child: WebView(
