@@ -49,8 +49,11 @@ class AppLocalizations {
     'dashboardsScreen.boardError.title': {
       'en': 'Board error',
     },
-    'dashboardsScreen.boardError.body': {
+    'dashboardsScreen.boardError.apiError.body': {
       'en': 'API connection error occurred!',
+    },
+    'dashboardsScreen.boardError.websocketError.body': {
+      'en': 'Websocket connection error occurred!',
     },
     'dashboardsScreen.widgetChangedNotification': {
       'en': 'Some widgets have changed their status:',
@@ -112,23 +115,23 @@ class AppLocalizations {
     'widgetScreen.hintDialogConfirm': {
       'en': 'Ok',
     },
-    'widgetScreen.errorBody': {
-      'en': 'Websocket connection error occured!',
-    },
     'widgetScreen.alertDialog.message': {
-      'en': 'Do you want this widget to be removed form quarantine at expiration date',
+      'en': 'How do you want to add a widget to quarantine(With or without expiration date)?',
     },
-    'widgetScreen.alertDialog.confirm': {
-      'en': 'YES',
+    'widgetScreen.alertDialog.cancel': {
+      'en': 'CANCEL',
     },
-    'widgetScreen.alertDialog.decline': {
-      'en': 'NO',
+    'widgetScreen.alertDialog.withExpirationDate': {
+      'en': 'WITH',
+    },
+    'widgetScreen.alertDialog.withoutExpirationDate': {
+      'en': 'WITHOUT',
     },
     'widgetListScreen.errorTitle': {
       'en': 'Dashboard',
     },
     'widgetListErrorScreen.retry': {
-      'en': 'retry connecting again',
+      'en': 'RETRY',
     },
     'widgetListScreen.errorBody': {
       'en': 'Websocket connection error occurred!',
@@ -184,6 +187,9 @@ class AppLocalizations {
     'sonarQube.details': {
       'en': 'Details',
     },
+    'widgetStatus.errorConfiguration': {
+      'en': 'Configuration Error',
+    },
     'worldClock.loading': {
       'en': 'Loading...',
     },
@@ -201,6 +207,12 @@ class AppLocalizations {
     },
     'iframeEmbed.blankUrl': {
       'en': 'URL is blank',
+    },
+    'zabbix.history': {
+      'en': 'HISTORICAL DATA',
+    },
+    'zabbix.date': {
+      'en': 'Date',
     },
     'widget.notUpdated': {
       'en': 'Not updated yet',

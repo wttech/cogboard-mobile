@@ -22,7 +22,6 @@ class WidgetListItem extends StatelessWidget {
     return Card(
       color: getWidgetColor(widget),
       elevation: 5,
-      margin: getCardMargin(),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(STANDARD_BORDER_RADIOUS),
       ),
@@ -59,16 +58,7 @@ class WidgetListItem extends StatelessWidget {
   }
 
   EdgeInsets getCardMargin() {
-    if(widgetIndex == 0) {
-      return EdgeInsets.fromLTRB(16, 0, 16, 8);
-    } else if(lastWidget) {
-      return EdgeInsets.fromLTRB(16, 8, 16, 86);
-    } else {
-      return EdgeInsets.symmetric(
-        vertical: 8,
-        horizontal: 16,
-      );
-    }
+  return EdgeInsets.all(0);
   }
 
   Widget getWidgetTileSubtitle() {

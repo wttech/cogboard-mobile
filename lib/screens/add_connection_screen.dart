@@ -94,8 +94,8 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                         if (value.isEmpty) {
                           return AppLocalizations.of(context).getTranslation('addConnectionScreen.name.emptyError');
                         }
-                        if(widget.editMode) {
-                          if(value == widget.connection.connectionName) {
+                        if (widget.editMode) {
+                          if (value == widget.connection.connectionName) {
                             return null;
                           }
                         }
@@ -132,7 +132,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                           return AppLocalizations.of(context).getTranslation('addConnectionScreen.url.emptyError');
                         }
                         if (widget.editMode) {
-                          if(value == widget.connection.connectionName) {
+                          if (value == widget.connection.connectionName) {
                             return null;
                           }
                           if (settingsProvider.connections
@@ -225,7 +225,8 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
       return;
     }
 
-    if(urlController.text != widget.connection.connectionUrl || nameController.text != widget.connection.connectionName) {
+    if (urlController.text != widget.connection.connectionUrl ||
+        nameController.text != widget.connection.connectionName) {
       final settingsProvider = Provider.of<SettingsProvider>(
         context,
         listen: false,

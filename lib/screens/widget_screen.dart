@@ -1,18 +1,16 @@
+
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
 import 'package:cogboardmobileapp/providers/widget_provider.dart';
-import 'package:cogboardmobileapp/screens/widget_list_error_screen.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
-import 'package:cogboardmobileapp/widgets/screen_with_appbar_widget.dart';
 import 'package:cogboardmobileapp/widgets/widgets/open_url_button.dart';
 import 'package:cogboardmobileapp/widgets/widgets/widget_details.dart';
 import 'package:cogboardmobileapp/widgets/widgets/widget_status.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:web_socket_channel/io.dart';
 
 class DashboardItemScreen extends StatefulWidget {
   static const routeName = '/widget';
@@ -56,14 +54,17 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
   Widget build(BuildContext context) {
     final configProvider = Provider.of<ConfigProvider>(context);
     final dashboardsProvider = Provider.of<DashboardsProvider>(context);
-    final channel = IOWebSocketChannel.connect('ws://${configProvider.currentUrl}/ws');
 
-    Future.delayed(const Duration(milliseconds: 0), () {
+    Future.delayed(const Duration(milliseconds: 200), () {
       if (configProvider.showHints && configProvider.hints[Hints.SWIPE_WIDGET_DETAILS]) {
         Provider.of<ConfigProvider>(context, listen: false).setHintSeen(Hints.SWIPE_WIDGET_DETAILS);
         showHintDialog(context);
       }
     });
+
+    if(configProvider.webSocketConnectionErrorPresent) {
+      Navigator.of(context).pop();
+    }
 
     if (!currentWidgetFetched) {
       setState(() {
@@ -84,6 +85,11 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
         }
       });
     }
+
+    _controller = PageController(
+      initialPage: getInitialPage(configProvider, dashboardsProvider),
+    );
+    pageNumber = getInitialPage(configProvider, dashboardsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -106,61 +112,39 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
             value: WidgetProvider(),
           ),
         ],
-        child: StreamBuilder(
-          stream: channel.stream,
-          builder: (context, snapshot) {
-            if (snapshot.error != null) {
-              debugPrint('ws error ${snapshot.error}');
-              return ScreenWithAppBar(
-                appBarTitle: AppLocalizations.of(context).getTranslation('widgetScreen.errorTitle'),
-                body: WidgetListErrorScreen(
-                  message: AppLocalizations.of(context).getTranslation('widgetScreen.errorBody'),
-                  refresh: () {
-                    setState(() {});
-                  },
+        child: PageView.builder(
+        controller: _controller,
+        scrollDirection: Axis.horizontal,
+        itemCount: getWidgetLength(configProvider, dashboardsProvider),
+        onPageChanged: (widgetIndex) {
+          setState(() {
+            setCurrentWidget(configProvider, dashboardsProvider, widgetIndex);
+            pageNumber = widgetIndex;
+          });
+        },
+        itemBuilder: (context, widgetIndex) {
+          DashboardWidget widget = getNextWidget(configProvider, dashboardsProvider, widgetIndex);
+          return Column(
+            children: [
+              WidgetStatusHeader(
+                widgetTitle: getWidgetTitle(widget) != "" && getWidgetTitle(widget) != null
+                    ? getWidgetTitle(widget)
+                    : getWidgetType(widget),
+                status: getWidgetStatus(widget),
+                lastUpdated: getLastUpdated(widget),
+              ),
+              if (renderWidget(widget))
+                WidgetDetails(
+                  widget: widget,
                 ),
-              );
-            } else {
-              _controller = PageController(
-                initialPage: getInitialPage(configProvider, dashboardsProvider),
-              );
-              pageNumber = getInitialPage(configProvider, dashboardsProvider);
-              return PageView.builder(
-                controller: _controller,
-                scrollDirection: Axis.horizontal,
-                itemCount: getWidgetLength(configProvider, dashboardsProvider),
-                onPageChanged: (widgetIndex) {
-                  setState(() {
-                    setCurrentWidget(configProvider, dashboardsProvider, widgetIndex);
-                    pageNumber = widgetIndex;
-                  });
-                },
-                itemBuilder: (context, widgetIndex) {
-                  DashboardWidget widget = getNextWidget(configProvider, dashboardsProvider, widgetIndex);
-                  return Column(
-                    children: [
-                      WidgetStatusHeader(
-                        widgetTitle: getWidgetTitle(widget) != "" && getWidgetTitle(widget) != null
-                            ? getWidgetTitle(widget)
-                            : getWidgetType(widget),
-                        status: getWidgetStatus(widget),
-                        lastUpdated: getLastUpdated(widget),
-                      ),
-                      if (renderWidget(widget))
-                        WidgetDetails(
-                          widget: widget,
-                        ),
-                      if (renderWidget(widget))
-                        OpenUrlButton(
-                          widget: widget,
-                        ),
-                    ],
-                  );
-                },
-              );
-            }
-          },
-        ),
+              if (renderWidget(widget))
+                OpenUrlButton(
+                  widget: widget,
+                ),
+            ],
+          );
+        },
+      ),
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
@@ -219,7 +203,17 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
             textColor: Theme.of(context).colorScheme.primary,
             color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.all(0.0),
-            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.decline')),
+            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.cancel')),
+            onPressed: () {
+              shouldWidgetExpireFromQuarantine = false;
+              Navigator.of(ctx).pop(true);
+            },
+          ),
+          FlatButton(
+            textColor: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.surface,
+            padding: const EdgeInsets.all(0.0),
+            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.withoutExpirationDate')),
             onPressed: () {
               shouldAddWidgetToQuarantine = true;
               shouldWidgetExpireFromQuarantine = false;
@@ -230,7 +224,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
             textColor: Theme.of(context).colorScheme.primary,
             color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.all(0.0),
-            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.confirm')),
+            child: Text(AppLocalizations.of(context).getTranslation('widgetScreen.alertDialog.withExpirationDate')),
             onPressed: () {
               shouldAddWidgetToQuarantine = true;
               shouldWidgetExpireFromQuarantine = true;
@@ -305,14 +299,16 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
         int currentWidgetIndex = configProvider
             .getBoardWidgets(configProvider.currentBoard)
             .indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
-        return configProvider.getBoardWidgets(configProvider.currentBoard)[currentWidgetIndex];
+        return currentWidgetIndex >= 0
+            ? configProvider.getBoardWidgets(configProvider.currentBoard)[currentWidgetIndex]
+            : configProvider.getBoardWidgets(configProvider.currentBoard)[0];
       case DashboardType.Favorites:
         int currentWidgetIndex =
-        configProvider.favouriteWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
+            configProvider.favouriteWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
         return configProvider.favouriteWidgets[currentWidgetIndex];
       case DashboardType.Quarantine:
         int currentWidgetIndex =
-        configProvider.quarantineWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
+            configProvider.quarantineWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
         return configProvider.quarantineWidgets[currentWidgetIndex];
       default:
         return null;
