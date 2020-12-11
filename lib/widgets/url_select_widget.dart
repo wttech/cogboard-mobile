@@ -17,7 +17,7 @@ class UrlSelect extends StatelessWidget {
     List<ConnectionPreferences> connections = settingsProvider.connections;
     if (connections != null && connections.length > 0) {
       return Container(
-        width: 250,
+        width: 150,
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
         decoration: BoxDecoration(
           border: Border.all(
@@ -32,15 +32,18 @@ class UrlSelect extends StatelessWidget {
           value: getDropdownButtonIndex(newlyAddedConnection, settingsProvider),
           icon: Icon(Icons.arrow_downward),
           iconSize: 20,
+          // style: TextStyle(color: Colors.blue),
           iconEnabledColor: Colors.cyan,
           underline: Container(),
           isExpanded: true,
           items: connections.map((ConnectionPreferences connection) {
             return new DropdownMenuItem(
-              child: new Text(
-                connection.connectionName,
-                style: TextStyle(
-                  color: Colors.black,
+              child: Container(
+                child: new Text(
+                  connection.connectionName,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
                 ),
               ),
               value: connections.indexOf(connection),

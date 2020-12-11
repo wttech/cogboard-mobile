@@ -13,6 +13,9 @@ class AppLocalizations {
     'loginScreen.connect': {
       'en': 'CONNECT',
     },
+    'loginScreen.add.new.connection': {
+      'en': 'ADD NEW CONNECTION',
+    },
     'addConnectionScreen.title': {
       'en': 'New Connection',
     },
@@ -20,7 +23,7 @@ class AppLocalizations {
       'en': 'Name',
     },
     'addConnectionScreen.name.emptyError': {
-      'en': 'Please provide a name.',
+      'en': 'This field is required',
     },
     'addConnectionScreen.name.duplicateError': {
       'en': 'This connection name is occupied.',
@@ -29,7 +32,7 @@ class AppLocalizations {
       'en': 'Url',
     },
     'addConnectionScreen.url.emptyError': {
-      'en': 'Please provide a url.',
+      'en': 'This field is required',
     },
     'addConnectionScreen.url.duplicateError': {
       'en': 'This connection name is occupied.',
@@ -41,7 +44,7 @@ class AppLocalizations {
       'en': 'ADD CONNECTION',
     },
     'urlSelect.noConnections': {
-      'en': 'There are no Connections saved',
+      'en': 'Welcome. Start by adding a connection.',
     },
     'dashboardsScreen.boardError.title': {
       'en': 'Board error',
