@@ -17,20 +17,23 @@ class SettingsScreen extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: Text(
-              AppLocalizations.of(context).getTranslation('settingsScreen.projects'),
+            title: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+              child: Text(
+                AppLocalizations.of(context).getTranslation('settingsScreen.projects'),
+              ),
             ),
             onTap: () => Navigator.of(context).pushNamed(SettingsProjectsScreen.routeName),
+          ),
+          Divider(
+            color: Theme.of(context).colorScheme.surface,
+            thickness: 2,
           ),
           ListTile(
             title: Text(
               AppLocalizations.of(context).getTranslation('settingsScreen.general'),
             ),
             onTap: () => Navigator.of(context).pushNamed(SettingsGeneralScreen.routeName),
-          ),
-          Divider(
-            color: Theme.of(context).colorScheme.surface,
-            thickness: 5,
           ),
         ],
       ),
