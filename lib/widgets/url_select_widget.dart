@@ -1,6 +1,7 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
+import 'package:cogboardmobileapp/screens/login_projects_screen.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -27,31 +28,67 @@ class UrlSelect extends StatelessWidget {
             Radius.circular(STANDARD_BORDER_RADIOUS),
           ),
         ),
-        child: new DropdownButton<int>(
-          dropdownColor: Colors.white,
-          value: getDropdownButtonIndex(newlyAddedConnection, settingsProvider),
-          icon: Icon(Icons.arrow_downward),
-          iconSize: 20,
-          // style: TextStyle(color: Colors.blue),
-          iconEnabledColor: Colors.cyan,
-          underline: Container(),
-          isExpanded: true,
-          items: connections.map((ConnectionPreferences connection) {
-            return new DropdownMenuItem(
-              child: Container(
-                child: new Text(
-                  connection.connectionName,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+        child: RaisedButton(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          color: Colors.white,
+          elevation: 0,
+          onPressed: () => Navigator.of(context).pushNamed(LoginProjectsScreen.routeName),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                settingsProvider.currentConnection.connectionName.length > 13
+                ? settingsProvider.currentConnection.connectionName.substring(0, 10) + "..."
+                : settingsProvider.currentConnection.connectionName,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
                 ),
               ),
-              value: connections.indexOf(connection),
-            );
-          }).toList(),
-          onChanged: (currentConnection) => settingsProvider.setCurrentConnection(connections[currentConnection]),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.cyan,
+              ),
+            ],
+          ),
         ),
       );
+      //   Container(
+      //   width: 150,
+      //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+      //   decoration: BoxDecoration(
+      //     border: Border.all(
+      //       color: Colors.black54,
+      //     ),
+      //     borderRadius: BorderRadius.all(
+      //       Radius.circular(STANDARD_BORDER_RADIOUS),
+      //     ),
+      //   ),
+      //   child: new DropdownButton<int>(
+      //     dropdownColor: Colors.white,
+      //     value: getDropdownButtonIndex(newlyAddedConnection, settingsProvider),
+      //     icon: Icon(Icons.arrow_downward),
+      //     iconSize: 20,
+      //     // style: TextStyle(color: Colors.blue),
+      //     iconEnabledColor: Colors.cyan,
+      //     underline: Container(),
+      //     isExpanded: true,
+      //     items: connections.map((ConnectionPreferences connection) {
+      //       return new DropdownMenuItem(
+      //         child: Container(
+      //           child: new Text(
+      //             connection.connectionName,
+      //             style: TextStyle(
+      //               color: Colors.black,
+      //             ),
+      //           ),
+      //         ),
+      //         value: connections.indexOf(connection),
+      //       );
+      //     }).toList(),
+      //     onChanged: (currentConnection) => settingsProvider.setCurrentConnection(connections[currentConnection]),
+      //   ),
+      // );
     } else {
       return Container(
         child: Text(
