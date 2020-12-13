@@ -76,14 +76,14 @@ class LoginScreen extends StatelessWidget {
                                     '+',
                                     style: TextStyle(
                                       // color: Theme.of(context).colorScheme.onSecondary,
-                                      color: Colors.green,
+                                      color: Theme.of(context).colorScheme.secondary,
                                       fontSize: 40,
                                     ),
                                   ),
                                 ),
                                 shape: RoundedRectangleBorder(
                                   side: BorderSide(
-                                    color: Colors.green,
+                                    color: Theme.of(context).colorScheme.secondary,
                                   ),
                                   borderRadius: new BorderRadius.circular(STANDARD_BORDER_RADIOUS),
                                 ),
@@ -133,9 +133,7 @@ class LoginScreen extends StatelessWidget {
                                   ),
                                   borderRadius: new BorderRadius.circular(STANDARD_BORDER_RADIOUS),
                                 ),
-                                color: settingsProvider.currentConnection != null
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Color(0xff5dbcd2),
+                                color: Theme.of(context).colorScheme.primary
                               ),
                             ),
                           ],

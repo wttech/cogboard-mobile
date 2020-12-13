@@ -38,8 +38,8 @@ class UrlSelect extends StatelessWidget {
             children: [
               Text(
                 settingsProvider.currentConnection.connectionName.length > 13
-                ? settingsProvider.currentConnection.connectionName.substring(0, 10) + "..."
-                : settingsProvider.currentConnection.connectionName,
+                    ? settingsProvider.currentConnection.connectionName.substring(0, 10) + "..."
+                    : settingsProvider.currentConnection.connectionName,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 14,
@@ -53,42 +53,6 @@ class UrlSelect extends StatelessWidget {
           ),
         ),
       );
-      //   Container(
-      //   width: 150,
-      //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-      //   decoration: BoxDecoration(
-      //     border: Border.all(
-      //       color: Colors.black54,
-      //     ),
-      //     borderRadius: BorderRadius.all(
-      //       Radius.circular(STANDARD_BORDER_RADIOUS),
-      //     ),
-      //   ),
-      //   child: new DropdownButton<int>(
-      //     dropdownColor: Colors.white,
-      //     value: getDropdownButtonIndex(newlyAddedConnection, settingsProvider),
-      //     icon: Icon(Icons.arrow_downward),
-      //     iconSize: 20,
-      //     // style: TextStyle(color: Colors.blue),
-      //     iconEnabledColor: Colors.cyan,
-      //     underline: Container(),
-      //     isExpanded: true,
-      //     items: connections.map((ConnectionPreferences connection) {
-      //       return new DropdownMenuItem(
-      //         child: Container(
-      //           child: new Text(
-      //             connection.connectionName,
-      //             style: TextStyle(
-      //               color: Colors.black,
-      //             ),
-      //           ),
-      //         ),
-      //         value: connections.indexOf(connection),
-      //       );
-      //     }).toList(),
-      //     onChanged: (currentConnection) => settingsProvider.setCurrentConnection(connections[currentConnection]),
-      //   ),
-      // );
     } else {
       return Container(
         child: Text(

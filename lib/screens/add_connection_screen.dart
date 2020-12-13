@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
@@ -244,16 +243,16 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
   }
 
   Future<void> onAddConnectionPressed(BuildContext context) async {
-    // bool isValid = _form.currentState.validate();
-    // if (!isValid) {
-    //   return;
-    // }
-    // await checkUrlValidity();
-    // isValid = _form.currentState.validate();
-    // if (!isValid) {
-    //   isUrlValid = true;
-    //   return;
-    // }
+    bool isValid = _form.currentState.validate();
+    if (!isValid) {
+      return;
+    }
+    await checkUrlValidity();
+    isValid = _form.currentState.validate();
+    if (!isValid) {
+      isUrlValid = true;
+      return;
+    }
     ConnectionPreferences connection = new ConnectionPreferences(
       connectionUrl: urlController.text,
       connectionName: nameController.text,
