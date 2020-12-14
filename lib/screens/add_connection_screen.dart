@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';

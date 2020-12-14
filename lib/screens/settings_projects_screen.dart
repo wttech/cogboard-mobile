@@ -113,7 +113,10 @@ class SettingsProjectsScreen extends StatelessWidget {
           FlatButton(
             onPressed: () async {
               await settingsProvider.removeConnection(connection);
-              if (settingsProvider.currentConnection == null) {
+              if (settingsProvider.currentConnection == null ) {
+                if(settingsProvider.connections.length > 0){
+                  settingsProvider.setCurrentConnection(settingsProvider.connections[0]);
+                }
                 Navigator.pushReplacementNamed(context, LoginScreen.routeName);
               } else {
                 Navigator.of(context).pop();

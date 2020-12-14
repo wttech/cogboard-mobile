@@ -105,8 +105,7 @@ class SettingsProvider with ChangeNotifier {
   }
 
   Future<void> removeConnection(ConnectionPreferences connection) async {
-
-    if(connection.connectionName == currentConnection.connectionName) {
+    if (connection.connectionName == currentConnection.connectionName) {
       settingsPreferences.currentConnection = null;
     }
     _connections.remove(connection);
@@ -117,13 +116,15 @@ class SettingsProvider with ChangeNotifier {
   Future<void> replaceConnection(ConnectionPreferences newConnection, int idx) async {
     Map<String, dynamic> settingsPreferencesJson = jsonDecode(await SharedPref.read(SettingsPreferences.KEY));
     _settingsPreferences = SettingsPreferences.fromJson(settingsPreferencesJson);
-    ConnectionPreferences currentConnectionInConnections = connections
-        .firstWhere((element) => element.connectionName == currentConnection.connectionName);
+    ConnectionPreferences currentConnectionInConnections =
+        connections.firstWhere((element) => element.connectionName == currentConnection.connectionName);
     int currentConnectionIndex = connections.indexOf(currentConnectionInConnections);
-    if(currentConnectionIndex == idx) {
+    if (currentConnectionIndex == idx) {
       settingsPreferences.currentConnection = newConnection;
     }
+
     _connections[idx] = newConnection;
+    _settingsPreferences.connections[idx] = newConnection;
     await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
     notifyListeners();
   }

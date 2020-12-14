@@ -28,6 +28,9 @@ class _SettingsGeneralScreenState extends State<SettingsGeneralScreen> {
   Widget build(BuildContext context) {
     final settingsProvider = Provider.of<SettingsProvider>(context);
     notificationFrequencyController.text = settingsProvider.notificationsFrequency.toString();
+
+    String currentSortingKeys =
+        "(${settingsProvider.sortByKey}${settingsProvider.sortByKey == WidgetSortByKeys.NONE ? '' : settingsProvider.sortByOrder == WidgetSortByOrder.ASC ? ', ASC' : ', DSC'})";
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -39,24 +42,140 @@ class _SettingsGeneralScreenState extends State<SettingsGeneralScreen> {
         children: [
           InkWell(
             onTap: () => onSortByClicked(context),
-            child: Row(
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    child: Text(
-                      AppLocalizations.of(context).getTranslation('settingsGeneralScreen.widgetSorting'),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      child: Text(
+                        AppLocalizations.of(context).getTranslation('settingsGeneralScreen.widgetSorting'),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    height: 70,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          currentSortingKeys,
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Icon(
+                          Icons.navigate_next,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Divider(
+            color: Theme.of(context).colorScheme.surface,
+            thickness: 2,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                  child: Text(AppLocalizations.of(context).getTranslation('settingsGeneralScreen.notifications'),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
+                      )),
+                ),
+                height: 70,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                child: Transform.scale(
+                  scale: 0.8,
+                  child: Switch(
+                    value: settingsProvider.showNotifications,
+                    onChanged: (value) => settingsProvider.setShowNotifications(value),
+                    activeColor: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Divider(
+            color: Theme.of(context).colorScheme.surface,
+            thickness: 2,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Text(
+                    AppLocalizations.of(context).getTranslation('settingsGeneralScreen.notificationFrequency'),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                height: 70,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 70,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                      child: TextField(
+                        textAlign: TextAlign.end,
+                        keyboardType: TextInputType.number,
+                        onSubmitted: (input) {
+                          if (input.isEmpty) {
+                            settingsProvider.setNotificationsFrequency(1);
+                          }
+                          int frequency = int.parse(input);
+                          if (frequency > 9999) {
+                            settingsProvider.setNotificationsFrequency(9999);
+                          } else {
+                            settingsProvider.setNotificationsFrequency(frequency);
+                          }
+                        },
+                        controller: notificationFrequencyController,
+                        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly], // Only
                       ),
                     ),
                   ),
-                  height: 70,
-                ),
-              ],
-            ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                    child: Text(
+                      'min.',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Divider(
+            color: Theme.of(context).colorScheme.surface,
+            thickness: 2,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,78 +201,6 @@ class _SettingsGeneralScreenState extends State<SettingsGeneralScreen> {
                   child: Switch(
                     value: settingsProvider.showHints,
                     onChanged: (value) => settingsProvider.setShowHints(value),
-                    activeColor: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Text(
-                    AppLocalizations.of(context).getTranslation('settingsGeneralScreen.notificationFrequency'),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                height: 70,
-              ),
-              SizedBox(
-                width: 100,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: TextField(
-                    textAlign: TextAlign.end,
-                    keyboardType: TextInputType.number,
-                    onSubmitted: (input) {
-                      if (input.isEmpty) {
-                        settingsProvider.setNotificationsFrequency(1);
-                      }
-                      int frequency = int.parse(input);
-                      if (frequency > 9999) {
-                        settingsProvider.setNotificationsFrequency(9999);
-                      } else {
-                        settingsProvider.setNotificationsFrequency(frequency);
-                      }
-                    },
-                    controller: notificationFrequencyController,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ], // Only
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                  child: Text(AppLocalizations.of(context).getTranslation('settingsGeneralScreen.notifications'),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                      )),
-                ),
-                height: 70,
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                child: Transform.scale(
-                  scale: 0.8,
-                  child: Switch(
-                    value: settingsProvider.showNotifications,
-                    onChanged: (value) => settingsProvider.setShowNotifications(value),
                     activeColor: Theme.of(context).colorScheme.primary,
                   ),
                 ),

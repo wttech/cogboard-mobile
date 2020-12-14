@@ -1,6 +1,7 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
+import 'package:cogboardmobileapp/screens/login_projects_screen.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -21,23 +22,35 @@ class UrlSelect extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Theme.of(context).colorScheme.primary,
+            color: Colors.black54,
           ),
           borderRadius: BorderRadius.all(
             Radius.circular(STANDARD_BORDER_RADIOUS),
           ),
         ),
-        child: new DropdownButton<int>(
-          value: getDropdownButtonIndex(newlyAddedConnection, settingsProvider),
-          underline: Container(),
-          isExpanded: true,
-          items: connections.map((ConnectionPreferences connection) {
-            return new DropdownMenuItem(
-              child: new Text(connection.connectionName),
-              value: connections.indexOf(connection),
-            );
-          }).toList(),
-          onChanged: (currentConnection) => settingsProvider.setCurrentConnection(connections[currentConnection]),
+        child: RaisedButton(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          color: Colors.white,
+          elevation: 0,
+          onPressed: () => Navigator.of(context).pushNamed(LoginProjectsScreen.routeName),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                settingsProvider.currentConnection.connectionName.length > 13
+                    ? settingsProvider.currentConnection.connectionName.substring(0, 10) + "..."
+                    : settingsProvider.currentConnection.connectionName,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.cyan,
+              ),
+            ],
+          ),
         ),
       );
     } else {
@@ -46,7 +59,7 @@ class UrlSelect extends StatelessWidget {
           AppLocalizations.of(context).getTranslation('urlSelect.noConnections'),
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 18,
           ),
         ),
