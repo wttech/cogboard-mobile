@@ -88,7 +88,10 @@ class ConfigProvider with ChangeNotifier {
     final response = await http.get('http://$currentUrl/api/config');
     debugPrint('fetched api config');
     _config = Config.fromJson(json.decode(response.body) as Map<String, dynamic>);
-    _boards = _config.boards.boardsById.entries.map((entry) => entry.value).toList();
+    _boards = _config.boards.boardsById.entries
+        .map((entry) => entry.value)
+        .where((element) => element.type != "IframeBoard")
+        .toList();
     _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
     await checkIfQuarantineExpirationDateHasExceeded();
     notifyListeners();
