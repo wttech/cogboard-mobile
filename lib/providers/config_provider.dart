@@ -156,7 +156,7 @@ class ConfigProvider with ChangeNotifier {
           .where((widget) =>
               board.widgets.contains(widget.id) &&
               quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1 &&
-              widget.type != "WhiteSpaceWidget")
+              widget.type != "WhiteSpaceWidget" && widget.type != "IframeEmbedWidget")
           .toList()
     ];
     return getSortedWidgetsList(boardWidgets);
