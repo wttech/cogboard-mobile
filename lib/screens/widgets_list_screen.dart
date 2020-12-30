@@ -53,7 +53,10 @@ class WidgetsListScreen extends StatelessWidget {
               ),
             )
           : widgetsList.length == 0
-              ? EmptyWidgetListScreen()
+              ? EmptyWidgetListScreen(
+                  board: board,
+                  dashboardType: dashboardType,
+                )
               : MediaQuery.removePadding(
                   context: context,
                   removeTop: true,

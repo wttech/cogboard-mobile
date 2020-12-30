@@ -11,7 +11,7 @@ class OpenUrlButton extends StatelessWidget with UrlLauncher {
   });
 
   String get widgetUrl {
-    return widget.content['url'];
+    return widget.content['url'] != null ? widget.content['url'] : widget.content['iframeUrl'];
   }
 
   dynamic get statusCode => widget.content['statusCode'];
@@ -43,6 +43,8 @@ class OpenUrlButton extends StatelessWidget with UrlLauncher {
         return 'OPEN REPORT';
       case WidgetTypes.AEM_BUNDLE_INFO_WIDGET:
         return 'VIEW BUNDLES';
+      case WidgetTypes.IFRAME_EMBED_WIDGET:
+        return 'VIEW CONTENT';
       default:
         return null;
     }
