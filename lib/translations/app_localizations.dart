@@ -142,6 +142,9 @@ class AppLocalizations {
     'widgetListScreen.hintDialogConfirm': {
       'en': 'Ok',
     },
+    'homeScreen.viewContent': {
+      'en': 'VIEW CONTENT',
+    },
     'aemBundleInfo.excludedBundles': {
       'en': 'Excluded bundles',
     },

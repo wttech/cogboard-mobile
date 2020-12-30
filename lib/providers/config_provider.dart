@@ -90,7 +90,6 @@ class ConfigProvider with ChangeNotifier {
     _config = Config.fromJson(json.decode(response.body) as Map<String, dynamic>);
     _boards = _config.boards.boardsById.entries
         .map((entry) => entry.value)
-        .where((element) => element.type != "IframeBoard")
         .toList();
     _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
     await checkIfQuarantineExpirationDateHasExceeded();
@@ -156,7 +155,7 @@ class ConfigProvider with ChangeNotifier {
           .where((widget) =>
               board.widgets.contains(widget.id) &&
               quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1 &&
-              widget.type != "WhiteSpaceWidget" && widget.type != "IframeEmbedWidget")
+              widget.type != "WhiteSpaceWidget")
           .toList()
     ];
     return getSortedWidgetsList(boardWidgets);

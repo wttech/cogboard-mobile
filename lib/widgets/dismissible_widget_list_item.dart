@@ -12,7 +12,8 @@ class DismissibleWidgetListItem extends StatelessWidget {
   final DashboardType dashboardType;
   final bool lastWidget;
 
-  DismissibleWidgetListItem({@required this.widget, @required this.widgetIndex, @required this.dashboardType , @required this.lastWidget});
+  DismissibleWidgetListItem(
+      {@required this.widget, @required this.widgetIndex, @required this.dashboardType, @required this.lastWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,7 @@ class DismissibleWidgetListItem extends StatelessWidget {
   void showUndoSnackBar(BuildContext context, ConfigProvider configProvider) {
     Scaffold.of(context).removeCurrentSnackBar();
     Scaffold.of(context).showSnackBar(SnackBar(
-      duration: Duration(seconds: 5000),
+      duration: Duration(seconds: 5),
       backgroundColor: Theme.of(context).colorScheme.background,
       content: Container(
         color: Theme.of(context).colorScheme.surface,
@@ -68,11 +69,15 @@ class DismissibleWidgetListItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  AppLocalizations.of(context).getTranslation('dissmisibleWidgetList.removed') + widget.title,
-                  style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    AppLocalizations.of(context).getTranslation('dissmisibleWidgetList.removed') + widget.title,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                  ),
                 ),
               ),
               FlatButton(

@@ -21,7 +21,7 @@ class DashboardsScreenBottomNavigationBar extends StatelessWidget {
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).colorScheme.background,
               icon: Icon(Icons.star),
-              title: Text('Favourite'),
+              title: Text('Favourites'),
             ),
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).colorScheme.background,

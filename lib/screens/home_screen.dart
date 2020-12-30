@@ -3,20 +3,22 @@ import 'package:cogboardmobileapp/models/board_model.dart';
 import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/screens/widgets_list_screen.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
+import 'package:cogboardmobileapp/utils/url_launcher.dart';
 import 'package:cogboardmobileapp/widgets/screen_with_appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class HomeWidgetScreen extends StatefulWidget {
   final Function refresh;
+
   HomeWidgetScreen({this.refresh});
 
   @override
   _HomeWidgetScreenState createState() => _HomeWidgetScreenState();
 }
 
-class _HomeWidgetScreenState extends State<HomeWidgetScreen> {
+class _HomeWidgetScreenState extends State<HomeWidgetScreen> with UrlLauncher {
   PageController _controller = PageController(
     initialPage: 0,
   );
@@ -40,12 +42,13 @@ class _HomeWidgetScreenState extends State<HomeWidgetScreen> {
   @override
   Widget build(BuildContext context) {
     final configProvider = Provider.of<ConfigProvider>(context, listen: false);
-    if(configProvider.currentBoard == null) {
+    if (configProvider.currentBoard == null) {
       configProvider.setCurrentBoard(configProvider.boards[pageNumber]);
     } else {
-      int currentBoardIndex = configProvider.boards.indexWhere((element) => element.id == configProvider.currentBoard.id);
+      int currentBoardIndex =
+          configProvider.boards.indexWhere((element) => element.id == configProvider.currentBoard.id);
       setState(() {
-        pageNumber = currentBoardIndex >= 0 ? currentBoardIndex: 0;
+        pageNumber = currentBoardIndex >= 0 ? currentBoardIndex : 0;
       });
     }
     _controller = PageController(
@@ -70,13 +73,22 @@ class _HomeWidgetScreenState extends State<HomeWidgetScreen> {
                       board: board,
                       refresh: widget.refresh,
                     )
-                  : Container(
-                      child: WebView(
-                        initialUrl: Uri.dataFromString(
-                                '<html><body><iframe src="${getIframeUrl(board)}" width="100%" height="100%"></iframe></body></html>',
-                                mimeType: 'text/html')
-                            .toString(),
-                        javascriptMode: JavascriptMode.unrestricted,
+                  : Center(
+                      child: FlatButton(
+                        color: Theme.of(context).colorScheme.primary,
+                        onPressed: () => launchUrl(getIframeUrl(board), context),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(STANDARD_BORDER_RADIOUS),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            AppLocalizations.of(context).getTranslation('homeScreen.viewContent'),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
             )
