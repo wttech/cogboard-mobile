@@ -22,8 +22,6 @@ class DashboardsProvider with ChangeNotifier {
   ];
 
   int _dashboardTabIndex;
-  bool _warningFilterPresent = false;
-  bool _errorFilterPresent = false;
 
   DashboardsProvider() {
     _dashboardTabIndex = _dashboardTabs
@@ -38,18 +36,6 @@ class DashboardsProvider with ChangeNotifier {
     return _dashboardTabIndex;
   }
 
-  bool get isWarningFilterPresent {
-    return _warningFilterPresent;
-  }
-
-  bool get isErrorFilterPresent {
-    return _errorFilterPresent;
-  }
-
-  bool get isAnyFilterPresent {
-    return isWarningFilterPresent || isErrorFilterPresent;
-  }
-
   void setDashboardTabIndex(int dashboardTabIndex) {
     _dashboardTabIndex = dashboardTabIndex;
     notifyListeners();
@@ -57,15 +43,5 @@ class DashboardsProvider with ChangeNotifier {
 
   List<DashboardTab> get dashboardTabs {
     return _dashboardTabs;
-  }
-
-  void toggleWarningFilter() {
-    _warningFilterPresent = !_warningFilterPresent;
-    notifyListeners();
-  }
-
-  void toggleErrorFilter() {
-    _errorFilterPresent = !_errorFilterPresent;
-    notifyListeners();
   }
 }
