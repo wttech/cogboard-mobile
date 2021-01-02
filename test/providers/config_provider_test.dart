@@ -119,6 +119,7 @@ void main() {
       test('should not notify when widgets are in quarantine', () async {
         // given
         WidgetsFlutterBinding.ensureInitialized();
+        SharedPreferences.setMockInitialValues({});
         SettingsPreferences settingsPreferences = setUpStartingSettingsPreferences();
         settingsPreferences.showNotifications = true;
         settingsPreferences.lastNotificationTimestamp = new DateTime.now().subtract(new Duration(minutes: 5));
