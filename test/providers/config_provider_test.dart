@@ -5,6 +5,7 @@ import 'package:cogboardmobileapp/models/settings_preferences_model.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/providers/config_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
@@ -117,6 +118,7 @@ void main() {
 
       test('should not notify when widgets are in quarantine', () async {
         // given
+        WidgetsFlutterBinding.ensureInitialized();
         SettingsPreferences settingsPreferences = setUpStartingSettingsPreferences();
         settingsPreferences.showNotifications = true;
         settingsPreferences.lastNotificationTimestamp = new DateTime.now().subtract(new Duration(minutes: 5));

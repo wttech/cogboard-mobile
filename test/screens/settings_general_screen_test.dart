@@ -13,22 +13,11 @@ void main() {
   testWidgets('settings general screen tests', (WidgetTester tester) async {
     // given when
     SettingsProvider settingsProvider = new SettingsProvider();
-    await settingsProvider.fetchSettingsPreferences();
+    settingsProvider.createSettingsPreferences();
     await tester.pumpWidget(MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
           value: settingsProvider,
-        ),
-        ChangeNotifierProvider.value(
-          value: DashboardsProvider(),
-        ),
-        ChangeNotifierProxyProvider<SettingsProvider, ConfigProvider>(
-          create: (_) => new ConfigProvider(),
-          update: (_, settingsProvider, configProvider) =>
-              configProvider.withSettingsPreferences(settingsProvider.settingsPreferences),
-        ),
-        ChangeNotifierProvider.value(
-          value: FilterProvider(),
         ),
       ],
       child: Builder(
