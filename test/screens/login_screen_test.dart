@@ -36,48 +36,5 @@ void main() {
       ));
       await tester.pump(Duration.zero);
     });
-
-    testWidgets('login screen test one connection saved', (WidgetTester tester) async {
-      tester.runAsync(() async {
-        // given when
-        SettingsProvider settingsProvider = new SettingsProvider();
-        await settingsProvider.fetchSettingsPreferences();
-        ConnectionPreferences newConnection = new ConnectionPreferences(
-          favouriteWidgets: [],
-          quarantineWidgets: [],
-          connectionName: 'test',
-          connectionUrl: '150.254.30.118',
-        );
-        await settingsProvider.addConnection(newConnection);
-        await settingsProvider.setCurrentConnection(newConnection);
-        await tester.pumpWidget(MultiProvider(
-          providers: [
-            ChangeNotifierProvider.value(
-              value: settingsProvider,
-            ),
-          ],
-          child: Builder(
-            builder: (_) => MaterialApp(
-              title: 'Title',
-              home: LoginScreen(),
-              localizationsDelegates: [
-                const AppLocalizationsDelegate(),
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: [
-                const Locale('en', ''),
-              ],
-            ),
-          ),
-        ));
-        await tester.pump(Duration.zero);
-
-        // then
-        expect(find.text('test'), findsOneWidget);
-        expect(find.text('CONNECT'), findsOneWidget);
-      });
-    });
   });
 }
