@@ -38,7 +38,7 @@ void main() {
       await tester.pump(Duration.zero);
 
       // then
-      expect(find.text('ADD NEW CONNECTION'), findsOneWidget);
+      expect(find.text('Welcome. Start by adding a connection.'), findsOneWidget);
     });
 
     testWidgets('login screen test one connection saved', (WidgetTester tester) async {
