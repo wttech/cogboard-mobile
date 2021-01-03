@@ -32,6 +32,7 @@ class UrlSelect extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
           color: Colors.white,
           elevation: 0,
+          key: Key('loginScreenUrlSelectButton'),
           onPressed: () => Navigator.of(context).pushNamed(LoginProjectsScreen.routeName),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,6 +45,7 @@ class UrlSelect extends StatelessWidget {
                   color: Colors.black,
                   fontSize: 14,
                 ),
+                key: Key('loginScreenUrlSelectWidget'),
               ),
               Icon(
                 Icons.arrow_forward_ios,
@@ -62,6 +64,7 @@ class UrlSelect extends StatelessWidget {
             color: Colors.black,
             fontSize: 18,
           ),
+          key: Key('urlSelectNoConnections'),
         ),
       );
     }

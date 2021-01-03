@@ -160,6 +160,7 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
         ),
         actions: [
           FlatButton(
+            key: Key('dashboardScreenHintsConfirmButton'),
             textColor: Theme.of(context).colorScheme.primary,
             color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.all(0.0),

@@ -79,6 +79,7 @@ class LoginScreen extends StatelessWidget {
                                       color: Theme.of(context).colorScheme.secondary,
                                       fontSize: 40,
                                     ),
+                                    key: Key('loginScreenAddButton'),
                                   ),
                                 ),
                                 shape: RoundedRectangleBorder(
@@ -118,6 +119,7 @@ class LoginScreen extends StatelessWidget {
                                             fontSize: 17,
                                             color: Colors.black,
                                           ),
+                                    key: Key('loginScreenConnectButton'),
                                         )
                                       : Text(
                                     AppLocalizations.of(context).getTranslation('loginScreen.add.new.connection'),
@@ -125,6 +127,7 @@ class LoginScreen extends StatelessWidget {
                                             fontSize: 15,
                                             color: Colors.black,
                                           ),
+                                    key: Key('loginScreenAddNewConnectionButton'),
                                         ),
                                 ),
                                 shape: RoundedRectangleBorder(

@@ -1,7 +1,5 @@
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
-import 'package:cogboardmobileapp/screens/add_connection_screen.dart';
-import 'package:cogboardmobileapp/screens/dashboards_screen.dart';
 import 'package:cogboardmobileapp/screens/login_screen.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +16,7 @@ class LoginProjectsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        key: Key('loginProjectsScreenBackButton'),
         title: Text(
           AppLocalizations.of(context).getTranslation('settingsProjectsScreen.title'),
         ),
@@ -27,15 +26,23 @@ class LoginProjectsScreen extends StatelessWidget {
         itemBuilder: (context, idx) {
           ConnectionPreferences connection = settingsProvider.connections[idx];
           return ListTile(
+            key: Key('${connection.connectionName}_${idx}'),
             title: settingsProvider.currentConnection.connectionName == connection.connectionName
                 ? Text(
-              connection.connectionName,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            )
-                : Text(connection.connectionName),
-            subtitle: Text(connection.connectionUrl),
+                    connection.connectionName,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    key: Key('item_${connection.connectionName}_name'),
+                  )
+                : Text(
+                    connection.connectionName,
+                    key: Key('item_${connection.connectionName}_name'),
+                  ),
+            subtitle: Text(
+              connection.connectionUrl,
+              key: Key('item_${connection.connectionUrl}_url'),
+            ),
             onTap: () {
               settingsProvider.setCurrentConnection(connection);
               Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);

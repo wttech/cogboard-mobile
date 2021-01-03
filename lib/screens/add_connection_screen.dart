@@ -46,6 +46,9 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
     }
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          key: Key('addConnectionScreenBackButton'),
+        ),
         title: widget.editMode
             ? Text(
                 AppLocalizations.of(context).getTranslation('addConnectionScreen.title.edit'),
@@ -69,6 +72,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: TextFormField(
+                      key: Key('addConnectionNameTextForm'),
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context).getTranslation('addConnectionScreen.name'),
                         labelStyle: TextStyle(
@@ -110,6 +114,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                   Padding(
                     padding: EdgeInsets.all(20),
                     child: TextFormField(
+                      key: Key('addConnectionUrlTextForm'),
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context).getTranslation('addConnectionScreen.url'),
                         labelStyle: TextStyle(
@@ -161,6 +166,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
                     height: 30,
                   ),
                   FlatButton(
+                    key: Key('addConnectionButton'),
                     color: Theme.of(context).colorScheme.primary,
                     onPressed: () =>
                         widget.editMode ? onSaveConnectionPressed(context) : onAddConnectionPressed(context),
