@@ -14,6 +14,7 @@ jobs:
         with:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
+      - run: flutter clean
       - run: flutter pub get
       - run: flutter test
       - run: flutter build apk

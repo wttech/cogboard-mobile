@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/checkbox_update_payload.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
+import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:cogboardmobileapp/providers/widget_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -44,7 +45,8 @@ class _CheckboxWidgetState extends State<CheckboxWidget> {
   }
 
   Future<void> updateCheckbox() async {
-    const url = 'http://150.254.30.119/api/widget/contentUpdate';
+    String currentUrl = Provider.of<ConfigProvider>(context, listen: false).currentUrl;
+    String url = 'http://$currentUrl/api/widget/contentUpdate';
     CheckboxUpdatePayload payload = CheckboxUpdatePayload(
       id: widget.widget.id,
       widgetStatus: getNextStatus(getWidgetStatus),

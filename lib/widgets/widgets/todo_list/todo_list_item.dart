@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:cogboardmobileapp/models/todo_item_payload.dart';
+import 'package:cogboardmobileapp/providers/config_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class TodoListItem extends StatefulWidget {
   final String id;
@@ -39,7 +41,8 @@ class _TodoListItemState extends State<TodoListItem> {
   }
 
   Future<void> updateItem() async {
-    const url = 'http://150.254.30.119/api/widget/contentUpdate';
+    String currentUrl = Provider.of<ConfigProvider>(context, listen: false).currentUrl;
+    String url = 'http://$currentUrl/api/widget/contentUpdate';
     TodoUpdatePayload payload = TodoUpdatePayload(
       id: widget.widgetId,
       selectedItem: widget.id,
