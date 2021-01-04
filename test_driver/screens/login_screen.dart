@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_driver/flutter_driver.dart';
+import 'dashboards_screen.dart';
 import 'new_connection_screen.dart';
 import 'projects_screen.dart';
 
@@ -17,10 +18,7 @@ class LoginScreen {
   LoginScreen(this.driver);
 
   Future<bool> get isReady {
-    return driver
-        .waitFor(_noConnectionsTextFinder)
-        .then((_) => true)
-        .catchError((_) => false);
+    return driver.waitFor(_noConnectionsTextFinder).then((_) => true).catchError((_) => false);
   }
 
   Future<String> getWelcomeText() async {
@@ -52,5 +50,10 @@ class LoginScreen {
   ProjectsScreen goToProjectsScreen() {
     driver.tap(_projectsScreenButtonFinder);
     return new ProjectsScreen(driver);
+  }
+
+  DashboardsScreen goToDashboardsScreen() {
+    driver.tap(_connectButtonFinder);
+    return new DashboardsScreen(driver);
   }
 }

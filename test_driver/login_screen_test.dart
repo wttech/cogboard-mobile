@@ -1,8 +1,6 @@
 // Imports the Flutter Driver API.
-
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
-
 import 'screens/login_screen.dart';
 import 'screens/new_connection_screen.dart';
 import 'screens/projects_screen.dart';
@@ -24,7 +22,6 @@ void main() {
     final url = "150.254.30.119";
     FlutterDriver driver;
     LoginScreen loginScreen;
-
 
     // Connect to the Flutter driver before running any tests.
     setUpAll(() async {
@@ -79,29 +76,24 @@ void main() {
       await projectsScreen.tapOnProject(projectName, '0');
     });
 
-
-
-
-
-
     // test('Add new Connection Test', () async {
     //   final loginScreen = new LoginScreen(driver);
     //   loginScreen.addFirstConnection();
-      // await driver.tap(addNewConnectionButtonFinder);
-      // await driver.tap(addConnectionScreenButtonFinder);
-      // final addConnectionErrorNameField = find.text('This field is required');
-      // await driver.waitFor(addConnectionErrorNameField);
-      // await driver.tap(addConnectionScreenNameTextFormFinder);
-      // await driver.enterText("Cogboard Mobile");
-      // await driver.waitFor(find.text('Cogboard Mobile'));
-      // await driver.tap(addConnectionScreenUrlTextFormFinder);
-      // await driver.enterText("150.254.30.119");
-      // await driver.waitFor(find.text('150.254.30.119'));
-      // await driver.tap(addConnectionScreenButtonFinder);
-      // final newConnectionScreen = new NewConnectionScreen(driver);
-      // newConnectionScreen.addNewConnection();
-      // expect(await loginScreen.addConnectionButtonText, "+");
-      // expect(await loginScreen.connectButtonText, "CONNECT");
+    // await driver.tap(addNewConnectionButtonFinder);
+    // await driver.tap(addConnectionScreenButtonFinder);
+    // final addConnectionErrorNameField = find.text('This field is required');
+    // await driver.waitFor(addConnectionErrorNameField);
+    // await driver.tap(addConnectionScreenNameTextFormFinder);
+    // await driver.enterText("Cogboard Mobile");
+    // await driver.waitFor(find.text('Cogboard Mobile'));
+    // await driver.tap(addConnectionScreenUrlTextFormFinder);
+    // await driver.enterText("150.254.30.119");
+    // await driver.waitFor(find.text('150.254.30.119'));
+    // await driver.tap(addConnectionScreenButtonFinder);
+    // final newConnectionScreen = new NewConnectionScreen(driver);
+    // newConnectionScreen.addNewConnection();
+    // expect(await loginScreen.addConnectionButtonText, "+");
+    // expect(await loginScreen.connectButtonText, "CONNECT");
     // });
 
     // test('Add duplicate project name Test', () async {
@@ -123,10 +115,5 @@ void main() {
     //   await driver.tap(find.byValueKey('dashboardScreenHintsConfirmButton'));
     //   await driver.tap(find.byValueKey('dashboardScreenHintsConfirmButton'));
     // });
-
-
-
-
-
   });
 }

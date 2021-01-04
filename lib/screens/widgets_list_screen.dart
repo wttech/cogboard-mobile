@@ -111,6 +111,7 @@ class WidgetsListScreen extends StatelessWidget {
         ),
         actions: [
           FlatButton(
+            key: Key('widgetListScreenHintConfirmButton'),
             textColor: Theme.of(context).colorScheme.primary,
             color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.all(0.0),
