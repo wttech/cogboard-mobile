@@ -31,12 +31,14 @@ class WidgetListItem extends StatelessWidget {
           height: 70,
           child: Center(
             child: ListTile(
+              key: Key('widget_${widget.type}_${widget.id}'),
               title: Text(
                 Provider.of<ConfigProvider>(context, listen: false).getWidgetName(widget),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                 ),
+                key: Key('widget_${widget.type}_${widget.id}_title'),
               ),
               subtitle: getWidgetTileSubtitle(),
               trailing: getWidgetIcon(widget),

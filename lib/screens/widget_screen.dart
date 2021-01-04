@@ -93,13 +93,16 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        key: Key('widgetScreenBackButton'),
         actions: <Widget>[
           IconButton(
+            key: Key('widgetScreenQuarantineButton'),
             icon: Icon(Icons.block),
             color: getQuarantineIconColor(currentWidget, configProvider, context),
             onPressed: () => onChangeWidgetStateClicked(currentWidget, configProvider, dashboardsProvider),
           ),
           IconButton(
+            key: Key('widgetScreenFavouriteButton'),
             icon: Icon(Icons.star),
             color: getFavouriteIconColor(currentWidget, configProvider, context),
             onPressed: () => configProvider.updateFavouriteWidget(currentWidget),
@@ -165,6 +168,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
         ),
         actions: [
           FlatButton(
+            key: Key('widgetScreenHintConfirmButton'),
             textColor: Theme.of(context).colorScheme.primary,
             color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.all(0.0),
@@ -210,6 +214,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
             },
           ),
           FlatButton(
+            key: Key('widgetScreenQuarantineDialogWithoutButton'),
             textColor: Theme.of(context).colorScheme.primary,
             color: Theme.of(context).colorScheme.surface,
             padding: const EdgeInsets.all(0.0),
