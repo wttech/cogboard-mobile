@@ -46,6 +46,15 @@ class AppLocalizations {
     'urlSelect.noConnections': {
       'en': 'Welcome. Start by adding a connection.',
     },
+    'dashboardsProvider.Home': {
+      'en': 'Dashboard',
+    },
+    'dashboardsProvider.Favourites': {
+      'en': 'Favourites',
+    },
+    'dashboardsProvider.Quarantine': {
+      'en': 'Quarantine',
+    },
     'dashboardsScreen.boardError.title': {
       'en': 'Board error',
     },
@@ -63,6 +72,15 @@ class AppLocalizations {
     },
     'dashboardsScreen.hintDialogTextSwipeBoards': {
       'en': 'Swipe left and right to switch between boards',
+    },
+    'dashboardsScreenBottomNavigationBar.Home': {
+      'en': 'Home',
+    },
+    'dashboardsScreenBottomNavigationBar.Favourites': {
+      'en': 'Favourites',
+    },
+    'dashboardsScreenBottomNavigationBar.Quarantine': {
+      'en': 'Quarantine',
     },
     'dashboardsScreen.hintDialogConfirm': {
       'en': 'Ok',

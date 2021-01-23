@@ -75,7 +75,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
           case DashboardType.Home:
             initialWidgetsOrder = getWidgetsDeepCopy(configProvider.getBoardWidgets(configProvider.currentBoard));
             break;
-          case DashboardType.Favorites:
+          case DashboardType.Favourites:
             initialWidgetsOrder = getWidgetsDeepCopy(configProvider.favouriteWidgets);
             break;
           case DashboardType.Quarantine:
@@ -267,7 +267,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
         return configProvider
             .getBoardWidgets(configProvider.currentBoard)
             .indexWhere((element) => element.id == currentWidget.id);
-      case DashboardType.Favorites:
+      case DashboardType.Favourites:
         return configProvider.favouriteWidgets.indexWhere((element) => element.id == currentWidget.id);
       case DashboardType.Quarantine:
         return configProvider.quarantineWidgets.indexWhere((element) => element.id == currentWidget.id);
@@ -284,7 +284,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
             .indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
         currentWidget = configProvider.getBoardWidgets(configProvider.currentBoard)[currentWidgetIndex];
         break;
-      case DashboardType.Favorites:
+      case DashboardType.Favourites:
         int currentWidgetIndex =
             configProvider.favouriteWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
         currentWidget = configProvider.favouriteWidgets[currentWidgetIndex];
@@ -307,7 +307,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
         return currentWidgetIndex >= 0
             ? configProvider.getBoardWidgets(configProvider.currentBoard)[currentWidgetIndex]
             : configProvider.getBoardWidgets(configProvider.currentBoard)[0];
-      case DashboardType.Favorites:
+      case DashboardType.Favourites:
         int currentWidgetIndex =
             configProvider.favouriteWidgets.indexWhere((element) => element.id == initialWidgetsOrder[widgetIndex].id);
         return configProvider.favouriteWidgets[currentWidgetIndex];
@@ -324,7 +324,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
     switch (dashboardsProvider.currentDashboardType) {
       case DashboardType.Home:
         return configProvider.getBoardWidgets(configProvider.currentBoard).length;
-      case DashboardType.Favorites:
+      case DashboardType.Favourites:
         return configProvider.favouriteWidgets.length;
       case DashboardType.Quarantine:
         return configProvider.quarantineWidgets.length;

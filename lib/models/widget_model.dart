@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/models/widget_config_model.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 
 enum WidgetStatus {
   OK,
@@ -15,6 +16,7 @@ enum WidgetStatus {
   CHECKBOX_UNKNOWN,
   NONE
 }
+
 
 class DashboardWidget {
   String id;
@@ -87,6 +89,45 @@ class DashboardWidget {
       "toDoListItems": toDoListItems,
       "content": content,
     };
+  }
+
+  bool isWarningWidget() {
+    if (content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus =
+      EnumToString.fromString(WidgetStatus.values, content[DashboardWidget.WIDGET_STATUS_KEY]);
+      return hasWarningStatus(widgetStatus);
+    } else {
+      return false;
+    }
+  }
+
+  bool hasWarningStatus(WidgetStatus widgetStatus) {
+    return widgetStatus == WidgetStatus.CHECKBOX_UNKNOWN ||
+        widgetStatus == WidgetStatus.UNKNOWN ||
+        widgetStatus == WidgetStatus.UNSTABLE;
+  }
+
+  bool isErrorWidget() {
+    if (content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus =
+      EnumToString.fromString(WidgetStatus.values, content[DashboardWidget.WIDGET_STATUS_KEY]);
+      return hasErrorStatus(widgetStatus);
+    } else {
+      return false;
+    }
+  }
+
+  bool hasErrorStatus(WidgetStatus widgetStatus) {
+    return widgetStatus == WidgetStatus.CHECKBOX_FAIL ||
+        widgetStatus == WidgetStatus.ERROR_CONNECTION ||
+        widgetStatus == WidgetStatus.ERROR_CONFIGURATION ||
+        widgetStatus == WidgetStatus.ERROR ||
+        widgetStatus == WidgetStatus.FAIL;
+  }
+
+
+  bool isWarningOrErrorWidget() {
+    return isWarningWidget() || isErrorWidget();
   }
 
   void updateWidget(Map<String, dynamic> json) {

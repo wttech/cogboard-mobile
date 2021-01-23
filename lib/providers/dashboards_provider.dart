@@ -5,17 +5,14 @@ class DashboardsProvider with ChangeNotifier {
 
   final List<DashboardTab> _dashboardTabs = [
     DashboardTab(
-      title: 'Dashboard',
       dashboardType: DashboardType.Home,
       selectedTabColor: Colors.white,
     ),
     DashboardTab(
-      title: 'Favourites',
-      dashboardType: DashboardType.Favorites,
+      dashboardType: DashboardType.Favourites,
       selectedTabColor: Colors.white,
     ),
     DashboardTab(
-      title: 'Quarantine',
       dashboardType: DashboardType.Quarantine,
       selectedTabColor: Colors.white,
     )

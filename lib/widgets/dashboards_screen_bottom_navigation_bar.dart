@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/providers/dashboards_provider.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,17 +17,17 @@ class DashboardsScreenBottomNavigationBar extends StatelessWidget {
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).colorScheme.background,
               icon: Icon(Icons.home),
-              title: Text('Home'),
+              title: Text(AppLocalizations.of(context).getTranslation('dashboardsScreenBottomNavigationBar.Home')),
             ),
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).colorScheme.background,
               icon: Icon(Icons.star),
-              title: Text('Favourites'),
+              title: Text(AppLocalizations.of(context).getTranslation('dashboardsScreenBottomNavigationBar.Favourites')),
             ),
             BottomNavigationBarItem(
               backgroundColor: Theme.of(context).colorScheme.background,
               icon: Icon(Icons.block),
-              title: Text('Quarantine'),
+              title: Text(AppLocalizations.of(context).getTranslation('dashboardsScreenBottomNavigationBar.Quarantine')),
             ),
           ],
           onTap: (tabIndex) {

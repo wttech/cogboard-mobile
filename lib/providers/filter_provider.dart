@@ -36,45 +36,15 @@ class FilterProvider with ChangeNotifier {
   List<DashboardWidget> getFilteredWidgetList(List<DashboardWidget> widgetList) {
     return widgetList.where((widget) {
       if (this.isWarningFilterPresent && this.isErrorFilterPresent) {
-        return this.isWarningOrErrorWidget(widget);
+        return widget.isWarningOrErrorWidget();
       } else if (this.isWarningFilterPresent) {
-        return isWarningWidget(widget);
+        return widget.isWarningWidget();
       } else if (this.isErrorFilterPresent) {
-        return isErrorWidget(widget);
+        return widget.isErrorWidget();
       } else {
         return true;
       }
     }).toList();
-  }
-
-  bool isWarningOrErrorWidget(DashboardWidget widget) {
-    return isWarningWidget(widget) || isErrorWidget(widget);
-  }
-
-  bool isWarningWidget(DashboardWidget widget) {
-    if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-      final WidgetStatus widgetStatus =
-          EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
-      return widgetStatus == WidgetStatus.CHECKBOX_UNKNOWN ||
-          widgetStatus == WidgetStatus.UNKNOWN ||
-          widgetStatus == WidgetStatus.UNSTABLE;
-    } else {
-      return false;
-    }
-  }
-
-  bool isErrorWidget(DashboardWidget widget) {
-    if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
-      final WidgetStatus widgetStatus =
-          EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
-      return widgetStatus == WidgetStatus.CHECKBOX_FAIL ||
-          widgetStatus == WidgetStatus.ERROR_CONNECTION ||
-          widgetStatus == WidgetStatus.ERROR_CONFIGURATION ||
-          widgetStatus == WidgetStatus.ERROR ||
-          widgetStatus == WidgetStatus.FAIL;
-    } else {
-      return false;
-    }
   }
 
   void resetFilterView() {

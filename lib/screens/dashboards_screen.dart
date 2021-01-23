@@ -109,7 +109,7 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
                   setState(() {});
                 },)
                     : ScreenWithAppBar(
-                        appBarTitle: dashboardTabs[dashboardsProvider.dashboardTabIndex].title,
+                        appBarTitle: dashboardTabs[dashboardsProvider.dashboardTabIndex].getTitle(context),
                         body: WidgetsListScreen(
                             dashboardType: dashboardTabs[dashboardsProvider.dashboardTabIndex].dashboardType,
                           refresh: () {
