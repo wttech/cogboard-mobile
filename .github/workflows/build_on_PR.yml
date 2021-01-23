@@ -1,9 +1,8 @@
-name: Dart CI
+name: Build artifact on PR
 
 on:
-  push:
-    branches:
-      - master
+  pull_request:
+    types: [assigned, opened, synchronize, reopened, edited]
 
 jobs:
   build:
@@ -15,12 +14,12 @@ jobs:
         with:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
+      - run: flutter clean
       - run: flutter pub get
       - run: flutter test
       - run: flutter build apk
-      - name: Create a Release artifacts
-        uses: ncipollo/release-action@v1
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
         with:
-          artifacts: "build/app/outputs/flutter-apk/*.apk"
-          tag: ${{github.run_number}}
-          token: ${{ secrets.TOKEN }}
+          name: app_${{github.run_number}}.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
