@@ -53,9 +53,7 @@ class DashboardWidget {
       type: json['type'],
       config: WidgetConfig.fromJson(json['config']),
       disabled: json['disabled'],
-      expirationDate: (json['expirationDate'] != "null" && json['expirationDate'] != null)
-          ? DateTime.parse(json['expirationDate'])
-          : null,
+      expirationDate:json['expirationDate'] != null ? DateTime.parse(json['expirationDate']) : null,
       maxValue: (json['maxValue']),
       selectedZabbixMetric: json['selectedZabbixMetric'],
       range: json['range'],
@@ -82,7 +80,7 @@ class DashboardWidget {
       "type": type,
       "config": config.toJson(),
       "disabled": disabled,
-      "expirationDate": expirationDate.toString(),
+      "expirationDate": expirationDate != null ? expirationDate.toString() : null,
       "maxValue": maxValue,
       "selectedZabbixMetric": selectedZabbixMetric,
       "range": range,
@@ -91,7 +89,7 @@ class DashboardWidget {
     };
   }
 
-  bool isWarningWidget() {
+  bool isWarning() {
     if (content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
       final WidgetStatus widgetStatus =
       EnumToString.fromString(WidgetStatus.values, content[DashboardWidget.WIDGET_STATUS_KEY]);
@@ -107,7 +105,7 @@ class DashboardWidget {
         widgetStatus == WidgetStatus.UNSTABLE;
   }
 
-  bool isErrorWidget() {
+  bool isError() {
     if (content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
       final WidgetStatus widgetStatus =
       EnumToString.fromString(WidgetStatus.values, content[DashboardWidget.WIDGET_STATUS_KEY]);
@@ -127,7 +125,7 @@ class DashboardWidget {
 
 
   bool isWarningOrErrorWidget() {
-    return isWarningWidget() || isErrorWidget();
+    return isWarning() || isError();
   }
 
   void updateWidget(Map<String, dynamic> json) {

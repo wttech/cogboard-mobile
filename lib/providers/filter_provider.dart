@@ -38,9 +38,9 @@ class FilterProvider with ChangeNotifier {
       if (this.isWarningFilterPresent && this.isErrorFilterPresent) {
         return widget.isWarningOrErrorWidget();
       } else if (this.isWarningFilterPresent) {
-        return widget.isWarningWidget();
+        return widget.isWarning();
       } else if (this.isErrorFilterPresent) {
-        return widget.isErrorWidget();
+        return widget.isError();
       } else {
         return true;
       }
