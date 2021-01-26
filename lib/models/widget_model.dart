@@ -1,4 +1,5 @@
 import 'package:cogboardmobileapp/models/widget_config_model.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 
 enum WidgetStatus {
   OK,
@@ -15,6 +16,7 @@ enum WidgetStatus {
   CHECKBOX_UNKNOWN,
   NONE
 }
+
 
 class DashboardWidget {
   String id;
@@ -51,9 +53,7 @@ class DashboardWidget {
       type: json['type'],
       config: WidgetConfig.fromJson(json['config']),
       disabled: json['disabled'],
-      expirationDate: (json['expirationDate'] != "null" && json['expirationDate'] != null)
-          ? DateTime.parse(json['expirationDate'])
-          : null,
+      expirationDate:json['expirationDate'] != null ? DateTime.parse(json['expirationDate']) : null,
       maxValue: (json['maxValue']),
       selectedZabbixMetric: json['selectedZabbixMetric'],
       range: json['range'],
@@ -80,13 +80,52 @@ class DashboardWidget {
       "type": type,
       "config": config.toJson(),
       "disabled": disabled,
-      "expirationDate": expirationDate.toString(),
+      "expirationDate": expirationDate != null ? expirationDate.toString() : null,
       "maxValue": maxValue,
       "selectedZabbixMetric": selectedZabbixMetric,
       "range": range,
       "toDoListItems": toDoListItems,
       "content": content,
     };
+  }
+
+  bool isWarning() {
+    if (content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus =
+      EnumToString.fromString(WidgetStatus.values, content[DashboardWidget.WIDGET_STATUS_KEY]);
+      return hasWarningStatus(widgetStatus);
+    } else {
+      return false;
+    }
+  }
+
+  bool hasWarningStatus(WidgetStatus widgetStatus) {
+    return widgetStatus == WidgetStatus.CHECKBOX_UNKNOWN ||
+        widgetStatus == WidgetStatus.UNKNOWN ||
+        widgetStatus == WidgetStatus.UNSTABLE;
+  }
+
+  bool isError() {
+    if (content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
+      final WidgetStatus widgetStatus =
+      EnumToString.fromString(WidgetStatus.values, content[DashboardWidget.WIDGET_STATUS_KEY]);
+      return hasErrorStatus(widgetStatus);
+    } else {
+      return false;
+    }
+  }
+
+  bool hasErrorStatus(WidgetStatus widgetStatus) {
+    return widgetStatus == WidgetStatus.CHECKBOX_FAIL ||
+        widgetStatus == WidgetStatus.ERROR_CONNECTION ||
+        widgetStatus == WidgetStatus.ERROR_CONFIGURATION ||
+        widgetStatus == WidgetStatus.ERROR ||
+        widgetStatus == WidgetStatus.FAIL;
+  }
+
+
+  bool isWarningOrError() {
+    return isWarning() || isError();
   }
 
   void updateWidget(Map<String, dynamic> json) {

@@ -47,7 +47,7 @@ class DismissibleWidgetListItem extends StatelessWidget {
   }
 
   void removeWidgetListItem(BuildContext context, ConfigProvider configProvider) {
-    if (dashboardType == DashboardType.Favorites) {
+    if (dashboardType == DashboardType.Favourites) {
       configProvider.removeFavouriteWidget(widget);
     } else if (dashboardType == DashboardType.Quarantine) {
       configProvider.removeQuarantineWidget(widget);
@@ -85,7 +85,7 @@ class DismissibleWidgetListItem extends StatelessWidget {
                 color: Theme.of(context).colorScheme.surface,
                 padding: const EdgeInsets.all(0.0),
                 onPressed: () {
-                  if (dashboardType == DashboardType.Favorites) {
+                  if (dashboardType == DashboardType.Favourites) {
                     configProvider.addFavouriteWidget(widget);
                   } else if (dashboardType == DashboardType.Quarantine) {
                     configProvider.addQuarantineWidget(widget);
