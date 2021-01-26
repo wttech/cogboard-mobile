@@ -124,7 +124,7 @@ class DashboardWidget {
   }
 
 
-  bool isWarningOrErrorWidget() {
+  bool isWarningOrError() {
     return isWarning() || isError();
   }
 
