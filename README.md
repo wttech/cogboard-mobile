@@ -1,5 +1,5 @@
 <p>
-  <img src="/wttech/cogboard/raw/master/docs/images/wtt_logo.png" alt="Wunderman Thompson Technology logo Logo"/>
+  <img src="https://github.com/wttech/cogboard/raw/master/docs/images/wtt_logo.png" alt="Wunderman Thompson Technology logo Logo"/>
 </p>
 
 [![Build Status](https://api.travis-ci.org/wttech/cogboard.svg?branch=master)](https://travis-ci.org/wttech/cogboard)
@@ -7,7 +7,7 @@
 # CogBoard Mobile
 
 <p align="center">
-  <img src="/wttech/cogboard/raw/master/docs/images/logo.png" alt="Cogboard Mobile Logo"/>
+  <img src="https://github.com/wttech/cogboard/raw/master/docs/images/logo.png" alt="Cogboard Mobile Logo"/>
 </p>
 
 CogBoard Mobile will let you to connect to existing instances of CogBoard giving you a quick access to project status.
