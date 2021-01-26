@@ -1,5 +1,4 @@
 import 'package:cogboardmobileapp/models/widget_model.dart';
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 
 class FilterProvider with ChangeNotifier {
@@ -36,7 +35,7 @@ class FilterProvider with ChangeNotifier {
   List<DashboardWidget> getFilteredWidgetList(List<DashboardWidget> widgetList) {
     return widgetList.where((widget) {
       if (this.isWarningFilterPresent && this.isErrorFilterPresent) {
-        return widget.isWarningOrErrorWidget();
+        return widget.isWarningOrError();
       } else if (this.isWarningFilterPresent) {
         return widget.isWarning();
       } else if (this.isErrorFilterPresent) {
