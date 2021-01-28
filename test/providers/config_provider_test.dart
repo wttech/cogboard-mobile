@@ -327,7 +327,7 @@ SettingsPreferences setUpStartingSettingsPreferences() {
     favouriteWidgets: [],
     quarantineWidgets: [],
     connectionName: 'test',
-    connectionUrl: '150.254.30.118',
+    connectionUrl: 'http://150.254.30.118',
   );
   return settingsPreferences;
 }

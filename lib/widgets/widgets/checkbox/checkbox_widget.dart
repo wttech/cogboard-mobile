@@ -46,7 +46,7 @@ class _CheckboxWidgetState extends State<CheckboxWidget> {
 
   Future<void> updateCheckbox() async {
     String currentUrl = Provider.of<ConfigProvider>(context, listen: false).currentUrl;
-    String url = 'http://$currentUrl/api/widget/contentUpdate';
+    String url = '$currentUrl/api/widget/contentUpdate';
     CheckboxUpdatePayload payload = CheckboxUpdatePayload(
       id: widget.widget.id,
       widgetStatus: getNextStatus(getWidgetStatus),

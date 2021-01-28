@@ -1,4 +1,3 @@
-
 import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/dashboard_tab_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
@@ -62,7 +61,7 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
       }
     });
 
-    if(configProvider.webSocketConnectionErrorPresent) {
+    if (configProvider.webSocketConnectionErrorPresent) {
       Navigator.of(context).pop();
     }
 
@@ -116,41 +115,45 @@ class _DashboardItemScreenState extends State<DashboardItemScreen> {
           ),
         ],
         child: PageView.builder(
-        controller: _controller,
-        scrollDirection: Axis.horizontal,
-        itemCount: getWidgetLength(configProvider, dashboardsProvider),
-        onPageChanged: (widgetIndex) {
-          setState(() {
-            setCurrentWidget(configProvider, dashboardsProvider, widgetIndex);
-            pageNumber = widgetIndex;
-          });
-        },
-        itemBuilder: (context, widgetIndex) {
-          DashboardWidget widget = getNextWidget(configProvider, dashboardsProvider, widgetIndex);
-          return Column(
-            children: [
-              WidgetStatusHeader(
-                widgetTitle: getWidgetTitle(widget) != "" && getWidgetTitle(widget) != null
-                    ? getWidgetTitle(widget)
-                    : getWidgetType(widget),
-                status: getWidgetStatus(widget),
-                lastUpdated: getLastUpdated(widget),
-              ),
-              if (renderWidget(widget))
-                WidgetDetails(
-                  widget: widget,
+          controller: _controller,
+          scrollDirection: Axis.horizontal,
+          itemCount: getWidgetLength(configProvider, dashboardsProvider),
+          onPageChanged: (widgetIndex) {
+            setState(() {
+              setCurrentWidget(configProvider, dashboardsProvider, widgetIndex);
+              pageNumber = widgetIndex;
+            });
+          },
+          itemBuilder: (context, widgetIndex) {
+            DashboardWidget widget = getNextWidget(configProvider, dashboardsProvider, widgetIndex);
+            return Column(
+              children: [
+                WidgetStatusHeader(
+                  widgetTitle: getTitleOrType(widget),
+                  status: getWidgetStatus(widget),
+                  lastUpdated: getLastUpdated(widget),
                 ),
-              if (renderWidget(widget))
-                OpenUrlButton(
-                  widget: widget,
-                ),
-            ],
-          );
-        },
-      ),
+                if (renderWidget(widget))
+                  WidgetDetails(
+                    widget: widget,
+                  ),
+                if (renderWidget(widget))
+                  OpenUrlButton(
+                    widget: widget,
+                  ),
+              ],
+            );
+          },
+        ),
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
     );
+  }
+
+  String getTitleOrType(DashboardWidget widget) {
+    return getWidgetTitle(widget) != "" && getWidgetTitle(widget) != null
+        ? getWidgetTitle(widget)
+        : getWidgetType(widget);
   }
 
   List<DashboardWidget> getWidgetsDeepCopy(List<DashboardWidget> listToCopy) {

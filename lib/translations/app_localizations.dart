@@ -9,6 +9,10 @@ class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
+  String getTranslation(String key) {
+    return _localizedValues[locale.languageCode][key];
+  }
+
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
       'loginScreen.connect': 'CONNECT',
@@ -111,8 +115,4 @@ class AppLocalizations {
       'addConnectionScreen.save': 'SAVE'
     }
   };
-
-  String getTranslation(String key) {
-    return _localizedValues[locale.languageCode][key];
-  }
 }

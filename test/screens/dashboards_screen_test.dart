@@ -25,7 +25,7 @@ void main() {
         favouriteWidgets: [],
         quarantineWidgets: [],
         connectionName: 'test',
-        connectionUrl: '150.254.30.118',
+        connectionUrl: 'http://150.254.30.118',
       );
       await settingsProvider.setCurrentConnection(currentConnection);
       ConfigProvider configProvider = prepareConfigProviderWithSettingPreferences(settingsProvider.settingsPreferences);

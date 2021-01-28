@@ -19,10 +19,11 @@ class ConnectionPreferences {
 
   Map<String, dynamic> toJson() {
     return {
-      'favouriteWidgets': jsonEncode(favouriteWidgets.map((i) => i.toJson()).toList()).toString(),
-      'quarantineWidgets': jsonEncode(quarantineWidgets.map((i) => i.toJson()).toList()).toString(),
+      'favouriteWidgets': widgetListToJson(favouriteWidgets),
+      'quarantineWidgets': widgetListToJson(quarantineWidgets),
       'connectionName': connectionName,
       'connectionUrl': connectionUrl,
     };
   }
+  String widgetListToJson(List<DashboardWidget> widgets) => jsonEncode(widgets.map((i) => i.toJson()).toList()).toString();
 }

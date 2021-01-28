@@ -179,7 +179,7 @@ class _DashboardsScreenState extends State<DashboardsScreen> with WidgetsBinding
 
   void startWebSocketListening(BuildContext context) {
     ConfigProvider configProvider = Provider.of<ConfigProvider>(context, listen: false);
-    final channel = IOWebSocketChannel.connect('ws://${configProvider.currentUrl}/ws');
+    final channel = IOWebSocketChannel.connect('ws://${configProvider.currentIP}/ws');
     if(configProvider.webSocketConnectionErrorPresent) {
       configProvider.setWebSocketConnectionErrorPresent(false);
     }

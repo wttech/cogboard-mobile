@@ -3,6 +3,7 @@ import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
 import 'package:cogboardmobileapp/translations/app_localizations.dart';
+import 'package:cogboardmobileapp/utils/url_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -197,7 +198,7 @@ class _AddConnectionScreenState extends State<AddConnectionScreen> {
   Future<void> checkUrlValidity() async {
     try {
       final response =
-          await http.get('http://${urlController.text}/api/config').timeout(Duration(seconds: 1), onTimeout: () {
+          await http.get('${UrlUtil.getBaseUrl(urlController.text)}/api/config').timeout(Duration(seconds: 1), onTimeout: () {
         isUrlValid = false;
         return;
       });

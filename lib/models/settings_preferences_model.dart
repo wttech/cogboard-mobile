@@ -5,7 +5,7 @@ import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 
 class SettingsPreferences {
   static const String KEY = 'SettingsPreferences';
-  static const int VERSION = 7;
+  static const int VERSION = 8;
 
   List<ConnectionPreferences> connections = [];
   ConnectionPreferences currentConnection;
@@ -34,9 +34,12 @@ class SettingsPreferences {
   });
 
   factory SettingsPreferences.fromJson(Map<String, dynamic> json) => SettingsPreferences(
+        version: json['version'],
         connections:
             List<dynamic>.from(jsonDecode(json['connections'])).map((e) => ConnectionPreferences.fromJson(e)).toList(),
-        version: json['version'],
+        currentConnection:
+            json['currentConnection'] != null ? ConnectionPreferences.fromJson(json['currentConnection']) : null,
+        hints: ((json['hints']) as Map<String, dynamic>).map((key, value) => MapEntry(key.toString(), value)),
         showHints: json['showHints'],
         lastNotificationTimestamp:
             (json['lastNotificationTimestamp'] != "null" && json['lastNotificationTimestamp'] != null)
@@ -45,24 +48,21 @@ class SettingsPreferences {
         showNotifications: json['showNotifications'],
         notificationFrequencyInMinutes: json['notificationFrequencyInMinutes'],
         sortBy: json['sortBy'],
-        currentConnection:
-            json['currentConnection'] != null ? ConnectionPreferences.fromJson(json['currentConnection']) : null,
-        hints: ((json['hints']) as Map<String, dynamic>).map((key, value) => MapEntry(key.toString(), value)),
         sortByKey: json['sortByKey'],
         sortByOrder: json['sortByOrder'],
       );
 
   Map<String, dynamic> toJson() {
     return {
-      'connections': jsonEncode(connections.map((i) => i.toJson()).toList()).toString(),
       'version': version,
+      'connections': jsonEncode(connections.map((i) => i.toJson()).toList()).toString(),
+      'currentConnection': currentConnection != null ? currentConnection.toJson() : null,
+      'hints': hints,
       'showHints': showHints,
       'lastNotificationTimestamp': lastNotificationTimestamp.toString(),
       'showNotifications': showNotifications,
       'notificationFrequencyInMinutes': notificationFrequencyInMinutes,
       'sortBy': sortBy,
-      'currentConnection': currentConnection != null ? currentConnection.toJson() : null,
-      'hints': hints,
       'sortByKey': sortByKey,
       'sortByOrder': sortByOrder,
     };

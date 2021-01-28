@@ -9,6 +9,7 @@ import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/models/widget_model.dart';
 import 'package:cogboardmobileapp/models/widget_status_change_model.dart';
 import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
+import 'package:cogboardmobileapp/utils/url_util.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -58,18 +59,18 @@ class ConfigProvider with ChangeNotifier {
   }
 
   Future<void> fetchConfig() async {
-      final response = await client.get('http://$currentUrl/api/config');
-      debugPrint('fetched api config');
-      _config = Config.fromJson(json.decode(response.body) as Map<String, dynamic>);
-      _boards = _config.boards.boardsById.entries
-          .map((entry) => entry.value)
-          .toList();
-      _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
-      await checkIfQuarantineExpirationDateHasExceeded();
-      notifyListeners();
+    final response = await client.get('$currentUrl/api/config');
+    debugPrint('fetched api config');
+    _config = Config.fromJson(json.decode(response.body) as Map<String, dynamic>);
+    _boards = _config.boards.boardsById.entries.map((entry) => entry.value).toList();
+    _lastNotificationUpdateWidgetsState = getAllWidgetsDeepCopy();
+    await checkIfQuarantineExpirationDateHasExceeded();
+    notifyListeners();
   }
 
-  String get currentUrl => _settingsPreferences.currentConnection.connectionUrl;
+  String get currentUrl => UrlUtil.getBaseUrl(_settingsPreferences.currentConnection.connectionUrl);
+
+  String get currentIP => UrlUtil.getIP(_settingsPreferences.currentConnection.connectionUrl);
 
   ConnectionPreferences get currentConnection => _settingsPreferences.currentConnection;
 
@@ -122,15 +123,12 @@ class ConfigProvider with ChangeNotifier {
   }
 
   List<DashboardWidget> getBoardWidgets(Board board) {
-    List<DashboardWidget> boardWidgets = [
-      ..._config.widgets.widgetsById.entries
-          .map((entry) => entry.value)
-          .where((widget) =>
-              board.widgets.contains(widget.id) &&
-              quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1 &&
-              widget.type != "WhiteSpaceWidget")
-          .toList()
-    ];
+    List<DashboardWidget> boardWidgets = getAllWidgets()
+        .where((widget) =>
+            board.widgets.contains(widget.id) &&
+            quarantineWidgets.indexWhere((element) => element.id == widget.id) == -1 &&
+            widget.type != "WhiteSpaceWidget")
+        .toList();
     return getSortedWidgetsList(boardWidgets);
   }
 
@@ -142,15 +140,13 @@ class ConfigProvider with ChangeNotifier {
         boardWidgets.sort((a, b) => getWidgetName(a).compareTo(getWidgetName(b)));
         break;
       case WidgetSortTypes.NAME_DESCENDING:
-        boardWidgets.sort((a, b) => getWidgetName(a).compareTo(getWidgetName(b)));
-        boardWidgets = boardWidgets.reversed.toList();
+        boardWidgets.sort((b, a) => getWidgetName(a).compareTo(getWidgetName(b)));
         break;
       case WidgetSortTypes.STATUS_ASCENDING:
         boardWidgets.sort((a, b) => sortWidgetsByStatus(a, b));
         break;
       case WidgetSortTypes.STATUS_DESCENDING:
-        boardWidgets.sort((a, b) => sortWidgetsByStatus(a, b));
-        boardWidgets = boardWidgets.reversed.toList();
+        boardWidgets.sort((b, a) => sortWidgetsByStatus(a, b));
         break;
     }
     return boardWidgets;
@@ -170,38 +166,9 @@ class ConfigProvider with ChangeNotifier {
     if (widget.content.containsKey(DashboardWidget.WIDGET_STATUS_KEY)) {
       WidgetStatus widgetStatus =
           EnumToString.fromString(WidgetStatus.values, widget.content[DashboardWidget.WIDGET_STATUS_KEY]);
-      switch (widgetStatus) {
-        case WidgetStatus.OK:
-          return 1;
-        case WidgetStatus.UNSTABLE:
-          return 5;
-        case WidgetStatus.FAIL:
-          return 6;
-        case WidgetStatus.UNKNOWN:
-          return 4;
-        case WidgetStatus.IN_PROGRESS:
-          return 2;
-        case WidgetStatus.ERROR_CONFIGURATION:
-          return 6;
-        case WidgetStatus.ERROR:
-          return 6;
-        case WidgetStatus.ERROR_CONNECTION:
-          return 6;
-        case WidgetStatus.TRANSPARENT:
-          return 2;
-        case WidgetStatus.CHECKBOX_OK:
-          return 1;
-        case WidgetStatus.CHECKBOX_FAIL:
-          return 6;
-        case WidgetStatus.CHECKBOX_UNKNOWN:
-          return 4;
-        case WidgetStatus.NONE:
-          return 3;
-        default:
-          return 3;
-      }
+      return widgetStatus.index;
     } else {
-      return 3;
+      return WidgetStatus.NONE.index;
     }
   }
 

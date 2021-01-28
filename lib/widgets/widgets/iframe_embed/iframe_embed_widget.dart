@@ -18,7 +18,7 @@ class IframeEmbedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        '<iframe/>',
+        'Iframe preview not supported',
         style: TextStyle(fontSize: 40),
       ),
     );

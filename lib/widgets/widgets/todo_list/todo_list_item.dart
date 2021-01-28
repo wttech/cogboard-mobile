@@ -42,7 +42,7 @@ class _TodoListItemState extends State<TodoListItem> {
 
   Future<void> updateItem() async {
     String currentUrl = Provider.of<ConfigProvider>(context, listen: false).currentUrl;
-    String url = 'http://$currentUrl/api/widget/contentUpdate';
+    String url = '$currentUrl/api/widget/contentUpdate';
     TodoUpdatePayload payload = TodoUpdatePayload(
       id: widget.widgetId,
       selectedItem: widget.id,

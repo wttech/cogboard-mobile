@@ -67,7 +67,7 @@ void main() {
         favouriteWidgets: [],
         quarantineWidgets: [],
         connectionName: 'test',
-        connectionUrl: '150.254.30.118',
+        connectionUrl: 'http://150.254.30.118',
       );
 
       // when
@@ -105,7 +105,7 @@ void main() {
         favouriteWidgets: [],
         quarantineWidgets: [],
         connectionName: 'test',
-        connectionUrl: '150.254.30.118',
+        connectionUrl: 'http://150.254.30.118',
       );
 
       // when
@@ -128,7 +128,7 @@ void main() {
         favouriteWidgets: [],
         quarantineWidgets: [],
         connectionName: 'test',
-        connectionUrl: '150.254.30.118',
+        connectionUrl: 'http://150.254.30.118',
       );
       await settingsProvider.addConnection(newConnection);
       await settingsProvider.setCurrentConnection(newConnection);
@@ -152,7 +152,7 @@ void main() {
         favouriteWidgets: [],
         quarantineWidgets: [],
         connectionName: 'test',
-        connectionUrl: '150.254.30.118',
+        connectionUrl: 'http://150.254.30.118',
       );
       await settingsProvider.addConnection(newConnection);
       await settingsProvider.setCurrentConnection(newConnection);
@@ -162,7 +162,7 @@ void main() {
         favouriteWidgets: [],
         quarantineWidgets: [],
         connectionName: 'updated',
-        connectionUrl: '150.254.30.118',
+        connectionUrl: 'http://150.254.30.118',
       );
       await settingsProvider.replaceConnection(updatedConnection, 0);
 

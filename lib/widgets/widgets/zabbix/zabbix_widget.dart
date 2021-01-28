@@ -95,7 +95,7 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
   }
 
   String get getProgressType {
-    return checkMetricHasProgress() && (!checkMetricHasMaxValue() || widget.widget.maxValue > 0)
+    return isPercentage() && (!isInBytes() || widget.widget.maxValue > 0)
         ? 'progress'
         : 'maxValue';
   }
@@ -108,11 +108,11 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
     return widget.widget.content['lastvalue'];
   }
 
-  bool checkMetricHasMaxValue() {
+  bool isInBytes() {
     return ZabbixMetricsWithMaxValue.contains(widget.widget.selectedZabbixMetric);
   }
 
-  bool checkMetricHasProgress() {
+  bool isPercentage() {
     return ZabbixMetricsWithProgress.contains(widget.widget.selectedZabbixMetric);
   }
 
@@ -121,7 +121,7 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
   }
 
   int calculatePercentageValue(int value) {
-    if (!checkMetricHasMaxValue()) return value;
+    if (!isInBytes()) return value;
     return convertToBytes(value);
   }
 
@@ -144,12 +144,13 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
   }
 
   String get xAxisUnit {
-    if (checkMetricHasMaxValue()) {
+    if (isInBytes()) {
       return '[GB]';
-    } else if (!checkMetricHasProgress()) {
+    } else if (isPercentage()) {
+      return '[%]';
+    } else {
       return 'No.';
     }
-    return '[%]';
   }
 
   charts.Color getColorWhenRangeApplicable(int value) {
@@ -169,7 +170,7 @@ class _ZabbixWidgetState extends State<ZabbixWidget> with SingleTickerProviderSt
   }
 
   charts.Color getColorForValue(int value) {
-    return checkMetricHasProgress() || convertToGigabytes() != 0
+    return isPercentage() || convertToGigabytes() != 0
         ? getColorWhenRangeApplicable(value)
         : charts.MaterialPalette.white;
   }
