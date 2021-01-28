@@ -37,7 +37,7 @@ class WidgetsListScreen extends StatelessWidget {
       if (widgetsList.length > 0 &&
           configProvider.showHints &&
           configProvider.hints[Hints.SWIPE_TO_DELETE] &&
-          (dashboardType == DashboardType.Favorites || dashboardType == DashboardType.Quarantine)) {
+          (dashboardType == DashboardType.Favourites || dashboardType == DashboardType.Quarantine)) {
         Provider.of<ConfigProvider>(context, listen: false).setHintSeen(Hints.SWIPE_TO_DELETE);
         showHintDialog(context);
       }
@@ -137,7 +137,7 @@ class WidgetsListScreen extends StatelessWidget {
       case DashboardType.Home:
         return filterProvider.getFilteredWidgetList(configProvider.getBoardWidgets(board));
         break;
-      case DashboardType.Favorites:
+      case DashboardType.Favourites:
         return filterProvider.getFilteredWidgetList(configProvider.favouriteWidgets);
         break;
       case DashboardType.Quarantine:

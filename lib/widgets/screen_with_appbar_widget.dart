@@ -32,7 +32,7 @@ class ScreenWithAppBar extends StatelessWidget {
                     ),
                   ) :  Consumer<DashboardsProvider>(
                     builder: (ctx, dashboardsProvider, child) =>  Text(
-                      dashboardsProvider.dashboardTabs[dashboardsProvider.dashboardTabIndex].title,
+                      dashboardsProvider.dashboardTabs[dashboardsProvider.dashboardTabIndex].getTitle(context),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 22,
