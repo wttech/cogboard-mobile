@@ -31,7 +31,12 @@ CogBoard Mobile will let you to connect to existing instances of CogBoard giving
 
 ## Running CogBoard Mobile on connected device
 
-TBD 
+1. On a mobile device enable Developer Options.
+2. In Developer Options enable USB debugging.
+3. Connect mobile device to your PC via cable.
+4. Allow USB debugging if you are prompted with such question.
+5. Open your IDE and in the select device dropdown choose your mobile device.
+6. Press run, app will be installed on a mobile device.
 
 ## Additional Info for Flutter projects
 
