@@ -5,45 +5,32 @@ class DashboardsProvider with ChangeNotifier {
 
   final List<DashboardTab> _dashboardTabs = [
     DashboardTab(
-      title: 'dashboard',
       dashboardType: DashboardType.Home,
       selectedTabColor: Colors.white,
     ),
     DashboardTab(
-      title: 'favourite',
-      dashboardType: DashboardType.Favorites,
+      dashboardType: DashboardType.Favourites,
       selectedTabColor: Colors.white,
     ),
     DashboardTab(
-      title: 'quarantine',
       dashboardType: DashboardType.Quarantine,
       selectedTabColor: Colors.white,
     )
   ];
 
   int _dashboardTabIndex;
-  bool _warningFilterPresent = false;
-  bool _errorFilterPresent = false;
 
   DashboardsProvider() {
     _dashboardTabIndex = _dashboardTabs
         .indexWhere((element) => element.dashboardType == DashboardType.Home);
   }
 
+  DashboardType get currentDashboardType {
+    return _dashboardTabs[dashboardTabIndex].dashboardType;
+  }
+
   int get dashboardTabIndex {
     return _dashboardTabIndex;
-  }
-
-  bool get isWarningFilterPresent {
-    return _warningFilterPresent;
-  }
-
-  bool get isErrorFilterPresent {
-    return _errorFilterPresent;
-  }
-
-  bool get isAnyFilterPresent {
-    return isWarningFilterPresent || isErrorFilterPresent;
   }
 
   void setDashboardTabIndex(int dashboardTabIndex) {
@@ -53,15 +40,5 @@ class DashboardsProvider with ChangeNotifier {
 
   List<DashboardTab> get dashboardTabs {
     return _dashboardTabs;
-  }
-
-  void toggleWarningFilter() {
-    _warningFilterPresent = !_warningFilterPresent;
-    notifyListeners();
-  }
-
-  void toggleErrorFilter() {
-    _errorFilterPresent = !_errorFilterPresent;
-    notifyListeners();
   }
 }

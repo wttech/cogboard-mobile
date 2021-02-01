@@ -1,99 +1,81 @@
 import 'package:cogboardmobileapp/constants/constants.dart';
-import 'package:cogboardmobileapp/models/connection_model.dart';
+import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/providers/settings_provider.dart';
-import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
+import 'package:cogboardmobileapp/screens/login_projects_screen.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-class UrlSelect extends StatefulWidget {
-  UrlSelect({Key key}) : super(key: key);
+class UrlSelect extends StatelessWidget {
+  final String newlyAddedConnection;
 
-  @override
-  _UrlSelectState createState() => _UrlSelectState();
-}
-
-class _UrlSelectState extends State<UrlSelect> {
-  SharedPref sharedPref = SharedPref();
-  int _connection;
-  List<Connection> _connections = List();
-
-  int getLastVisitedConnection(List<Connection> connections) {
-    if (connections == null) {
-      return null;
-    }
-    for (Connection c in connections) {
-      if (c.lastVisited) {
-        // TODO return lastVisited
-        return 0;
-      }
-    }
-    return 0;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loadConnections();
-  }
-
-  Future<void> loadConnections() async {
-    try {
-      final settingsProvider =
-          Provider.of<SettingsProvider>(context, listen: false);
-      await settingsProvider.fetchConnections();
-      int c = getLastVisitedConnection(settingsProvider.connections);
-
-      setState(() {
-        _connections = settingsProvider.connections;
-        _connection = c;
-      });
-    } catch (Exception) {}
-  }
+  UrlSelect({this.newlyAddedConnection});
 
   @override
   Widget build(BuildContext context) {
     final settingsProvider = Provider.of<SettingsProvider>(context);
-
-    if (_connections != null && _connections.length > 0) {
+    List<ConnectionPreferences> connections = settingsProvider.connections;
+    if (connections != null && connections.length > 0) {
       return Container(
         width: 150,
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
         decoration: BoxDecoration(
           border: Border.all(
-            color: Theme.of(context).colorScheme.primary,
+            color: Colors.black54,
           ),
           borderRadius: BorderRadius.all(
-            Radius.circular(standardBorderRadius),
+            Radius.circular(STANDARD_BORDER_RADIOUS),
           ),
         ),
-        child: new DropdownButton<int>(
-          value: _connection,
-          underline: Container(),
-          isExpanded: true,
-          items: _connections.map((Connection c) {
-            return new DropdownMenuItem(
-              child: new Text(c.name),
-              value: _connections.indexOf(c),
-            );
-          }).toList(),
-          onChanged: (c) => setState(() {
-            _connection = c;
-            settingsProvider.setCurrentConnection(_connections[c]);
-          }),
+        child: RaisedButton(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          color: Colors.white,
+          elevation: 0,
+          key: Key('loginScreenUrlSelectButton'),
+          onPressed: () => Navigator.of(context).pushNamed(LoginProjectsScreen.routeName),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                settingsProvider.currentConnection.connectionName.length > 13
+                    ? settingsProvider.currentConnection.connectionName.substring(0, 10) + "..."
+                    : settingsProvider.currentConnection.connectionName,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+                key: Key('loginScreenUrlSelectWidget'),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.cyan,
+              ),
+            ],
+          ),
         ),
       );
     } else {
       return Container(
         child: Text(
-          'There are no Connections saved.',
+          AppLocalizations.of(context).getTranslation('urlSelect.noConnections'),
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
+            color: Colors.black,
+            fontSize: 18,
           ),
+          key: Key('urlSelectNoConnections'),
         ),
       );
     }
+  }
+
+  int getDropdownButtonIndex(String newlyAddedConnection, SettingsProvider settingsProvider) {
+    if (settingsProvider.currentConnection != null) {
+      ConnectionPreferences currentConnection = settingsProvider.connections
+          .firstWhere((element) => element.connectionName == settingsProvider.currentConnection.connectionName);
+      return settingsProvider.connections.indexOf(currentConnection);
+    }
+    return null;
   }
 }

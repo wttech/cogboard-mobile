@@ -1,3 +1,4 @@
+import 'package:cogboardmobileapp/constants/constants.dart';
 import 'package:cogboardmobileapp/providers/filter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +13,6 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
   bool isWarningFilterChecked = false;
   bool isErrorFilterChecked = false;
   AnimationController _filterToggleAnimationController;
-  Animation<Color> _inactiveFilterButtonColor;
-  Animation<Color> _activeFilterButtonColor;
   Animation<double> _translateButton;
   Curve _curve = Curves.easeOut;
   double _fabHeight = 56.0;
@@ -21,17 +20,10 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _filterToggleAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
-          ..addListener(() {
-            setState(() {});
-          });
-    _inactiveFilterButtonColor = filterButtonColor(
-        Theme.of(context).colorScheme.primary,
-        Theme.of(context).colorScheme.error);
-    _activeFilterButtonColor = filterButtonColor(
-        Theme.of(context).colorScheme.primary,
-        Theme.of(context).colorScheme.error);
+    _filterToggleAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+      ..addListener(() {
+        setState(() {});
+      });
     _translateButton = Tween<double>(
       begin: _fabHeight,
       end: -14.0,
@@ -74,36 +66,30 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
     isOpened = !isOpened;
   }
 
-  Widget error(FilterProvider filterProvider) {
+  Widget error(FilterProvider filterProvider, BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(right: 16.0),
       child: FloatingActionButton(
         heroTag: 'error',
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
-        backgroundColor: filterProvider.isErrorFilterPresent
-            ? Theme.of(context).colorScheme.secondary
-            : Colors.grey,
+        backgroundColor: filterProvider.isErrorFilterPresent ? Theme.of(context).colorScheme.secondary : Colors.grey,
         child: Icon(
           Icons.error,
-          size: 22,
+          size: FILTER_ICON_SIZE,
         ),
         onPressed: () => filterProvider.toggleErrorFilter(),
       ),
     );
   }
 
-  Widget warning(FilterProvider filterProvider) {
+  Widget warning(FilterProvider filterProvider, BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(right: 16.0),
       child: FloatingActionButton(
         heroTag: 'warning',
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
-        backgroundColor: filterProvider.isWarningFilterPresent
-            ? Theme.of(context).colorScheme.secondary
-            : Colors.grey,
+        backgroundColor: filterProvider.isWarningFilterPresent ? Theme.of(context).colorScheme.secondary : Colors.grey,
         child: Icon(
           Icons.warning,
-          size: 22,
+          size: FILTER_ICON_SIZE,
         ),
         onPressed: () => filterProvider.toggleWarningFilter(),
       ),
@@ -121,24 +107,17 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
     }
 
     return Container(
-      padding: const EdgeInsets.only(right: 16.0),
+      padding: EdgeInsets.only(right: 0),
       child: FloatingActionButton(
         heroTag: 'filter',
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: animateFilterToggle,
-        child: !this.isOpened
-            ? Image.asset(
-                'assets/images/filter_icon.png',
-                width: 25,
-                height: 25,
-              )
-            : Image.asset(
-                'assets/images/cancel_icon.png',
-                width: 18,
-                height: 18,
-                color: Theme.of(context).colorScheme.onSecondary,
-              ),
+        child: Image.asset(
+          'assets/images/filter_icon.png',
+          width: 22,
+          height: 22,
+        ),
       ),
     );
   }
@@ -154,8 +133,7 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
             _translateButton.value * 2.0,
             0.0,
           ),
-          child: Consumer<FilterProvider>(
-              builder: (ctx, filterProvider, child) => error(filterProvider)),
+          child: Consumer<FilterProvider>(builder: (ctx, filterProvider, child) => error(filterProvider, context)),
         ),
         Transform(
           transform: Matrix4.translationValues(
@@ -163,11 +141,9 @@ class _FiltersState extends State<Filters> with TickerProviderStateMixin {
             _translateButton.value,
             0.0,
           ),
-          child: Consumer<FilterProvider>(
-              builder: (ctx, filterProvider, child) => warning(filterProvider)),
+          child: Consumer<FilterProvider>(builder: (ctx, filterProvider, child) => warning(filterProvider, context)),
         ),
-        Consumer<FilterProvider>(
-            builder: (ctx, filterProvider, child) => filter(filterProvider)),
+        Consumer<FilterProvider>(builder: (ctx, filterProvider, child) => filter(filterProvider)),
       ],
     );
   }

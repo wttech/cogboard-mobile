@@ -19,19 +19,38 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   provider: ^4.3.2
   shared_preferences: ^0.5.12+2
   enum_to_string: ^1.0.13
   http: ^0.12.2
   web_socket_channel: ^1.1.0
   intl: ^0.16.1
+  mockito: ^4.1.3
+  flutter_local_notifications: ^3.0.0
+  timezone: ^0.5.9
+  url_launcher: ^5.7.10
+  coverage: ^0.14.2
+  toast: ^0.1.5
+  webview_flutter: ^1.0.7
+  charts_flutter: ^0.9.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+  flutter_launcher_icons: ^0.8.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  test: any
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/cogboard_icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -47,6 +66,7 @@ flutter:
   assets:
     - assets/images/filter_icon.png
     - assets/images/cancel_icon.png
+    - assets/images/cogboard_icon.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

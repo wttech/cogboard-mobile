@@ -1,20 +1,42 @@
-import 'package:cogboardmobileapp/providers/settings_provider.dart';
+import 'package:cogboardmobileapp/screens/settings_general_screen.dart';
+import 'package:cogboardmobileapp/screens/settings_projects_screen.dart';
+import 'package:cogboardmobileapp/translations/app_localizations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const routeName = '/settings';
 
-  // TODO: #13, #14
   @override
   Widget build(BuildContext context) {
-    final settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text(AppLocalizations.of(context).getTranslation('settingsScreen.title')),
       ),
-      body: Container(),
       backgroundColor: Theme.of(context).colorScheme.background,
+      body: ListView(
+        children: <Widget>[
+          ListTile(
+            title: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+              child: Text(
+                AppLocalizations.of(context).getTranslation('settingsScreen.projects'),
+              ),
+            ),
+            onTap: () => Navigator.of(context).pushNamed(SettingsProjectsScreen.routeName),
+          ),
+          Divider(
+            color: Theme.of(context).colorScheme.surface,
+            thickness: 2,
+          ),
+          ListTile(
+            title: Text(
+              AppLocalizations.of(context).getTranslation('settingsScreen.general'),
+            ),
+            onTap: () => Navigator.of(context).pushNamed(SettingsGeneralScreen.routeName),
+          ),
+        ],
+      ),
     );
   }
 }

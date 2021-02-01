@@ -1,39 +1,149 @@
-import 'package:cogboardmobileapp/models/connection_model.dart';
+import 'dart:convert';
+
+import 'package:cogboardmobileapp/constants/constants.dart';
+import 'package:cogboardmobileapp/models/settings_preferences_model.dart';
+import 'package:cogboardmobileapp/models/url_preferences_model.dart';
 import 'package:cogboardmobileapp/utils/shared_preferences_utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SettingsProvider with ChangeNotifier {
-  List<Connection> _connections;
-  Connection _currentConnection;
+  List<ConnectionPreferences> _connections;
+  SettingsPreferences _settingsPreferences;
 
-  Future<void> fetchConnections() async {
-    if (await SharedPref.containsKey('connections')) {
-      _connections =
-          Connection.decodeConnections(await SharedPref.read('connections'));
+  get settingsPreferences => _settingsPreferences;
+
+  get showHints => _settingsPreferences.showHints;
+
+  get showNotifications => _settingsPreferences.showNotifications;
+
+  get notificationsFrequency => _settingsPreferences.notificationFrequencyInMinutes;
+
+  get sortBy => _settingsPreferences.sortBy;
+
+  get sortByKey => _settingsPreferences.sortByKey;
+
+  get sortByOrder => _settingsPreferences.sortByOrder;
+
+  Future<void> fetchSettingsPreferences() async {
+    if (await SharedPref.containsKey(SettingsPreferences.KEY)) {
+      Map<String, dynamic> settingsPreferencesJson = jsonDecode(await SharedPref.read(SettingsPreferences.KEY));
+      int settingsPreferencesVersion = SettingsPreferences.readVersion(settingsPreferencesJson);
+      if (settingsPreferencesVersion == null ||
+          (settingsPreferencesVersion != null && settingsPreferencesVersion < SettingsPreferences.VERSION)) {
+        await createSettingsPreferences();
+      } else {
+        _settingsPreferences = SettingsPreferences.fromJson(settingsPreferencesJson);
+      }
     } else {
-      _connections = List();
+      await createSettingsPreferences();
+    }
+    _connections = _settingsPreferences.connections;
+  }
+
+  Future<void> createSettingsPreferences() async {
+    _settingsPreferences = new SettingsPreferences(
+      connections: [],
+      version: SettingsPreferences.VERSION,
+      showHints: true,
+      sortBy: WidgetSortTypes.NONE,
+      showNotifications: true,
+      hints: SettingsPreferences.createHints(),
+      notificationFrequencyInMinutes: 1,
+      sortByKey: WidgetSortByKeys.NONE,
+      sortByOrder: WidgetSortByOrder.DESC,
+    );
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+  }
+
+  List<ConnectionPreferences> get connections {
+    return _connections;
+  }
+
+  ConnectionPreferences get currentConnection {
+    return _settingsPreferences.currentConnection;
+  }
+
+  T enumFromString<T>(Iterable<T> values, String value) {
+    return values.firstWhere((type) => type.toString().split(".").last == value, orElse: () => null);
+  }
+
+  Future<void> setShowHints(bool showHints) async {
+    _settingsPreferences.showHints = showHints;
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+    notifyListeners();
+  }
+
+  Future<void> setShowNotifications(bool showNotifications) async {
+    _settingsPreferences.showNotifications = showNotifications;
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+    notifyListeners();
+  }
+
+  Future<void> setSortBy(String sortBy) async {
+    _settingsPreferences.sortBy = sortBy;
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+    notifyListeners();
+  }
+
+  Future<void> setCurrentConnection(ConnectionPreferences currentConnection) async {
+    _settingsPreferences.currentConnection = currentConnection;
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+    notifyListeners();
+  }
+
+  Future<void> setNotificationsFrequency(int notificationFrequency) async {
+    _settingsPreferences.notificationFrequencyInMinutes = notificationFrequency;
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+    notifyListeners();
+  }
+
+  Future<void> addConnection(ConnectionPreferences connection) async {
+    _connections.add(connection);
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+    notifyListeners();
+  }
+
+  Future<void> removeConnection(ConnectionPreferences connection) async {
+    if (connection.connectionName == currentConnection.connectionName) {
+      settingsPreferences.currentConnection = null;
+    }
+    _connections.remove(connection);
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+    notifyListeners();
+  }
+
+  Future<void> replaceConnection(ConnectionPreferences newConnection, int idx) async {
+    Map<String, dynamic> settingsPreferencesJson = jsonDecode(await SharedPref.read(SettingsPreferences.KEY));
+    _settingsPreferences = SettingsPreferences.fromJson(settingsPreferencesJson);
+    ConnectionPreferences currentConnectionInConnections =
+        connections.firstWhere((element) => element.connectionName == currentConnection.connectionName);
+    int currentConnectionIndex = connections.indexOf(currentConnectionInConnections);
+    if (currentConnectionIndex == idx) {
+      settingsPreferences.currentConnection = newConnection;
+    }
+
+    _connections[idx] = newConnection;
+    _settingsPreferences.connections[idx] = newConnection;
+    await SharedPref.save(SettingsPreferences.KEY, jsonEncode(_settingsPreferences.toJson()));
+    notifyListeners();
+  }
+
+  Future<void> setSortByOrder(String order) async {
+    _settingsPreferences.sortByOrder = order;
+    if (_settingsPreferences.sortByKey != WidgetSortByKeys.NONE) {
+      setSortBy(_settingsPreferences.sortByKey + order);
     }
     notifyListeners();
   }
 
-  List<Connection> get connections {
-    return _connections;
-  }
-
-  Connection get currentConnection {
-    return _currentConnection;
-  }
-
-  void setCurrentConnection(Connection c) {
-    _currentConnection = c;
-    // TODO set lastVisited = true to corresponding connection in _connections
-    notifyListeners();
-  }
-
-  void addConnection(Connection c) async {
-    _connections.add(c);
-    await SharedPref.save(
-        'connections', Connection.encodeConnections(_connections));
+  Future<void> setSortByKey(String key) async {
+    _settingsPreferences.sortByKey = key;
+    if (key == WidgetSortByKeys.NONE) {
+      setSortBy(WidgetSortByKeys.NONE);
+    } else {
+      setSortBy(key + _settingsPreferences.sortByOrder);
+    }
     notifyListeners();
   }
 }
